@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    username: root
+    password: M2575052366
+    url: jdbc:mysql://49.235.232.7:3306/knowledge_planet?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    redis:
+      host: 127.0.0.1
+      port: 6379
+mybatis:
+  type-aliases-package: com.major.knowledgePlanet.Entity
+  mapper-locations: classpath:mapping/*.xml
+server:
+  IP: localhost
+  port: 81
+  servlet:
+    context-path: /kp
+user:
+  defaultAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
+logging:
+  level:
+    root: info
+  file:
+    name: knowledgePlanet.log
