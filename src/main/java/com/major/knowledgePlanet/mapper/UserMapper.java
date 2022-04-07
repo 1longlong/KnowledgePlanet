@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface UserMapper {
-    User getUserById(String u_id);
 
     User getUserByEmail(String email);
 

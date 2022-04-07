@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
  * @date 2022/4/5 23:15
  */
 public interface UserInfoService {
-    User getUserById(String u_id);
 
     User getUserByEmail(String email);
 

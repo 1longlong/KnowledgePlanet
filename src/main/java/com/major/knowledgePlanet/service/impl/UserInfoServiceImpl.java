@@ -18,10 +18,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public User getUserById(String u_id) {
-        return userMapper.getUserById(u_id);
-    }
 
     @Override
     public User getUserByEmail(String email) {

@@ -8,7 +8,7 @@ spring:
       host: 127.0.0.1
       port: 6379
 mybatis:
-  type-aliases-package: com.major.knowledgePlanet.Entity
+  type-aliases-package: com.major.knowledgePlanet.entity
   mapper-locations: classpath:mapping/*.xml
 server:
   IP: localhost
