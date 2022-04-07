@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ import java.util.Date;
 public class LoginLog {
     private Long id;
     private Long u_id;
-    private Date time;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date create_time;
     private String ip;
     private Integer status;
     private String browser;

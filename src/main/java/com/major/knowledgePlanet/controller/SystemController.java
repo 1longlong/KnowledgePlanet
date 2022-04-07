@@ -5,9 +5,13 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.extra.mail.MailUtil;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.jwt.JWTUtil;
+import com.major.knowledgePlanet.entity.LoginLog;
 import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
+import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +48,9 @@ public class SystemController {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private LoginLogService loginLogService;
 
     @GetMapping("system/getVerificationCode/{email}")
     public Response getVerificationCode(@PathVariable("email") String email) {
@@ -81,7 +89,7 @@ public class SystemController {
 
 
     @PostMapping("system/login")
-    public Response login(@RequestParam("email")String email,@RequestParam("password")String password){
+    public Response login(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
         User user = userInfoService.getUserByEmail(email);
         if(user==null) {
             return Response.clientError().code("A0201").message("用户不存在");
@@ -95,10 +103,19 @@ public class SystemController {
             return Response.clientError().code("A0203").message("用户密码错误");
         }
         //密码正确，记录登录日志
+        String userAgentStr = request.getHeader("user-agent");
+        UserAgent ua = UserAgentUtil.parse(userAgentStr);
+        String browser=ua.getBrowser().toString();
+        String ip=request.getHeader("X-Forwarded-For");
 
-
-
-
+        //TODO:待获取ip
+        if(ip==null||ip.isEmpty()||ip.equalsIgnoreCase("unknown")){
+          ip="127.0.0.1";
+        }
+        LoginLog loginLog = new LoginLog(null, user.getU_id(), new Date(), ip, user.getStatus(), browser);
+        if(loginLogService.addLoginLog(loginLog)<=0){
+            System.out.println(user.toString()+"的日志未记录");
+        }
         //生成token
         Map<String, Object> map = new HashMap<String, Object>() {
             private static final long serialVersionUID = 1L;

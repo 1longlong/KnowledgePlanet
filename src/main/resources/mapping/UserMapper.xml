@@ -3,11 +3,11 @@
 <mapper namespace="com.major.knowledgePlanet.mapper.UserMapper">
 
    <select id="getUserByEmail" resultType="User" parameterType="String">
-      select * from user where email=#{email};
+      select * from knowledge_planet.user where email=#{email};
    </select>
 
    <insert id="addUser" parameterType="User" useGeneratedKeys="true" keyProperty="u_id">
-      insert user(u_name,create_time,update_time,status,avatar,email,password)
+      insert knowledge_planet.user(u_name,create_time,update_time,status,avatar,email,password)
       values(#{u_name},#{create_time},#{update_time},#{status},#{avatar},#{email},#{password});
    </insert>
 
