@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.major.knowledgePlanet.mapper.UserMapper">
+
+
+<insert id="uploadResource" parameterType="Resource" useGeneratedKeys="true" keyProperty="r_id">
+    insert into knowledge_planet.resource(u_id,p_code,u_name,r_name,upload_time,link,coverage,r_description)
+      values (#{u_id},#{p_code},#{u_name},#{r_name},#{upload_time},#{link},#{coverage},#{r_description});
+</insert>
+
+
+</mapper>
