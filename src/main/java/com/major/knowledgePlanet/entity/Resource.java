@@ -19,21 +19,21 @@ import java.util.Date;
 @AllArgsConstructor
 public class Resource {
 
-  private Long rId;
-  private Long uId;
-  private Long pCode;
-  private String uName;
-  private String rName;
+  private Long r_id;
+  private Long u_id;
+  private Long p_code;
+  private String u_name;
+  private String r_name;
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-  private Date uploadTime;
+  private Date upload_time;
   private String link;
   private String coverage;
-  private String rDescription;
-  private Boolean isChecked;
+  private String r_description;
+  private Boolean is_checked;
   private String remarks;
-  private Boolean isRecommended;
-  private Integer praiseCount;
-  private Integer collectCount;
+  private Boolean is_recommended;
+  private Integer praise_count;
+  private Integer collect_count;
 
 
 }

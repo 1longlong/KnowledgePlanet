@@ -21,4 +21,11 @@ public class ResourceServiceImpl implements ResourceService {
     public Integer uploadResource (Resource resource){return resourceMapper.uploadResource(resource);}
 
 
+    @Override
+    public Integer  upDatePraise(Resource resource){return resourceMapper.upDatePraise(resource);}
+
+
+    @Override
+    public Resource getResourceById(Long r_id){return resourceMapper.getResourceById(r_id);}
 }
+

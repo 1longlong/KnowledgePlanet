@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.major.knowledgePlanet.mapper.CollectionMapper">
+
+    <insert id="addCollection" parameterType="Collection">
+        insert into knowledge_planet.user_resource_collect_rel(u_id ,r_id,r_name,coverage)
+        values(#{u_id},#{r_id},#{r_name},#{coverage});
+    </insert>
+
+
+    <delete id="deleteCollection" parameterType=""
+</mapper>

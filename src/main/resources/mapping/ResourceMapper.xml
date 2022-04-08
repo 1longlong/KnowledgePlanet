@@ -8,5 +8,16 @@
       values (#{u_id},#{p_code},#{u_name},#{r_name},#{upload_time},#{link},#{coverage},#{r_description});
 </insert>
 
+<update id="upDatePraise" parameterType="Resource" >
+    update knowledge_planet.resource
+    set praise_count = #{praise_count}
+    where r_id = #{r_id};
+</update>
+
+    <select id="getResourceById" parameterType="Long" >
+        select * from knowledge_planet.resource
+        where r_id=#{r_id};
+    </select>
+
 
 </mapper>
