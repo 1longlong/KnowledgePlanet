@@ -32,8 +32,6 @@ public class ResourceController {
     private ResourceService resourceService;
 
     @Autowired
-
-
     private FavoritesService favoritesService;
 
 
@@ -81,7 +79,7 @@ public class ResourceController {
 
     //取消点赞
     @PostMapping("resource/unPraise")
-
+    //TODO 数据库创建用户和资源关系表
     public Response unPraise(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "r_id") Long r_id){
         Resource resource = resourceService.getResourceById(r_id);
         int count = resource.getPraise_count()-1;
@@ -115,7 +113,15 @@ public class ResourceController {
     }
 
     //取消收藏
-//    @PostMapping("resource/uncollect")
+    @PostMapping("resource/uncollect")
+    public Response uncollect(@RequestParam(value = " u_id")Long u_id ,@RequestParam(value= "r_id")Long r_id){
+        Integer result = favoritesService.deleteFavorites(u_id, r_id);
+        if(result!=0){
+            return  Response.success().message("取消收藏成功").data("result",result);
+        }else{
+            return Response.serverError().message("取消收藏失败").data("result",result);
+        }
+    }
 
 
 

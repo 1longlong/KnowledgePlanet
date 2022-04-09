@@ -6,6 +6,8 @@ import com.major.knowledgePlanet.service.FavoritesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FavoritesServiceImpl implements FavoritesService {
     @Autowired
@@ -17,4 +19,6 @@ public class FavoritesServiceImpl implements FavoritesService {
     @Override
     public  Integer  deleteFavorites(Long u_id ,Long r_id){return favoritesMapper.deleteFavorites(u_id,r_id);}
 
+    @Override
+    public List<Favorites> getAll(){return favoritesMapper.getAll();}
 }

@@ -13,4 +13,8 @@
           and
             r_id = #{r_id};
     </delete>
+
+    <select id="getAll" resultType="Favorites">
+        select * from knowledge_planet.user_resource_collect_rel;
+    </select>
 </mapper>

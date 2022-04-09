@@ -5,5 +5,10 @@
         insert knowledge_planet.login_log(id,u_id,create_time,ip,status,browser)
         values(#{id},#{u_id},#{create_time},#{ip},#{status},#{browser});
     </insert>
+
+    <select id="getLoginLogById" parameterType="Long" resultType="LoginLog">
+        select * from knowledge_planet.login_log
+        where u_id = #{u_id};
+    </select>
 </mapper>
 
