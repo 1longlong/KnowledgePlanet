@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -130,19 +129,6 @@ public class SystemController {
         String token = JWTUtil.createToken(map, saltValue.getBytes());
 
         return Response.success().message("登录成功").data("token",token);
-    }
-
-
-    //根据u_id查找登录日志
-    @GetMapping("system/getLoginLog")
-    public Response getLoginLog(@RequestParam("u_id") Long u_id){
-        List<LoginLog> loginLogs = loginLogService.getLoginLogById(u_id);
-        if(!loginLogs.isEmpty()){
-            return Response.success().message("查询成功").data("loginLogs",loginLogs);
-        }else{
-            return Response.success().message("未查询到登录日志").data("loginLogs",loginLogs);
-        }
-
     }
 }
 

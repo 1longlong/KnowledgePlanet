@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<<<<<<< Updated upstream
-<mapper namespace="com.major.knowledgePlanet.mapper.UserMapper">
-
-
-<insert id="uploadResource" parameterType="Resource" useGeneratedKeys="true" keyProperty="r_id">
-    insert into knowledge_planet.resource(u_id,p_code,u_name,r_name,upload_time,link,coverage,r_description)
-      values (#{u_id},#{p_code},#{u_name},#{r_name},#{upload_time},#{link},#{coverage},#{r_description});
-</insert>
-
-<update id="upDatePraise" parameterType="Resource" >
-    update knowledge_planet.resource
-    set praise_count = #{praise_count}
-    where r_id = #{r_id};
-</update>
-=======
 <mapper namespace="com.major.knowledgePlanet.mapper.ResourceMapper">
 
 
@@ -28,7 +13,7 @@
         set praise_count = #{praise_count}
         where r_id = #{r_id};
     </update>
->>>>>>> Stashed changes
+
 
     <select id="getResourceById" parameterType="Long" >
         select * from knowledge_planet.resource

@@ -10,7 +10,7 @@
     <delete id="deleteFavorites" >
         delete from  knowledge_planet.user_resource_collect_rel
         where u_id = #{u_id}
-        and
-        r_id = #{r_id};
+          and
+            r_id = #{r_id};
     </delete>
 </mapper>

@@ -7,8 +7,6 @@ import com.major.knowledgePlanet.service.LoginLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * TODO:此处写LoginLogServiceImpl类的描述
  *
@@ -24,7 +22,4 @@ public class LoginLogServiceImpl implements LoginLogService {
     public Integer addLoginLog(LoginLog loginLog) {
         return loginLogMapper.addLoginLog(loginLog);
     }
-
-    @Override
-    public List<LoginLog> getLoginLogById(Long u_id){return loginLogMapper.getLoginLogById(u_id);}
 }
