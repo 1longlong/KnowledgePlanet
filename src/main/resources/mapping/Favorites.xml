@@ -10,11 +10,11 @@
     <delete id="deleteFavorites" >
         delete from  knowledge_planet.user_resource_collect_rel
         where u_id = #{u_id}
-          and
-            r_id = #{r_id};
+        and r_id = #{r_id};
     </delete>
 
-    <select id="getAll" resultType="Favorites">
-        select * from knowledge_planet.user_resource_collect_rel;
+    <select id="getAll" resultType="Favorites" parameterType="Long">
+        select * from knowledge_planet.user_resource_collect_rel
+        where u_id = #{u_id};
     </select>
 </mapper>

@@ -11,6 +11,7 @@ import com.major.knowledgePlanet.service.FavoritesService;
 
 import com.major.knowledgePlanet.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -114,13 +115,19 @@ public class ResourceController {
 
     //取消收藏
     @PostMapping("resource/uncollect")
-    public Response uncollect(@RequestParam(value = " u_id")Long u_id ,@RequestParam(value= "r_id")Long r_id){
+    public Response uncollect(@RequestParam(value = "u_id")Long u_id ,@RequestParam(value= "r_id")Long r_id){
         Integer result = favoritesService.deleteFavorites(u_id, r_id);
         if(result!=0){
             return  Response.success().message("取消收藏成功").data("result",result);
         }else{
             return Response.serverError().message("取消收藏失败").data("result",result);
         }
+    }
+
+    @GetMapping("resource/getResource")
+    public Response getResource(@RequestParam(value = "r_id") Long r_id){
+        Resource resource = resourceService.getResourceById(r_id);
+        return Response.success().message("查找成功").data("result",resource);
     }
 
 

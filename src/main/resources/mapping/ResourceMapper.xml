@@ -15,9 +15,9 @@
     </update>
 
 
-    <select id="getResourceById" parameterType="Long" >
+    <select id="getResourceById" parameterType="Long" resultType="Resource">
         select * from knowledge_planet.resource
-        where r_id=#{r_id};
+        where r_id = #{r_id};
     </select>
 
 
