@@ -1,0 +1,20 @@
+package com.major.knowledgePlanet.service.impl;
+
+import com.major.knowledgePlanet.entity.Favorites;
+import com.major.knowledgePlanet.mapper.FavoritesMapper;
+import com.major.knowledgePlanet.service.FavoritesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class FavoritesServiceImpl implements FavoritesService {
+    @Autowired
+    private FavoritesMapper favoritesMapper;
+
+    @Override
+    public Integer addFavorites(Favorites favorites){return favoritesMapper.addFavorites(favorites);}
+
+    @Override
+    public  Integer  deleteFavorites(Long u_id ,Long r_id){return favoritesMapper.deleteFavorites(u_id,r_id);}
+
+}
