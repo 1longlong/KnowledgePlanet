@@ -1,8 +1,6 @@
 package
 com.major.knowledgePlanet.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -11,7 +9,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * TODO:此处写RedisConfig类的描述
+ * Redis配置类
  * @author 孟繁霖
  * @date 2022/4/9 19:57 
  */
