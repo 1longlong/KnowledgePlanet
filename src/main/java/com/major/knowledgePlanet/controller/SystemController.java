@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -134,7 +135,6 @@ public class SystemController {
             }
         };
         String token = JWTUtil.createToken(map, saltValue.getBytes());
-
         return Response.success().message("登录成功").data("token",token);
     }
 }
