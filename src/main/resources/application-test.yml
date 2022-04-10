@@ -7,6 +7,9 @@ spring:
     redis:
       host: 127.0.0.1
       port: 6379
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
 mybatis:
   type-aliases-package: com.major.knowledgePlanet.entity
   mapper-locations: classpath:mapping/*.xml

@@ -14,6 +14,8 @@ import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
  * @author 孟繁霖
  * @date 2022/4/5 23:18
  */
+@Api(tags="登录注册模块",value="SystemController")
 @RestController
 public class SystemController {
 
@@ -52,6 +55,7 @@ public class SystemController {
     @Autowired
     private LoginLogService loginLogService;
 
+    @ApiOperation(value="向邮箱发送验证码")
     @GetMapping("system/getVerificationCode/{email}")
     public Response getVerificationCode(@PathVariable("email") String email) {
         boolean isMatch = ReUtil.isMatch("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$", email);
@@ -61,12 +65,14 @@ public class SystemController {
         String verificationCode = EmailUtil.getVerificationCode();
         redisTemplate.opsForValue().set(email, verificationCode, 60 * 10, TimeUnit.SECONDS);
         //调用hutool工具类
-        MailUtil.send(email, "激活验证码", EmailUtil.getContents(email, verificationCode), true);
+        String result = MailUtil.send(email, "激活验证码", EmailUtil.getContents(email, verificationCode), true);
+        System.out.println(result);
         //缓存验证码,2分钟
         //TODO 验证码不返回
         return Response.success().data("verificationCode", verificationCode);
     }
 
+    @ApiOperation(value="注册账号")
     @PostMapping("system/register")
     public Response register(@RequestParam(value = "nickName") String nickName, @RequestParam("email") String email,
                              @RequestParam("verificationCode") String verificationCode, @RequestParam("password") String password) {
@@ -88,6 +94,7 @@ public class SystemController {
     }
 
 
+    @ApiOperation(value="登录")
     @PostMapping("system/login")
     public Response login(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
         User user = userInfoService.getUserByEmail(email);
@@ -110,7 +117,7 @@ public class SystemController {
 
         //TODO:待获取ip
         if(ip==null||ip.isEmpty()||ip.equalsIgnoreCase("unknown")){
-          ip="127.0.0.1";
+          ip="unknown";
         }
         LoginLog loginLog = new LoginLog(null, user.getU_id(), new Date(), ip, user.getStatus(), browser);
         if(loginLogService.addLoginLog(loginLog)<=0){
