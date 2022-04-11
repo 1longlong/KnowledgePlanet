@@ -4,8 +4,8 @@
 
 
     <insert id="uploadResource" parameterType="Resource" useGeneratedKeys="true" keyProperty="r_id">
-        insert into knowledge_planet.resource(u_id,p_code,u_name,r_name,upload_time,link,coverage,r_description)
-        values (#{u_id},#{p_code},#{u_name},#{r_name},#{upload_time},#{link},#{coverage},#{r_description});
+        insert into knowledge_planet.resource(u_id,p_code,u_name,r_name,upload_time,link,coverage,r_description,details)
+        values (#{u_id},#{p_code},#{u_name},#{r_name},#{upload_time},#{link},#{coverage},#{r_description},#{details});
     </insert>
 
     <update id="upDatePraise" parameterType="Resource" >
@@ -21,4 +21,8 @@
     </select>
 
 
+    <select id="getResourceByPCode" parameterType="Long" resultType="Resource">
+        select * from knowledge_planet.resource
+        where p_code = #{p_code};
+    </select>
 </mapper>

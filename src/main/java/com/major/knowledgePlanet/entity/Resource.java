@@ -34,5 +34,6 @@ public class Resource {
     private Boolean is_recommended;
     private Integer praise_count;
     private Integer collect_count;
+    private String details;
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -40,7 +41,7 @@ public class ResourceController {
     public Response uploadResource(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "p_code") Long p_code,
                                    @RequestParam(value = "u_name") String u_name,@RequestParam(value = "r_name") String r_name,
                                    @RequestParam(value = "link") String link,@RequestParam(value = "coverage") String coverage,
-                                   @RequestParam(value = "r_description") String r_description){
+                                   @RequestParam(value = "r_description") String r_description ,@RequestParam(value = "details")String details){
 
         Date currentTime = new Date();
         Resource resource = new Resource();
@@ -49,12 +50,13 @@ public class ResourceController {
         resource.setU_name(u_name);
         resource.setR_name(r_name);
         resource.setLink(link);
+        resource.setDetails(details);
         resource.setUpload_time(currentTime);
         resource.setCoverage(coverage);
         resource.setR_description(r_description);
         int result = resourceService.uploadResource(resource);
         if(result!=0){
-            return Response.success().message("上传成功").data("r_id",resource.getR_id());
+            return Response.success().message("上传成功").data("r_id",resource.getR_id()).data("upload_time",resource.getUpload_time());
         }else{
             return Response.serverError().message("上传失败").data("result",result);
         }
@@ -124,11 +126,18 @@ public class ResourceController {
         }
     }
 
-    @GetMapping("resource/getResource")
-    public Response getResource(@RequestParam(value = "r_id") Long r_id){
+    @GetMapping("resource/getResourceById")
+    public Response getResourceById(@RequestParam(value = "r_id") Long r_id){
         Resource resource = resourceService.getResourceById(r_id);
         return Response.success().message("查找成功").data("result",resource);
     }
+
+    @GetMapping("resource/getResourceByPCode")
+    public Response getResourceByPCode(@RequestParam(value = "p_code") Long p_code){
+        List<Resource> resource = resourceService.getResourceByPCode(p_code);
+        return Response.success().message("查找成功").data("result",resource);
+    }
+
 
 
 
