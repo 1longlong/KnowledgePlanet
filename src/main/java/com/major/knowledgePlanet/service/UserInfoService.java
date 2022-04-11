@@ -15,4 +15,8 @@ public interface UserInfoService {
     User getUserByEmail(String email);
 
     Integer addUser(User user);
+
+    User getUserById(Long u_id);
+
+    Integer updatePassword(Long u_id,String newPassword);
 }

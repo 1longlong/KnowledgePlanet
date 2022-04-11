@@ -11,4 +11,15 @@
       values(#{u_name},#{create_time},#{update_time},#{status},#{avatar},#{email},#{password});
    </insert>
 
+   <select id="getUserById" parameterType="Long" resultType="User">
+      select u_id,u_name,create_time,update_time,status,avatar,email,password from knowledge_planet.user
+      where u_id=#{u_id};
+   </select>
+
+   <update id="updatePassword">
+      update knowledge_planet.user
+      set password=#{newPassword}
+      where u_id=#{u_id};
+   </update>
+
 </mapper>

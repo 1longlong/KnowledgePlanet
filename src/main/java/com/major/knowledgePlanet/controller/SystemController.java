@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +50,12 @@ public class SystemController {
 
     @Value("${user.defaultAvatar}")
     private String defaultAvatar;
+
+    @Value("${server.IP}")
+    private String cookieDomain;
+
+    @Value("${server.servlet.context-path}")
+    private String cookiePath;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -97,7 +104,7 @@ public class SystemController {
 
     @ApiOperation(value="登录")
     @PostMapping("system/login")
-    public Response login(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
+    public Response login(HttpServletResponse httpServletResponse,HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
         User user = userInfoService.getUserByEmail(email);
         if(user==null) {
             return Response.clientError().code("A0201").message("用户不存在");
@@ -135,6 +142,10 @@ public class SystemController {
             }
         };
         String token = JWTUtil.createToken(map, saltValue.getBytes());
+        Cookie cookie = new Cookie("token", token);
+        cookie.setDomain(cookieDomain);
+        cookie.setPath(cookiePath);
+        httpServletResponse.addCookie(cookie);
         return Response.success().message("登录成功").data("token",token);
     }
 }
