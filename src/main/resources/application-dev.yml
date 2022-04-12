@@ -18,8 +18,6 @@ server:
   port: 81
   servlet:
     context-path: /kp
-user:
-  defaultAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
 logging:
   level:
     root: info
@@ -31,4 +29,6 @@ swagger:
   applicationVersion: 1.0
   applicationDescription: knowledgePlanet api info
 saltValue: 1234
-
+defaultAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
+defaultPlanetAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
+defaultPlanetMaxNumber: 500

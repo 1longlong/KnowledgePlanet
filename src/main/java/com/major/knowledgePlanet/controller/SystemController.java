@@ -8,20 +8,23 @@ import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.jwt.JWTUtil;
+import com.major.knowledgePlanet.constValue.SystemConst;
+import com.major.knowledgePlanet.constValue.UserStatusEnum;
 import com.major.knowledgePlanet.entity.LoginLog;
 import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +34,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TODO:系统基本使用模块
+ * 系统基本使用模块
  * 包含登录、注册等基本功能
  *
  * @author 孟繁霖
@@ -41,14 +44,14 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class SystemController {
 
-    @Autowired
+    @Resource
     @Qualifier("redisTemplate")
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,Object> redisTemplate;
 
     @Value("${saltValue}")
     private String saltValue;
 
-    @Value("${user.defaultAvatar}")
+    @Value("${defaultAvatar}")
     private String defaultAvatar;
 
     @Value("${server.IP}")
@@ -57,14 +60,15 @@ public class SystemController {
     @Value("${server.servlet.context-path}")
     private String cookiePath;
 
-    @Autowired
+    @Resource(name="userInfoServiceImpl")
     private UserInfoService userInfoService;
 
-    @Autowired
+    @Resource(name="loginLogServiceImpl")
     private LoginLogService loginLogService;
 
-    @ApiOperation(value="向邮箱发送验证码")
     @GetMapping("system/getVerificationCode/{email}")
+    @ApiOperation(value="向邮箱发送验证码")
+    @ApiImplicitParams(@ApiImplicitParam(name="email",value="邮箱",dataType="String",dataTypeClass =String.class, paramType = "path",required = true))
     public Response getVerificationCode(@PathVariable("email") String email) {
         boolean isMatch = ReUtil.isMatch("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$", email);
         if (!isMatch) {
@@ -72,7 +76,7 @@ public class SystemController {
         }
         String verificationCode = EmailUtil.getVerificationCode();
         redisTemplate.opsForValue().set(email, verificationCode, 60 * 10, TimeUnit.SECONDS);
-        //调用hutool工具类
+        //调用HuTool工具类
         String result = MailUtil.send(email, "激活验证码", EmailUtil.getContents(email, verificationCode), true);
         System.out.println(result);
         //缓存验证码,2分钟
@@ -82,6 +86,10 @@ public class SystemController {
 
     @ApiOperation(value="注册账号")
     @PostMapping("system/register")
+    @ApiImplicitParams({@ApiImplicitParam(name="nickName",value="昵称",dataType = "String",dataTypeClass =String.class,paramType = "query",required = true),
+    @ApiImplicitParam(name="email",value="邮箱",dataType = "String",dataTypeClass =String.class,paramType = "query",required = true),
+    @ApiImplicitParam(name="verificationCode",value="验证码",dataType = "String",dataTypeClass =String.class,paramType = "query",required = true),
+    @ApiImplicitParam(name="password",value="密码",dataType = "String",dataTypeClass =String.class,paramType = "query",required = true)})
     public Response register(@RequestParam(value = "nickName") String nickName, @RequestParam("email") String email,
                              @RequestParam("verificationCode") String verificationCode, @RequestParam("password") String password) {
         User user = userInfoService.getUserByEmail(email);
@@ -92,7 +100,7 @@ public class SystemController {
         Digester sha256=new Digester(DigestAlgorithm.SHA256);
         String sha256Password = sha256.digestHex(password);
         User newUser = new User(null, nickName, new Date(), new Date(), 1, defaultAvatar, email, sha256Password);
-        if (verificationCode.equals((String) redisTemplate.opsForValue().get(email))) {
+        if (verificationCode.equals(redisTemplate.opsForValue().get(email))) {
             if (userInfoService.addUser(newUser) > 0) {
                 return Response.success().data("user", newUser).message("注册成功");
             }
@@ -104,12 +112,14 @@ public class SystemController {
 
     @ApiOperation(value="登录")
     @PostMapping("system/login")
-    public Response login(HttpServletResponse httpServletResponse,HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
+    @ApiImplicitParams({@ApiImplicitParam(name="email",value="邮箱",dataType = "String",dataTypeClass =String.class,paramType = "query"),
+    @ApiImplicitParam(name="password",value="密码",dataType = "String",dataTypeClass =String.class,paramType = "query")})
+    public Response login(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
         User user = userInfoService.getUserByEmail(email);
         if(user==null) {
             return Response.clientError().code("A0201").message("用户不存在");
         }
-        if(user.getStatus().equals(2)){
+        if(user.getStatus().equals(UserStatusEnum.DISABLE.getStatus())){
             return Response.clientError().code("A0202").message("用户已被冻结");
         }
         Digester sha256=new Digester(DigestAlgorithm.SHA256);
@@ -124,28 +134,24 @@ public class SystemController {
         String ip=request.getHeader("X-Forwarded-For");
 
         //TODO:待获取ip
-        if(ip==null||ip.isEmpty()||ip.equalsIgnoreCase("unknown")){
-          ip="unknown";
+        if(ip==null||ip.isEmpty()|| SystemConst.NO_IP.equalsIgnoreCase(ip)){
+          ip=SystemConst.NO_IP;
         }
-        LoginLog loginLog = new LoginLog(null, user.getU_id(), new Date(), ip, user.getStatus(), browser);
+        LoginLog loginLog = new LoginLog(null, user.getUserId(), new Date(), ip, browser);
         if(loginLogService.addLoginLog(loginLog)<=0){
             System.out.println(user.toString()+"的日志未记录");
         }
         //生成token
-        Map<String, Object> map = new HashMap<String, Object>() {
+        Map<String, Object> map = new HashMap<>(4){
             private static final long serialVersionUID = 1L;
             {
-                put("u_id", user.getU_id());
-                put("u_name",user.getU_name());
+                put("userId", user.getUserId());
+                put("userName",user.getUserName());
                 put("status",user.getStatus());
-                put("expire_time", System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 1);//1天
+                put("expireTime", System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);//1天
             }
         };
         String token = JWTUtil.createToken(map, saltValue.getBytes());
-        Cookie cookie = new Cookie("token", token);
-        cookie.setDomain(cookieDomain);
-        cookie.setPath(cookiePath);
-        httpServletResponse.addCookie(cookie);
         return Response.success().message("登录成功").data("token",token);
     }
 }

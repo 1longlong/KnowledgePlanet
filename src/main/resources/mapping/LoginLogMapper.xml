@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.major.knowledgePlanet.mapper.LoginLogMapper">
     <insert id="addLoginLog" parameterType="LoginLog">
-        insert knowledge_planet.login_log(id,u_id,create_time,ip,status,browser)
-        values(#{id},#{u_id},#{create_time},#{ip},#{status},#{browser});
+        insert knowledge_planet.login_log(id,u_id,create_time,ip,browser)
+        values(#{id},#{u_id},#{create_time},#{ip},#{browser});
     </insert>
 </mapper>
 
