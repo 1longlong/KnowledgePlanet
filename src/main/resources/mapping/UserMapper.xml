@@ -2,13 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.major.knowledgePlanet.mapper.UserMapper">
 
-   <select id="getUserByEmail" resultType="User" parameterType="String">
+   <resultMap id="User" type="User">
+      <id property="userId" column="u_id"/>
+      <result property="userName" column="u_name"/>
+      <result property="createTime" column="create_time"/>
+      <result property="updateTime" column="update_time"/>
+      <result property="status" column="status"/>
+      <result property="avatar" column="avatar"/>
+      <result property="email" column="email"/>
+      <result property="password" column="password"/>
+   </resultMap>
+
+   <select id="getUserByEmail" resultMap="User" parameterType="String">
       select * from knowledge_planet.user where email=#{email};
    </select>
 
-   <insert id="addUser" parameterType="User" useGeneratedKeys="true" keyProperty="u_id">
+   <insert id="addUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
       insert knowledge_planet.user(u_name,create_time,update_time,status,avatar,email,password)
-      values(#{u_name},#{create_time},#{update_time},#{status},#{avatar},#{email},#{password});
+      values(#{userName},#{createTime},#{updateTime},#{status},#{avatar},#{email},#{password});
    </insert>
+
+   <select id="getUserById" parameterType="Long" resultMap="User">
+      select u_id,u_name,create_time,update_time,status,avatar,email,password from knowledge_planet.user
+      where u_id=#{u_id};
+   </select>
+
+   <update id="updatePassword">
+      update knowledge_planet.user
+      set password=#{newPassword}
+      where u_id=#{u_id};
+   </update>
 
 </mapper>

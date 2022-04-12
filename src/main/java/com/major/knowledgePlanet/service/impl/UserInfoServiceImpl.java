@@ -28,4 +28,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Integer addUser(User user) {
         return userMapper.addUser(user);
     }
+
+    @Override
+    public User getUserById(Long u_id) {
+        return userMapper.getUserById(u_id);
+    }
+
+    @Override
+    public Integer updatePassword(Long u_id, String newPassword) {
+        return userMapper.updatePassword(u_id,newPassword);
+    }
 }
