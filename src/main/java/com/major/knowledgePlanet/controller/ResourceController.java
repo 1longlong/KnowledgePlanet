@@ -36,27 +36,29 @@ public class ResourceController {
     @Autowired
     private FavoritesService favoritesService;
 
-    
+
+
+    //TODO 加details
     @PostMapping("resource/uploadResource")
     public Response uploadResource(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "p_code") Long p_code,
-                                   @RequestParam(value = "u_name") String u_name,@RequestParam(value = "r_name") String r_name,
-                                   @RequestParam(value = "link") String link,@RequestParam(value = "coverage") String coverage,
-                                   @RequestParam(value = "r_description") String r_description ,@RequestParam(value = "details")String details){
+                                   @RequestParam(value = "r_name") String r_name, @RequestParam(value = "link") String link,
+                                   @RequestParam(value = "coverage") String coverage, @RequestParam(value = "r_description") String r_description ,
+                                   @RequestParam(value = "details")String details){
 
         Date currentTime = new Date();
         Resource resource = new Resource();
-        resource.setU_id(u_id);
-        resource.setP_code(p_code);
-        resource.setU_name(u_name);
-        resource.setR_name(r_name);
+        resource.setUserId(u_id);
+        resource.setPlanetCode(p_code);
+        resource.setResourceName(r_name);
         resource.setLink(link);
         resource.setDetails(details);
-        resource.setUpload_time(currentTime);
+        resource.setUploadTime(currentTime);
         resource.setCoverage(coverage);
-        resource.setR_description(r_description);
+        resource.setStatus(0);
+        resource.setResourceDescription(r_description);
         int result = resourceService.uploadResource(resource);
         if(result!=0){
-            return Response.success().message("上传成功").data("r_id",resource.getR_id()).data("upload_time",resource.getUpload_time());
+            return Response.success().message("上传成功").data("r_id",resource.getResourceId()).data("upload_time",resource.getUploadTime());
         }else{
             return Response.serverError().message("上传失败").data("result",result);
         }
@@ -68,8 +70,8 @@ public class ResourceController {
     @PostMapping("resource/praise")
     public Response praise(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "r_id") Long r_id){
         Resource resource = resourceService.getResourceById(r_id);
-        int count =resource.getPraise_count()+1;
-        resource.setPraise_count(count);
+        int count =resource.getLikeCount()+1;
+        resource.setLikeCount(count);
         Integer result = resourceService.upDatePraise(resource);
 
         if(result!=0) {
@@ -85,9 +87,9 @@ public class ResourceController {
     //TODO 数据库创建用户和资源关系表
     public Response unPraise(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "r_id") Long r_id){
         Resource resource = resourceService.getResourceById(r_id);
-        int count = resource.getPraise_count()-1;
+        int count = resource.getLikeCount()-1;
         if(count>0) {
-            resource.setPraise_count(count);
+            resource.setLikeCount(count);
             Integer result = resourceService.upDatePraise(resource);
             return Response.success().message("取消点赞成功").data("result", result);
         }
@@ -98,13 +100,11 @@ public class ResourceController {
 
     //添加收藏夹
     @PostMapping("resource/collect")
-    public Response collect(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "r_id") Long r_id,
-                            @RequestParam(value = "r_name") String r_name,@RequestParam(value="coverage") String coverage){
+    public Response collect(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "r_id") Long r_id){
         Favorites favorites = new Favorites();
-        favorites.setU_id(u_id);
-        favorites.setR_id(r_id);
-        favorites.setCoverage(coverage);
-        favorites.setR_name(r_name);
+        favorites.setUserId(u_id);
+        favorites.setResourceId(r_id);
+        favorites.setIsCollected(false);
 
         Integer result = favoritesService.addFavorites(favorites);
 

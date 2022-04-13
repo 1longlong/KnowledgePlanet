@@ -18,12 +18,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private Long u_id;
-    private String u_name;
+    private Long userId;
+    private String userName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date create_time;
+    private Date createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date update_time;
+    private Date updateTime;
     private Integer status;
     private String avatar;
     private String email;

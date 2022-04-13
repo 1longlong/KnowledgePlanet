@@ -26,5 +26,7 @@ public class LoginLogServiceImpl implements LoginLogService {
     }
 
     @Override
-    public List<LoginLog> getLoginLogById(Long u_id){return loginLogMapper.getLoginLogById(u_id);}
+    public List<LoginLog> getLoginLogById(Long u_id){
+        return loginLogMapper.getLoginLogById(u_id);
+    }
 }

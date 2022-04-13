@@ -17,7 +17,7 @@ public enum ResponseCodeEnum {
     */
     CLIENT_ERROR(false,"A0001","用户端错误"),
     /**
-    * TODO:此处写属性描述
+    * 服务端错误
     */
     SERVER_ERROR(false,"B0001","服务端错误");
 

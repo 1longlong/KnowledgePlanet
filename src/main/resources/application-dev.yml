@@ -7,6 +7,9 @@ spring:
     redis:
       host: 127.0.0.1
       port: 6379
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
 mybatis:
   type-aliases-package: com.major.knowledgePlanet.entity
   mapper-locations: classpath:mapping/*.xml
@@ -15,11 +18,17 @@ server:
   port: 81
   servlet:
     context-path: /kp
-user:
-  defaultAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
 logging:
   level:
     root: info
   file:
     name: knowledgePlanet.log
+swagger:
+  enable: true
+  applicationName: knowledgePlanet
+  applicationVersion: 1.0
+  applicationDescription: knowledgePlanet api info
 saltValue: 1234
+defaultAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultAvatar.jgp
+defaultPlanetAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultPlanetAvatar.jpg
+defaultPlanetMaxNumber: 500

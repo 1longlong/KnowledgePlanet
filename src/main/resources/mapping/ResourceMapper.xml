@@ -3,25 +3,44 @@
 <mapper namespace="com.major.knowledgePlanet.mapper.ResourceMapper">
 
 
-    <insert id="uploadResource" parameterType="Resource" useGeneratedKeys="true" keyProperty="r_id">
-        insert into knowledge_planet.resource(u_id,p_code,u_name,r_name,upload_time,link,coverage,r_description,details)
-        values (#{u_id},#{p_code},#{u_name},#{r_name},#{upload_time},#{link},#{coverage},#{r_description},#{details});
+
+    <resultMap id="Resource" type="Resource">
+        <id property="resourceId" column="r_id"/>
+        <result property="userId" column="u_id"/>
+        <result property="planetCode" column="p_code"/>
+        <result property="resourceName" column="r_name"/>
+        <result property="uploadTime" column="upload_time"/>
+        <result property="link" column="link"/>
+        <result property="coverage" column="coverage"/>
+        <result property="resourceDescription" column="r_description"/>
+        <result property="status" column="status"/>
+        <result property="checkInfo" column="check_info"/>
+        <result property="isRecommended" column="is_recommended"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="collectCount" column="collect_count"/>
+    </resultMap>
+
+
+
+    <insert id="uploadResource"  parameterType="Resource" useGeneratedKeys="true" keyProperty="resourceId" >
+        insert into knowledge_planet.resource(u_id,p_code,r_name,upload_time,link,coverage,status,r_description,details)
+        values (#{userId},#{planetCode},#{resourceName},#{uploadTime},#{link},#{coverage},#{status},#{resourceDescription},#{details});
     </insert>
 
     <update id="upDatePraise" parameterType="Resource" >
         update knowledge_planet.resource
-        set praise_count = #{praise_count}
-        where r_id = #{r_id};
+        set like_count = #{likeCount}
+        where r_id = #{resourceId};
     </update>
 
 
-    <select id="getResourceById" parameterType="Long" resultType="Resource">
+    <select id="getResourceById" parameterType="Long" resultType="Resource" resultMap="Resource">
         select * from knowledge_planet.resource
         where r_id = #{r_id};
     </select>
 
 
-    <select id="getResourceByPCode" parameterType="Long" resultType="Resource">
+    <select id="getResourceByPCode" parameterType="Long" resultType="Resource" resultMap="Resource">
         select * from knowledge_planet.resource
         where p_code = #{p_code};
     </select>

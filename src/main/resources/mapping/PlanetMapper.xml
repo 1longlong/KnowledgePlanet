@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.major.knowledgePlanet.mapper.PlanetMapper">
-
-    <resultMap id="BaseResultMap" type="Planet" >
-        <result column="p_code" property="pCode"></result>
-        <result column="p_name" property="pName"></result>
-        <result column="create_time" property="createTime"></result>
-        <result column="max_number" property="maxNumber"></result>
-        <result column="p_description" property="pDescription"></result>
-        <result column="p_avatar" property="pAvatar"></result>
+    <resultMap id="Planet" type="Planet">
+        <id property="planetCode" column="p_code"/>
+        <result property="planetName" column="p_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="maxNumber" column="max_number"/>
+        <result property="planetDescription" column="p_description"/>
+        <result property="planetAvatar" column="p_avatar"/>
+        <result property="hot" column="hot"/>
     </resultMap>
 
+    <insert id="addPlanet" parameterType="Planet" useGeneratedKeys="true" keyProperty="planetCode">
+        insert knowledge_planet.planet(p_name, create_time,max_number, p_description, p_avatar, hot)
+        values(#{planetName},#{createTime},#{maxNumber},#{planetDescription},#{planetAvatar},#{hot});
+    </insert>
 
-    <select id="getHotestPlanet" resultType="Planet" resultMap="BaseResultMap">
+    <insert id="addUserPlanetRel" parameterType="UserPlanetRel">
+        insert knowledge_planet.user_planet_rel(u_id, p_code, role, integral)
+        values(#{userId},#{planetCode},#{role},#{integral});
+    </insert>
+
+    <select id="getHotestPlanet" resultType="Planet" resultMap="Planet">
         select * from knowledge_planet.planet
         order by hot desc limit 5;
     </select>
+
 </mapper>

@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Favorites {
-    private Long u_id;
-    private Long r_id;
-    private String r_name;
-    private String coverage;
+    private Long userId;
+    private Long resourceId;
+    private Boolean isLiked;
+    private Boolean isCollected;
 }

@@ -20,7 +20,7 @@ public class LoginLogController {
     public Response getLoginLogById(@RequestParam("u_id") Long u_id){
         List<LoginLog> loginLogList = loginLogService.getLoginLogById(u_id);
         if(!loginLogList.isEmpty()){
-             return Response.success().message("查找成功").data("result",loginLogList);
+            return Response.success().message("查找成功").data("result",loginLogList);
         }else{
             return Response.serverError().message("未查询到相关结果").data("result",loginLogList);
         }

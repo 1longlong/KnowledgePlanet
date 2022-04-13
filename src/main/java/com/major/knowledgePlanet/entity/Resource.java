@@ -19,21 +19,21 @@ import java.util.Date;
 @AllArgsConstructor
 public class Resource {
 
-    private Long r_id;
-    private Long u_id;
-    private Long p_code;
-    private String u_name;
-    private String r_name;
+    //TODO 数据库加details
+    private Long resourceId;
+    private Long userId;
+    private Long planetCode;
+    private String resourceName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date upload_time;
+    private Date uploadTime;
     private String link;
     private String coverage;
-    private String r_description;
-    private Boolean is_checked;
-    private String remarks;
-    private Boolean is_recommended;
-    private Integer praise_count;
-    private Integer collect_count;
+    private String resourceDescription;
+    private Integer status;
+    private String checkInfo;
+    private Boolean isRecommended;
+    private Integer likeCount;
+    private Integer collectCount;
     private String details;
 
 }
