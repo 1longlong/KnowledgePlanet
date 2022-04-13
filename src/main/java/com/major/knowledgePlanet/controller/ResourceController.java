@@ -36,7 +36,7 @@ public class ResourceController {
     @Autowired
     private FavoritesService favoritesService;
 
-
+    
     @PostMapping("resource/uploadResource")
     public Response uploadResource(@RequestParam(value = "u_id") Long u_id,@RequestParam(value = "p_code") Long p_code,
                                    @RequestParam(value = "u_name") String u_name,@RequestParam(value = "r_name") String r_name,
