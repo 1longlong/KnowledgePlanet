@@ -23,7 +23,6 @@ public class FavoritesServiceImpl implements FavoritesService {
 
     @Override
     public  Integer  deleteFavorites(@Param("userId")Long userId , @Param("resourceId") Long resourceId){return favoritesMapper.deleteFavorites(userId,resourceId);}
-
     @Override
     public List<Favorites> getAll(Long u_id){return favoritesMapper.getAll(u_id);}
 }

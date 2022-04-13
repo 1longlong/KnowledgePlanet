@@ -18,8 +18,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +29,6 @@ import java.util.List;
  * @author cj
  * @date 2022/4/8 20:19
  */
-
 @Api(tags="资源模块",value="ResourceController")
 @RestController
 public class ResourceController {
@@ -98,7 +95,6 @@ public class ResourceController {
             }
         }
         return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
-
     }
 
     //取消点赞
@@ -155,6 +151,7 @@ public class ResourceController {
             }
         }
         return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+ 
     }
 
     //取消收藏
