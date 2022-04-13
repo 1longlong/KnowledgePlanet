@@ -29,6 +29,6 @@ swagger:
   applicationVersion: 1.0
   applicationDescription: knowledgePlanet api info
 saltValue: 1234
-defaultAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
-defaultPlanetAvatar: http://localhost:8080/easyLab/static/student/avatar/defaultAvatar.jpg
+defaultAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultAvatar.jgp
+defaultPlanetAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultPlanetAvatar.jpg
 defaultPlanetMaxNumber: 500
