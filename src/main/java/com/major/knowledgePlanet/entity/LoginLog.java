@@ -19,9 +19,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class LoginLog {
     private Long id;
-    private Long u_id;
+    private Long userId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date create_time;
+    private Date createTime;
     private String ip;
     private String browser;
 }

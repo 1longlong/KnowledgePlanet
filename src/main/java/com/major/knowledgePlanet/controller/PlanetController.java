@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.controller;
 
+import com.major.knowledgePlanet.entity.Planet;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.PlanetService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
@@ -9,12 +10,14 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * TODO:此处写PlanetController类的描述
@@ -50,5 +53,17 @@ public class PlanetController {
             return Response.serverError().message("创建失败！");
         }
         return Response.clientError().code("B0201").message("token验证失败，请重新登录");
+    }
+
+
+    @GetMapping("planet/getHotPlanet")
+    public Response getHotPlanet (){
+
+        List<Planet> planetList = planetService.getHotestPlanet();
+        if(!planetList.isEmpty()){
+            return Response.success().message("查找成功").data("planetList" ,planetList);
+        }else{
+            return Response.success().message("未查到热度信息");
+        }
     }
 }
