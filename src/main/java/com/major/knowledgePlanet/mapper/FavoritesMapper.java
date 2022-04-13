@@ -12,7 +12,7 @@ import java.util.List;
 public interface FavoritesMapper {
     Integer addFavorites(Favorites favorites);
 
-    Integer deleteFavorites(@Param("u_id")Long u_id , @Param("r_id") Long r_id);
+    Integer deleteFavorites(@Param("userId")Long userId , @Param("resourceId") Long resourceId);
 
     List<Favorites> getAll(Long u_id);
 }
