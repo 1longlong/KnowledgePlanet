@@ -35,6 +35,7 @@ public class ResourceController {
     @Value("${saltValue}")
     private String saltValue;
 
+
     @Autowired
     private ResourceService resourceService;
 

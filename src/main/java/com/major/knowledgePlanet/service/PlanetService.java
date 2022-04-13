@@ -19,5 +19,25 @@ public interface PlanetService {
      */
     Long createPlanet(Long userId,String planetName,String planetDescription,String planetAvatar);
 
+    /**
+    * 搜索星球
+    * @param info 1
+    * @return : java.util.List<com.major.knowledgePlanet.entity.Planet>
+    * @author Covenant
+    * @date 2022-04-13 15:58
+    */
+    List<Planet> searchPlanet(String info);
+
+    /**
+    * 获取推荐星球
+    * @param userId 1
+    * @return : java.util.List<com.major.knowledgePlanet.entity.Planet>
+    * @author Covenant
+    * @date 2022-04-13 15:58
+    */
+    List<Planet> getRecommendPlanet(Long userId);
+
     List<Planet> getHotestPlanet();
+
+
 }
