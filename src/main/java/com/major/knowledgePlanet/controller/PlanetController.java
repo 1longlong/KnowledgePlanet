@@ -57,7 +57,6 @@ public class PlanetController {
 
 
     @GetMapping("planet/getHotPlanet")
-    @ApiOperation(value="按热度获取前6个星球")
     public Response getHotPlanet (){
 
         List<Planet> planetList = planetService.getHotestPlanet();
