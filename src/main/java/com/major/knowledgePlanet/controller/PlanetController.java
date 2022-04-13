@@ -56,6 +56,26 @@ public class PlanetController {
     }
 
 
+    @GetMapping("planet/searchPlanet")
+    @ApiOperation(value="根据关键词查询星球")
+    @ApiImplicitParam(name="keyWord",value = "搜索的关键词",dataType="String",dataTypeClass = String.class,paramType = "query",required = true)
+    public Response searchPlanet(@RequestParam("keyWord")String keyWord){
+        List<Planet> planetList = planetService.searchPlanet(keyWord);
+        return Response.success().data("planetList",planetList);
+    }
+
+
+    @GetMapping("planet/getRecommendPlanet")
+    public Response getRecommendPlanet(HttpServletRequest request){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        //TODO: 获得推荐的星球
+        List<Planet> planetList=planetService.getRecommendPlanet(userId);
+        return Response.success().data("planetList",planetList);
+    }
+
     @GetMapping("planet/getHotPlanet")
     public Response getHotPlanet (){
 

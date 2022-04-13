@@ -29,7 +29,8 @@ import java.util.List;
  * @date 2022/4/8 20:19
  */
 @RestController
-public class ResourceController {
+public class
+ResourceController {
     @Autowired
     private ResourceService resourceService;
 
@@ -65,6 +66,7 @@ public class ResourceController {
 
 
     }
+
 
     //点赞
     @PostMapping("resource/praise")
