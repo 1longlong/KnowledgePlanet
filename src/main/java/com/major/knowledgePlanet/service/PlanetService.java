@@ -2,6 +2,8 @@ package com.major.knowledgePlanet.service;
 
 import com.major.knowledgePlanet.entity.Planet;
 
+import java.util.List;
+
 public interface PlanetService {
     Integer addPlanet(Planet planet);
 
@@ -16,4 +18,6 @@ public interface PlanetService {
      * @date 2022-04-12 21:09
      */
     Long createPlanet(Long userId,String planetName,String planetDescription,String planetAvatar);
+
+    List<Planet> getHotestPlanet();
 }

@@ -21,4 +21,9 @@
         values(#{userId},#{planetCode},#{role},#{integral});
     </insert>
 
+    <select id="getHotestPlanet" resultType="Planet" resultMap="Planet">
+        select * from knowledge_planet.planet
+        order by hot desc limit 5;
+    </select>
+
 </mapper>
