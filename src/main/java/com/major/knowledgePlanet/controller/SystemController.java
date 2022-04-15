@@ -11,9 +11,11 @@ import cn.hutool.jwt.JWTUtil;
 import com.major.knowledgePlanet.constValue.SystemConst;
 import com.major.knowledgePlanet.constValue.UserStatusEnum;
 import com.major.knowledgePlanet.entity.LoginLog;
+import com.major.knowledgePlanet.entity.Notice;
 import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.LoginLogService;
+import com.major.knowledgePlanet.service.NoticeService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
 import io.swagger.annotations.*;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -66,6 +69,9 @@ public class SystemController {
 
     @Resource(name="loginLogServiceImpl")
     private LoginLogService loginLogService;
+
+    @Resource(name="noticeServiceImpl")
+    private NoticeService noticeService;
 
     @GetMapping("system/getVerificationCode/{email}")
     @ApiOperation(value="向邮箱发送验证码")
@@ -155,6 +161,59 @@ public class SystemController {
         String token = JWTUtil.createToken(map, saltValue.getBytes());
         return Response.success().message("登录成功").data("token",token);
     }
+
+    @GetMapping("system/getLoginLogById")
+    @ApiOperation(value="根据用户id获取登录日志")
+    public Response getLoginLogById(HttpServletRequest request){
+        String token = request.getHeader("token");
+        if(token==null){
+            return Response.clientError().code("B0201").message("未获取到token");
+        } if(JWTUtil.verify(token, saltValue.getBytes())) {
+            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
+            System.out.println("userId:" + userId);
+
+            List<LoginLog> loginLogList = loginLogService.getLoginLogById(userId);
+            if (!loginLogList.isEmpty()) {
+                return Response.success().message("查找成功").data("result", loginLogList);
+            } else {
+                return Response.serverError().message("未查询到相关结果").data("result", loginLogList);
+            }
+        }
+        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+    }
+
+
+    @PostMapping("system/releaseNotice")
+    @ApiOperation(value="发布系统公告")
+    public Response realeaseNotice(HttpServletRequest request, @RequestBody Notice notice){
+        String token = request.getHeader("token");
+        if(token==null){
+            return Response.clientError().code("B0201").message("未获取到token");
+        } if(JWTUtil.verify(token, saltValue.getBytes())) {
+            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
+            System.out.println("userId:" + userId);
+            Integer result = noticeService.releaseNotice(notice);
+            if(result!=0){
+                return Response.success().message("上传成功").data("noticeId", notice.getNoticeId()).data("createTime", notice.getCreateTime());
+            }else{
+                return  Response.serverError().message("上传失败").data("result", result);
+            }
+
+        }
+        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+    }
+
+    @GetMapping("system/getAllNotice")
+    @ApiOperation(value="查找现有的公告")
+    public Response getAllNotice(){
+        List<Notice> notices = noticeService.getAllNotice();
+        if(!notices.isEmpty()){
+            return Response.success().message("查找成功").data("notices" ,notices);
+        }else{
+            return Response.serverError().message("未查到公告");
+        }
+    }
+
 }
 
 
