@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.config;
 
+
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
