@@ -11,6 +11,6 @@ import java.util.List;
 public interface LoginLogMapper {
     Integer addLoginLog(LoginLog loginLog);
 
-    List<LoginLog> getLoginLogById(Long u_id);
+    List<LoginLog> getLoginLogById(Long userId);
 
 }
