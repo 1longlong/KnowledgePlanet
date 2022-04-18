@@ -1,16 +1,16 @@
 package com.major.knowledgePlanet.controller;
 
 
-
-import cn.hutool.jwt.JWTUtil;
+import com.major.knowledgePlanet.constValue.RedisKey;
 import com.major.knowledgePlanet.entity.Resource;
+import com.major.knowledgePlanet.entity.ResourceVO;
 import com.major.knowledgePlanet.result.Response;
 
 
-import com.major.knowledgePlanet.entity.Favorites;
-import com.major.knowledgePlanet.service.FavoritesService;
-
+import com.major.knowledgePlanet.service.RedisService;
 import com.major.knowledgePlanet.service.ResourceService;
+import com.major.knowledgePlanet.util.RedisUtil;
+import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,188 +35,185 @@ public class ResourceController {
     @Value("${saltValue}")
     private String saltValue;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @javax.annotation.Resource(name="redisServiceImpl")
+    private RedisService redisService;
+
 
     @Autowired
     private ResourceService resourceService;
 
-    @Autowired
-    private FavoritesService favoritesService;
 
 
-
-    //TODO 加details
     @PostMapping("resource/uploadResource")
     @ApiOperation(value="上传资源")
     public Response uploadResource(HttpServletRequest request, @RequestBody Resource resource){
 
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            Date currentTime = new Date();
-            resource.setUserId(userId);
-            resource.setUploadTime(currentTime);
-            resource.setStatus(0);
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        System.out.println("userId:" + userId);
+        Date currentTime = new Date();
+        resource.setUserId(userId);
+        resource.setUploadTime(currentTime);
+        resource.setStatus(0);
             int result = resourceService.uploadResource(resource);
             if (result != 0) {
                 return Response.success().message("上传成功").data("r_id", resource.getResourceId()).data("upload_time", resource.getUploadTime());
             } else {
                 return Response.serverError().message("上传失败").data("result", result);
             }
-        }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
-
     }
+
 
 
     @PostMapping("resource/praise")
-    @ApiOperation(value="点赞")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)})
+    @ApiOperation(value="资源点赞")
+    @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)
     public Response praise(HttpServletRequest request, @RequestParam(value = "resourceId") Long resourceId){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-
-            //TODO 用户资源关系表里插数据
-            Resource resource = resourceService.getResourceById(resourceId);
-            int count = resource.getLikeCount() + 1;
-            resource.setLikeCount(count);
-            Integer result = resourceService.upDatePraise(resource);
-
-            if (result != 0) {
-                return Response.success().message("点赞成功").data("result", result);
-            } else {
-                return Response.serverError().message("点赞失败").data("result", result);
-            }
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        System.out.println("userId:" + userId);
+
+        if(resourceService.getResourceById(resourceId)==null) {
+            return Response.clientError().message("资源不存在");
+        }
+        //向redis中写入一条记录或者加1
+        if(!redisUtil.hHasKey(RedisKey.RESOURCE_LIKE_COUNT,resourceId.toString())){
+            redisUtil.hset(RedisKey.RESOURCE_LIKE_COUNT,resourceId.toString(),1);
+        }else{
+            redisUtil.hincr(RedisKey.RESOURCE_LIKE_COUNT,resourceId.toString(),1);
+        }
+        //资源-用户-是否点赞设为是
+        String hashKey= resourceId + ":" + userId;
+        redisUtil.hset(RedisKey.RESOURCE_USER_ISLIKE,hashKey,1);
+        return Response.success().message("点赞成功");
     }
 
-    //取消点赞
     @PostMapping("resource/unPraise")
     @ApiOperation(value="取消点赞")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)})
-    //TODO 数据库创建用户和资源关系表
+    @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)
     public Response unPraise(HttpServletRequest request, @RequestParam(value = "resourceId") Long resourceId){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            //TODO 用户资源关系表插数据
-            Resource resource = resourceService.getResourceById(resourceId);
-            int count = resource.getLikeCount() - 1;
-            if (count > 0) {
-                resource.setLikeCount(count);
-                Integer result = resourceService.upDatePraise(resource);
-                return Response.success().message("取消点赞成功").data("result", result);
-            } else {
-                return Response.clientError().message("取消点赞失败");
-            }
-
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        //向redis写入一条记录或者减1
+        if(!redisUtil.hHasKey(RedisKey.RESOURCE_LIKE_COUNT,resourceId.toString())){
+            redisUtil.hset(RedisKey.RESOURCE_LIKE_COUNT,resourceId.toString(),-1);
+        }else{
+            redisUtil.hdecr(RedisKey.RESOURCE_LIKE_COUNT,resourceId.toString(),1);
+        }
+        //资源-用户-是否点赞设为否
+        String hashKey= resourceId + ":" + userId;
+        redisUtil.hset(RedisKey.RESOURCE_USER_ISLIKE,hashKey,0);
+        return Response.success().message("取消点赞成功");
+
     }
 
-    //添加收藏夹
     @PostMapping("resource/collect")
     @ApiOperation(value="添加收藏")
     @ApiImplicitParams({
             @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)})
     public Response collect(HttpServletRequest request,@RequestParam(value = "resourceId") Long resourceId){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            Favorites favorites = new Favorites();
-            favorites.setUserId(userId);
-            favorites.setResourceId(resourceId);
-            favorites.setIsCollected(false);
-
-            Integer result = favoritesService.addFavorites(favorites);
-
-            if (result != 0) {
-                return Response.success().message("收藏成功").data("result", result);
-            } else {
-                return Response.serverError().message("收藏失败").data("result", result);
-            }
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        System.out.println("userId:" + userId);
+        if(resourceService.getResourceById(resourceId)==null) {
+            return Response.clientError().message("资源不存在");
+        }
+
+        //向redis中写入一条记录或者加1
+        if(!redisUtil.hHasKey(RedisKey.RESOURCE_COLLECT_COUNT,resourceId.toString())){
+            redisUtil.hset(RedisKey.RESOURCE_COLLECT_COUNT,resourceId.toString(),1);
+        }else{
+            redisUtil.hincr(RedisKey.RESOURCE_COLLECT_COUNT,resourceId.toString(),1);
+        }
+        //资源-用户-是否收藏设为是
+        String hashKey= resourceId + ":" + userId;
+        redisUtil.hset(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey,1);
+        return Response.success().message("收藏成功");
  
     }
 
-    //取消收藏
+
     @PostMapping("resource/uncollect")
     @ApiOperation(value="取消收藏")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)})
+    @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)
     public Response uncollect(HttpServletRequest request,@RequestParam(value= "resourceId")Long resourceId){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            Integer result = favoritesService.deleteFavorites(userId, resourceId);
-            if (result != 0) {
-                return Response.success().message("取消收藏成功").data("result", result);
-            } else {
-                return Response.serverError().message("取消收藏失败").data("result", result);
-            }
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        //向redis写入一条记录或者减1
+        if(!redisUtil.hHasKey(RedisKey.RESOURCE_COLLECT_COUNT,resourceId.toString())){
+            redisUtil.hset(RedisKey.RESOURCE_COLLECT_COUNT,resourceId.toString(),-1);
+        }else{
+            redisUtil.hdecr(RedisKey.RESOURCE_COLLECT_COUNT,resourceId.toString(),1);
+        }
+        //资源-用户-是否收藏设为否
+        String hashKey= resourceId + ":" + userId;
+        redisUtil.hset(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey,0);
+        return Response.success().message("取消收藏成功");
     }
 
-    @GetMapping("resource/getResourceById")
-    @ApiOperation(value="按资源id获取资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="resourceId",value="资源id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)})
-    public Response getResourceById(@RequestParam(value = "resourceId") Long resourceId){
-        Resource resource = resourceService.getResourceById(resourceId);
-        return Response.success().message("查找成功").data("result",resource);
-    }
 
     @GetMapping("resource/getResourceByPCode")
     @ApiOperation(value="按星球获取资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="planetCode",value="星球id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)})
-    public Response getResourceByPCode(@RequestParam(value = "planetCode") Long planetCode){
-        List<Resource> resource = resourceService.getResourceByPCode(planetCode);
-        if(!resource.isEmpty()){
-            return Response.success().message("查找成功").data("result",resource);
-        }else{
-            return Response.serverError().message("未查到相关信息");
+    @ApiImplicitParam(name="planetCode",value="星球id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)
+    public Response getResourceByPCode(HttpServletRequest request,@RequestParam(value = "planetCode") Long planetCode){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
         }
+
+        List<ResourceVO> resourceVOList = resourceService.getResourceByPCode(planetCode,userId);
+        for (ResourceVO resourceVO : resourceVOList) {
+            String hashKey= resourceVO.getResourceId() + ":" + userId;
+            if(redisUtil.hHasKey(RedisKey.RESOURCE_USER_ISLIKE,hashKey)){
+                Boolean is_like=redisUtil.hget(RedisKey.RESOURCE_USER_ISLIKE,hashKey).equals(1);
+                resourceVO.setLiked(is_like);
+            }else{
+                resourceVO.setLiked(false);
+            }
+            if(redisUtil.hHasKey(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey)){
+                Boolean is_collect=redisUtil.hget(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey).equals(1);
+                resourceVO.setCollected(is_collect);
+            }else{
+                resourceVO.setCollected(false);
+            }
+        }
+        return Response.success().message("查找成功").data("resourceList",resourceVOList);
     }
 
 
-    @GetMapping("getAll")
-    @ApiOperation(value="获取所有资源")
-    public Response getAll(HttpServletRequest request){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            List<Favorites> favorites = favoritesService.getAll(userId);
-            if (!favorites.isEmpty()) {
-                return Response.success().message("查找成功").data("favorites", favorites);
-            } else {
-                return Response.serverError().message("未找到相关信息");
+    @GetMapping("resource/getCollectResource")
+    @ApiOperation(value="获取所有收藏的资源")
+    public Response getCollectResource(HttpServletRequest request){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        //提前持久化一次
+        redisService.persistResourceUserIsCollect();
+        List<ResourceVO> resourceVOList = resourceService.getCollectResourceByUserId(userId);
+        for (ResourceVO resourceVO : resourceVOList) {
+            String hashKey= resourceVO.getResourceId() + ":" + userId;
+            if(redisUtil.hHasKey(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey)){
+                Boolean is_like=redisUtil.hget(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey).equals(1);
+                resourceVO.setLiked(is_like);
+            }else{
+                resourceVO.setLiked(false);
             }
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        return Response.success().data("resourceList",resourceVOList).message("获取成功");
     }
 
 

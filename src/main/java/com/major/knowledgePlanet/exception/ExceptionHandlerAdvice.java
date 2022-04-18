@@ -57,6 +57,20 @@ public class ExceptionHandlerAdvice {
     }
 
     /**
+    * 缺少token异常
+    * @param exception 1
+    * @return : com.major.knowledgePlanet.result.Response
+    * @author Covenant
+    * @date 2022-04-16 23:00
+    */
+    @ExceptionHandler(NoTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response noTokenException(NoTokenException exception){
+        exception.printStackTrace();
+        return Response.clientError().message("缺少token");
+    }
+
+    /**
     * 空指针异常
     * @return : com.major.knowledgePlanet.result.Response
     * @author Covenant
@@ -82,6 +96,8 @@ public class ExceptionHandlerAdvice {
         throwable.printStackTrace();
         return Response.serverError().message("系统异常，请联系管理员!");
     }
+
+
 
 
 
