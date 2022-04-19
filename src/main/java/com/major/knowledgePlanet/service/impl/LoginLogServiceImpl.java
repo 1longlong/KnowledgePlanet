@@ -30,7 +30,6 @@ public class LoginLogServiceImpl implements LoginLogService {
     public List<LoginLog> getLoginLogById(Long u_id){
         return loginLogMapper.getLoginLogById(u_id);
     }
-
     @Override
     public List<String> getActiveCalender(Long userId){
         List<String> Dates = loginLogMapper.getActiveCalender(userId);

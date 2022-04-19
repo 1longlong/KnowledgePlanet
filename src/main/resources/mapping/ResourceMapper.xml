@@ -55,7 +55,7 @@
 
 
     <select id="getResourceByPCode" resultMap="ResourceVO">
-        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,details,is_liked,is_collected,u_name,avatar
+        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,collect_count,details,is_liked,is_collected,u_name,avatar
         from (knowledge_planet.resource join knowledge_planet.user on user.u_id=resource.u_id) left join knowledge_planet.user_resource_rel urr on urr.r_id=resource.r_id
         where p_code = #{planetCode} and (urr.u_id=#{userId} or urr.u_id is null);
     </select>

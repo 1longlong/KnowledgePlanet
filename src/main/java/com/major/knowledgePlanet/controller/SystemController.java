@@ -213,7 +213,6 @@ public class SystemController {
             return Response.serverError().message("未查到公告");
         }
     }
-
     @GetMapping("system/getActiveCalender")
     @ApiOperation(value="查找活动日历")
     public Response getActiveCalender(HttpServletRequest request) {
@@ -233,6 +232,7 @@ public class SystemController {
         }
         return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
     }
+
 }
 
 
