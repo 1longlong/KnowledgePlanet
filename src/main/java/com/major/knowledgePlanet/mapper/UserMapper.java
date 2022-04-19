@@ -12,7 +12,9 @@ public interface UserMapper {
 
     Integer addUser(User user);
 
-    User getUserById(Long u_id);
+    User getUserById(Long userId);
 
-    Integer updatePassword(Long u_id,String newPassword);
+    Integer updatePasswordByUserId(Long userId,String newPassword);
+
+    Integer updatePasswordByEmail(String email,String newPassword);
 }

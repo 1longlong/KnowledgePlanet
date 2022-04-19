@@ -24,13 +24,18 @@
 
    <select id="getUserById" parameterType="Long" resultMap="User">
       select u_id,u_name,create_time,update_time,status,avatar,email,password from knowledge_planet.user
-      where u_id=#{u_id};
+      where u_id=#{userId};
    </select>
 
-   <update id="updatePassword">
+   <update id="updatePasswordByUserId">
       update knowledge_planet.user
       set password=#{newPassword}
-      where u_id=#{u_id};
+      where u_id=#{userId};
+   </update>
+   <update id="updatePasswordByEmail">
+      update knowledge_planet.user
+      set password=#{newPassword}
+      where email=#{email};
    </update>
 
 </mapper>

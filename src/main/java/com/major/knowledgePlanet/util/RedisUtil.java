@@ -80,7 +80,7 @@ public final class RedisUtil {
     /**
      * 普通缓存获取
      * @param key 键
-     * @return 值
+     * @return 值 没有则为null
      */
     public Object get(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);

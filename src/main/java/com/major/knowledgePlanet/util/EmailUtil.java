@@ -12,7 +12,7 @@ public class EmailUtil {
     public static String getContents(String mailTo,String verificationCode){
         //实例化一个StringBuffer
         StringBuffer sb=new StringBuffer();
-        sb.append("<h2>"+"亲爱的"+mailTo+"您好！</h2>").append("<p style='text-align: center; font-size: 24px; font-weight: bold'>您的注册验证码为:"+verificationCode+"</p>");
+        sb.append("<h2>"+"亲爱的"+mailTo+"您好！</h2>").append("<p style='text-align: center; font-size: 24px; font-weight: bold'>您本次操作的验证码为:"+verificationCode+"</p>");
         sb.append("<p style='text-align:right'>"+sendFrom+"</p>");
         sb.append("<p style='text-align:right'>"+curDate("yyyy-MM-dd HH:mm:ss")+"</p>");
         return sb.toString();

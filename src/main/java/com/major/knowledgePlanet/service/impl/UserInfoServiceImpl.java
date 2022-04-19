@@ -30,12 +30,17 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public User getUserById(Long u_id) {
-        return userMapper.getUserById(u_id);
+    public User getUserById(Long userId) {
+        return userMapper.getUserById(userId);
     }
 
     @Override
-    public Integer updatePassword(Long u_id, String newPassword) {
-        return userMapper.updatePassword(u_id,newPassword);
+    public Integer updatePassword(Long userId, String newPassword) {
+        return userMapper.updatePasswordByUserId(userId,newPassword);
+    }
+
+    @Override
+    public void updatePassword(String email, String newPassword) {
+         userMapper.updatePasswordByEmail(email,newPassword);
     }
 }

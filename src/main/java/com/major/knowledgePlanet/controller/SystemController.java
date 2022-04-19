@@ -18,6 +18,7 @@ import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.NoticeService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
+import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,6 +118,7 @@ public class SystemController {
     }
 
 
+
     @ApiOperation(value="登录")
     @PostMapping("system/login")
     @ApiImplicitParams({@ApiImplicitParam(name="email",value="邮箱",dataType = "String",dataTypeClass =String.class,paramType = "query"),
@@ -162,9 +164,9 @@ public class SystemController {
         return Response.success().message("登录成功").data("token",token);
     }
 
-    @GetMapping("system/getLoginLogById")
+    @GetMapping("system/getLoginLog")
     @ApiOperation(value="根据用户id获取登录日志")
-    public Response getLoginLogById(HttpServletRequest request){
+    public Response getLoginLog(HttpServletRequest request){
         String token = request.getHeader("token");
         if(token==null){
             return Response.clientError().code("B0201").message("未获取到token");
@@ -185,7 +187,7 @@ public class SystemController {
 
     @PostMapping("system/releaseNotice")
     @ApiOperation(value="发布系统公告")
-    public Response realeaseNotice(HttpServletRequest request, @RequestBody Notice notice){
+    public Response releaseNotice(HttpServletRequest request, @RequestBody Notice notice){
         String token = request.getHeader("token");
         if(token==null){
             return Response.clientError().code("B0201").message("未获取到token");
@@ -213,25 +215,22 @@ public class SystemController {
             return Response.serverError().message("未查到公告");
         }
     }
-    @GetMapping("system/getActiveCalender")
-    @ApiOperation(value="查找活动日历")
-    public Response getActiveCalender(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        if (token == null) {
-            return Response.clientError().code("B0201").message("未获取到token");
+    @GetMapping("system/getLoginRecord")
+    @ApiOperation(value="获取用户登录时间记录")
+    public Response getLoginRecord(HttpServletRequest request) {
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
         }
-        if (JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            List<String> result = loginLogService.getActiveCalender(userId);
-            if(result!=null) {
-                return Response.success().message("查找成功").data("date:", result);
-            }else{
-                return  Response.serverError().message("未查到相关记录");
-            }
+        System.out.println("userId:" + userId);
+        List<String> result = loginLogService.getActiveCalender(userId);
+        if(result!=null) {
+            return Response.success().message("查找成功").data("date:", result);
+        }else{
+            return  Response.serverError().message("未查到相关记录");
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
     }
+
 
 }
 
