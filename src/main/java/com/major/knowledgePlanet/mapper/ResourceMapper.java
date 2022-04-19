@@ -7,13 +7,14 @@ import com.major.knowledgePlanet.entity.ResourceVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
 @Repository
 public interface ResourceMapper {
 
-    Integer uploadResource (Resource resource);
+    Integer addResource (Resource resource);
 
     Integer upDatePraise(Resource resource);
 
@@ -56,5 +57,14 @@ public interface ResourceMapper {
     * @date 2022-04-16 21:03
     */
     void addUserResourceRel(Long userId,Long resourceId,Boolean isLike,Boolean isCollect);
+
+    /**
+    * 添加资源标签
+    * @param tagList 1
+    * @param resourceId 2
+    * @author Covenant
+    * @date 2022-04-19 20:42
+    */
+    void addTag(ArrayList<String> tagList,Long resourceId);
 
 }

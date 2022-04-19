@@ -3,11 +3,12 @@ package com.major.knowledgePlanet.service;
 import com.major.knowledgePlanet.entity.LoginLog;
 import com.major.knowledgePlanet.entity.Resource;
 import com.major.knowledgePlanet.entity.ResourceVO;
+import com.major.knowledgePlanet.entity.UploadResourceVO;
 
 import java.util.List;
 
 public interface ResourceService {
-    Integer uploadResource (Resource resource);
+    Integer uploadResource (UploadResourceVO uploadResourceVO, Long userId);
 
     Integer upDatePraise(Resource resource);
 

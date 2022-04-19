@@ -120,7 +120,7 @@ public class SystemController {
     @ApiOperation(value="登录")
     @PostMapping("system/login")
     @ApiImplicitParams({@ApiImplicitParam(name="email",value="邮箱",dataType = "String",dataTypeClass =String.class,paramType = "query"),
-    @ApiImplicitParam(name="password",value="密码",dataType = "String",dataTypeClass =String.class,paramType = "query")})
+        @ApiImplicitParam(name="password",value="密码",dataType = "String",dataTypeClass =String.class,paramType = "query")})
     public Response login(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("password")String password){
         User user = userInfoService.getUserByEmail(email);
         if(user==null) {
@@ -225,7 +225,7 @@ public class SystemController {
             System.out.println("userId:" + userId);
             List<String> result = loginLogService.getActiveCalender(userId);
             if(result!=null) {
-                return Response.success().message("查找成功").data("datedate:", result);
+                return Response.success().message("查找成功").data("date:", result);
             }else{
                 return  Response.serverError().message("未查到相关记录");
             }

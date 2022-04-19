@@ -22,10 +22,18 @@
         <result property="collected" column="is_collected"/>
         <result property="uploaderName" column="u_name"/>
         <result property="uploaderAvatar" column="avatar"/>
+        <collection property="tagList" javaType="ArrayList" column="r_id" ofType="String" select="getResourceTags">
+        </collection>
     </resultMap>
 
 
 
+
+    <select id="getResourceTags" resultType="String">
+        select tag_name
+        from knowledge_planet.tag
+        where r_id=#{id};
+    </select>
 
     <select id="getCollectResourceByUserId" resultMap="ResourceVO">
         select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,details,is_liked,is_collected,u_name,avatar
@@ -36,10 +44,18 @@
 
 
 
-    <insert id="uploadResource"  parameterType="Resource" useGeneratedKeys="true" keyProperty="resourceId" >
+    <insert id="addResource"  parameterType="Resource" useGeneratedKeys="true" keyProperty="resourceId" >
         insert into knowledge_planet.resource(u_id,p_code,r_name,upload_time,link,coverage,status,r_description,details)
         values (#{userId},#{planetCode},#{resourceName},#{uploadTime},#{link},#{coverage},#{status},#{resourceDescription},#{details});
     </insert>
+
+    <insert id="addTag" useGeneratedKeys="true">
+        insert into knowledge_planet.tag(r_id,tag_name) values
+        <foreach collection="tagList" item="item" separator=",">
+            (#{resourceId},#{item})
+        </foreach>
+    </insert>
+
 
     <update id="upDatePraise" parameterType="Resource" >
         update knowledge_planet.resource

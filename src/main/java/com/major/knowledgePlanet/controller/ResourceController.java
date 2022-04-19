@@ -4,6 +4,7 @@ package com.major.knowledgePlanet.controller;
 import com.major.knowledgePlanet.constValue.RedisKey;
 import com.major.knowledgePlanet.entity.Resource;
 import com.major.knowledgePlanet.entity.ResourceVO;
+import com.major.knowledgePlanet.entity.UploadResourceVO;
 import com.major.knowledgePlanet.result.Response;
 
 
@@ -49,23 +50,19 @@ public class ResourceController {
 
     @PostMapping("resource/uploadResource")
     @ApiOperation(value="上传资源")
-    public Response uploadResource(HttpServletRequest request, @RequestBody Resource resource){
+    public Response uploadResource(HttpServletRequest request, @RequestBody UploadResourceVO uploadResourceVO){
 
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("B0204").message("身份验证失败");
         }
         System.out.println("userId:" + userId);
-        Date currentTime = new Date();
-        resource.setUserId(userId);
-        resource.setUploadTime(currentTime);
-        resource.setStatus(0);
-            int result = resourceService.uploadResource(resource);
-            if (result != 0) {
-                return Response.success().message("上传成功").data("r_id", resource.getResourceId()).data("upload_time", resource.getUploadTime());
-            } else {
-                return Response.serverError().message("上传失败").data("result", result);
-            }
+        int result = resourceService.uploadResource(uploadResourceVO,userId);
+        if (result != 0) {
+            return Response.success().message("上传成功");
+        } else {
+            return Response.serverError().message("上传失败");
+        }
     }
 
 

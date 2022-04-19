@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -42,5 +43,10 @@ public class ResourceVO {
 
     private String uploaderName;
     private String uploaderAvatar;
+
+    /**
+    * 资源标签列表
+    */
+    private ArrayList<String> tagList=new ArrayList<>();
 
 }

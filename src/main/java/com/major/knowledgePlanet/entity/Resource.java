@@ -35,4 +35,14 @@ public class Resource {
     private Integer collectCount;
     private String details;
 
+
+    public Resource(UploadResourceVO uploadResourceVO){
+        this.planetCode=uploadResourceVO.getPlanetCode();
+        this.resourceName=uploadResourceVO.getResourceName();
+        this.link=uploadResourceVO.getLink();
+        this.coverage=uploadResourceVO.getCoverage();
+        this.resourceDescription=uploadResourceVO.getResourceDescription();
+        this.details=uploadResourceVO.getDetails();
+    }
+
 }
