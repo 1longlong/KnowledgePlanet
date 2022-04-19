@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,8 +28,8 @@ public class LoginLogServiceImpl implements LoginLogService {
     }
 
     @Override
-    public List<LoginLog> getLoginLogById(Long u_id){
-        return loginLogMapper.getLoginLogById(u_id);
+    public List<LoginLog> getLoginLogById(Long userId){
+        return loginLogMapper.getLoginLogById(userId);
     }
 
     @Override

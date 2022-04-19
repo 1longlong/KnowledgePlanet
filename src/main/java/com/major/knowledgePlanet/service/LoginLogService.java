@@ -9,7 +9,9 @@ import java.util.List;
 public interface LoginLogService {
     Integer addLoginLog(LoginLog loginLog);
 
+
     List<LoginLog> getLoginLogById(Long userId);
+
 
     List<String> getActiveCalender(Long userId);
 }
