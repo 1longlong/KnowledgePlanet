@@ -178,21 +178,6 @@ public class ResourceController {
         redisService.persistResourceUserIsCollect();
         redisService.persistResourceUserIsLike();
         List<ResourceVO> resourceVOList = resourceService.getResourceByPCode(planetCode,userId);
-//        for (ResourceVO resourceVO : resourceVOList) {
-//            String hashKey= resourceVO.getResourceId() + ":" + userId;
-//            if(redisUtil.hHasKey(RedisKey.RESOURCE_USER_ISLIKE,hashKey)){
-//                Boolean is_like=redisUtil.hget(RedisKey.RESOURCE_USER_ISLIKE,hashKey).equals(1);
-//                resourceVO.setLiked(is_like);
-//            }else{
-//                resourceVO.setLiked(false);
-//            }
-//            if(redisUtil.hHasKey(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey)){
-//                Boolean is_collect=redisUtil.hget(RedisKey.RESOURCE_USER_ISCOLLECT,hashKey).equals(1);
-//                resourceVO.setCollected(is_collect);
-//            }else{
-//                resourceVO.setCollected(false);
-//            }
-//        }
         return Response.success().message("查找成功").data("resourceList",resourceVOList);
     }
 
