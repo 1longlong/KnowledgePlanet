@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.major.knowledgePlanet.mapper.LoginLogMapper">
 
-    <resultMap id="Favorites" type="Favorites">
+    <resultMap id="LoginLog" type="LoginLog">
         <id property="id" column="id"/>
         <result property="userId" column="u_id"/>
         <result property="createTime" column="create_time"/>
@@ -17,8 +17,13 @@
     </insert>
 
 
-    <select id="getLoginLogById" parameterType="Long" resultType="LoginLog" resultMap="Favorites">
+    <select id="getLoginLogById" parameterType="Long" resultType="LoginLog" resultMap="LoginLog">
         select * from knowledge_planet.login_log
+        where u_id = #{u_id};
+    </select>
+
+    <select id="getActiveCalender" parameterType="Long" resultType="String" >
+        select create_time from knowledge_planet.login_log
         where u_id = #{u_id};
     </select>
 </mapper>
