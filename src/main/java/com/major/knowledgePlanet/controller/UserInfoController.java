@@ -78,7 +78,8 @@ public class UserInfoController {
         if(redisVerificationCode==null||!redisVerificationCode.equals(verificationCode)){
             return Response.clientError().code("A0104").message("邮件校验码匹配失败");
         }
-        userInfoService.updatePassword(email,newPassword);
+        Digester sha256=new Digester(DigestAlgorithm.SHA256);
+        userInfoService.updatePassword(email,sha256.digestHex(newPassword));
         return Response.success().message("新密码设置成功");
 
     }
