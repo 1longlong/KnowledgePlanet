@@ -8,4 +8,6 @@ public interface LoginLogService {
     Integer addLoginLog(LoginLog loginLog);
 
     List<LoginLog> getLoginLogById(Long u_id);
+
+    List<String> getActiveCalender(Long userId);
 }

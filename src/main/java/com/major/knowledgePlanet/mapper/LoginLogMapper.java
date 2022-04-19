@@ -13,4 +13,5 @@ public interface LoginLogMapper {
 
     List<LoginLog> getLoginLogById(Long userId);
 
+    List<String> getActiveCalender(Long userId);
 }

@@ -213,6 +213,25 @@ public class SystemController {
             return Response.serverError().message("未查到公告");
         }
     }
+    @GetMapping("system/getActiveCalender")
+    @ApiOperation(value="查找活动日历")
+    public Response getActiveCalender(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        if (token == null) {
+            return Response.clientError().code("B0201").message("未获取到token");
+        }
+        if (JWTUtil.verify(token, saltValue.getBytes())) {
+            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
+            System.out.println("userId:" + userId);
+            List<String> result = loginLogService.getActiveCalender(userId);
+            if(result!=null) {
+                return Response.success().message("查找成功").data("datedate:", result);
+            }else{
+                return  Response.serverError().message("未查到相关记录");
+            }
+        }
+        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+    }
 
 }
 

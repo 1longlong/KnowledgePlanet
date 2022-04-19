@@ -21,5 +21,10 @@
         select * from knowledge_planet.login_log
         where u_id = #{userId};
     </select>
+
+    <select id="getActiveCalender" parameterType="Long" resultType="String" >
+        select create_time from knowledge_planet.login_log
+        where u_id = #{userId};
+    </select>
 </mapper>
 

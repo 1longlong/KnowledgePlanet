@@ -7,6 +7,7 @@ import com.major.knowledgePlanet.service.LoginLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,5 +29,14 @@ public class LoginLogServiceImpl implements LoginLogService {
     @Override
     public List<LoginLog> getLoginLogById(Long u_id){
         return loginLogMapper.getLoginLogById(u_id);
+    }
+    @Override
+    public List<String> getActiveCalender(Long userId){
+        List<String> Dates = loginLogMapper.getActiveCalender(userId);
+        List<String> result =new ArrayList<>();
+        for(String str:Dates){
+            result.add(str.substring(0,10));
+        }
+        return result;
     }
 }
