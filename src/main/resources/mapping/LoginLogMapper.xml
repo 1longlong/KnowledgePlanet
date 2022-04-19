@@ -13,19 +13,15 @@
 
     <insert id="addLoginLog" parameterType="LoginLog">
         insert knowledge_planet.login_log(id,u_id,create_time,ip,browser)
-        values(#{id},#{u_id},#{create_time},#{ip},#{browser});
+        values(#{id},#{userId},#{createTime},#{ip},#{browser});
     </insert>
 
 
-    <select id="getLoginLogById" parameterType="Long" resultType="LoginLog" resultMap="LoginLog">
+    <select id="getLoginLogById" parameterType="Long"  resultMap="LoginLog">
         select * from knowledge_planet.login_log
-        where u_id = #{u_id};
+        where u_id = #{userId};
     </select>
 
-    <select id="getActiveCalender" parameterType="Long" resultType="String" >
-        select create_time from knowledge_planet.login_log
-        where u_id = #{u_id};
-    </select>
 
     <select id="getActiveCalender" parameterType="Long" resultType="String" >
         select create_time from knowledge_planet.login_log

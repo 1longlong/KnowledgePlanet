@@ -1,7 +1,6 @@
 package
         com.major.knowledgePlanet.service.impl;
 
-import cn.hutool.core.date.DateTime;
 import com.major.knowledgePlanet.entity.LoginLog;
 import com.major.knowledgePlanet.mapper.LoginLogMapper;
 import com.major.knowledgePlanet.service.LoginLogService;
@@ -28,8 +27,8 @@ public class LoginLogServiceImpl implements LoginLogService {
     }
 
     @Override
-    public List<LoginLog> getLoginLogById(Long userId){
-        return loginLogMapper.getLoginLogById(userId);
+    public List<LoginLog> getLoginLogById(Long u_id){
+        return loginLogMapper.getLoginLogById(u_id);
     }
 
     @Override

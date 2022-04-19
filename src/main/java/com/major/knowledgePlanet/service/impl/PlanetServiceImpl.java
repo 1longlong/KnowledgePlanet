@@ -3,6 +3,7 @@ package
 
 import com.major.knowledgePlanet.constValue.UserPlanetEnum;
 import com.major.knowledgePlanet.entity.Planet;
+import com.major.knowledgePlanet.entity.UserPlanetDTO;
 import com.major.knowledgePlanet.entity.UserPlanetRel;
 import com.major.knowledgePlanet.mapper.PlanetMapper;
 import com.major.knowledgePlanet.result.Response;
@@ -59,6 +60,17 @@ public class PlanetServiceImpl implements PlanetService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Planet> searchPlanet(String info) {
+        return planetMapper.searchPlanet(info);
+    }
+
+    @Override
+    public List<Planet> getRecommendPlanet(Long userId) {
+        //TODO:暂时和热度相同
+        return getHotestPlanet();
     }
 
     @Override

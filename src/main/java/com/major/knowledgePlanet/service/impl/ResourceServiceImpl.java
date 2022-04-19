@@ -1,12 +1,16 @@
 package com.major.knowledgePlanet.service.impl;
 
+import com.major.knowledgePlanet.constValue.RedisKey;
 import com.major.knowledgePlanet.entity.Resource;
+import com.major.knowledgePlanet.entity.ResourceVO;
 import com.major.knowledgePlanet.mapper.ResourceMapper;
 import com.major.knowledgePlanet.service.ResourceService;
+import com.major.knowledgePlanet.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author cj
@@ -14,6 +18,9 @@ import java.util.List;
  */
 @Service
 public class ResourceServiceImpl implements ResourceService {
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Autowired
     private ResourceMapper resourceMapper;
@@ -26,11 +33,22 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public Integer  upDatePraise(Resource resource){return resourceMapper.upDatePraise(resource);}
 
+    @Override
+    public Resource getResourceById(Long resourceId) {
+        return resourceMapper.getResourceById(resourceId);
+    }
+
 
     @Override
-    public Resource getResourceById(Long r_id){return resourceMapper.getResourceById(r_id);}
+    public List<ResourceVO> getResourceByPCode(Long planetCode, Long userId) {
+        return resourceMapper.getResourceByPCode(planetCode,userId);
+    }
 
     @Override
-    public List<Resource> getResourceByPCode(Long p_code){return resourceMapper.getResourceByPCode(p_code);}
+    public List<ResourceVO> getCollectResourceByUserId(Long userId) {
+        return resourceMapper.getCollectResourceByUserId(userId);
+    }
+
+
 }
 

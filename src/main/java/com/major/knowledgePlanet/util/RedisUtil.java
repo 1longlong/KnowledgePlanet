@@ -3,6 +3,7 @@ package
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @author 孟繁霖
  * @date 2022/4/13 10:54
  */
+@Component
 public final class RedisUtil {
 
     @Resource

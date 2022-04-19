@@ -10,6 +10,14 @@
         <result property="planetAvatar" column="p_avatar"/>
         <result property="hot" column="hot"/>
     </resultMap>
+    <resultMap id="UserPlanetDTO" type="UserPlanetDTO">
+        <id property="userId" column="u_id"/>
+        <result property="role" column="role"/>
+        <result property="integral" column="integral"/>
+        <association property="planet" resultMap="Planet"/>
+    </resultMap>
+    
+
 
     <insert id="addPlanet" parameterType="Planet" useGeneratedKeys="true" keyProperty="planetCode">
         insert knowledge_planet.planet(p_name, create_time,max_number, p_description, p_avatar, hot)
@@ -25,5 +33,19 @@
         select * from knowledge_planet.planet
         order by hot desc limit 5;
     </select>
+
+    <select id="searchPlanet" resultMap="Planet">
+        <bind name="bindInfo" value="'%'+info+'%'"></bind>
+        select * from knowledge_planet.planet
+        where p_name like #{bindInfo} or p_description like #{bindInfo};
+    </select>
+
+    <select id="getAllPlanetByUserId" resultMap="UserPlanetDTO">
+        select u_id,role,integral,planet.p_code,p_name,create_time,max_number,p_description,p_avatar,hot
+        from knowledge_planet.user_planet_rel,knowledge_planet.planet
+        where user_planet_rel.p_code=planet.p_code and u_id=#{userId};
+    </select>
+
+
 
 </mapper>

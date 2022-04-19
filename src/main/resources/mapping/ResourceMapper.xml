@@ -4,9 +4,9 @@
 
 
 
-    <resultMap id="Resource" type="Resource">
+    <resultMap id="ResourceVO" type="ResourceVO">
         <id property="resourceId" column="r_id"/>
-        <result property="userId" column="u_id"/>
+        <result property="uploaderId" column="u_id"/>
         <result property="planetCode" column="p_code"/>
         <result property="resourceName" column="r_name"/>
         <result property="uploadTime" column="upload_time"/>
@@ -18,7 +18,21 @@
         <result property="isRecommended" column="is_recommended"/>
         <result property="likeCount" column="like_count"/>
         <result property="collectCount" column="collect_count"/>
+        <result property="liked" column="is_liked"/>
+        <result property="collected" column="is_collected"/>
+        <result property="uploaderName" column="u_name"/>
+        <result property="uploaderAvatar" column="avatar"/>
     </resultMap>
+
+
+
+
+    <select id="getCollectResourceByUserId" resultMap="ResourceVO">
+        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,details,is_liked,is_collected,u_name,avatar
+        from (knowledge_planet.resource join knowledge_planet.user on user.u_id=resource.u_id)  join knowledge_planet.user_resource_rel urr on urr.r_id=resource.r_id
+        where urr.u_id=#{userId}  and is_collected=true;
+    </select>
+
 
 
 
@@ -34,14 +48,46 @@
     </update>
 
 
-    <select id="getResourceById" parameterType="Long" resultType="Resource" resultMap="Resource">
-        select * from knowledge_planet.resource
-        where r_id = #{r_id};
+    <select id="getResourceById" resultType="Resource">
+       select * from knowledge_planet.resource
+        where resource.r_id=#{resourceId};
     </select>
 
 
-    <select id="getResourceByPCode" parameterType="Long" resultType="Resource" resultMap="Resource">
-        select * from knowledge_planet.resource
-        where p_code = #{p_code};
+    <select id="getResourceByPCode" resultMap="ResourceVO">
+        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,details,is_liked,is_collected,u_name,avatar
+        from (knowledge_planet.resource join knowledge_planet.user on user.u_id=resource.u_id) left join knowledge_planet.user_resource_rel urr on urr.r_id=resource.r_id
+        where p_code = #{planetCode} and (urr.u_id=#{userId} or urr.u_id is null);
     </select>
+
+    <update id="addResourceLikeCount">
+        update knowledge_planet.resource set like_count=like_count+#{delta}
+        where r_id=#{resourceId};
+    </update>
+
+    <update id="addResourceCollectCount">
+        update knowledge_planet.resource set collect_count=collect_count+#{delta}
+        where r_id=#{resourceId};
+    </update>
+    <update id="changeUserResourceUserRel">
+        update knowledge_planet.user_resource_rel
+        <set>
+            <if test="liked!=null">is_liked=#{liked},</if>
+            <if test="collected!=null">is_collected=#{collected}</if>
+        </set>
+        where u_id=#{userId} and r_id=#{resourceId};
+    </update>
+
+    <select id="getUserResourceRelCount" resultType="Integer">
+        select count(*)
+        from knowledge_planet.user_resource_rel
+        where r_id=#{resourceId} and u_id=#{userId};
+    </select>
+
+    <insert id="addUserResourceRel">
+        insert knowledge_planet.user_resource_rel(u_id,r_id,is_liked,is_collected)
+        values(#{userId},#{resourceId},#{isLike},#{isCollect});
+    </insert>
+
+
 </mapper>

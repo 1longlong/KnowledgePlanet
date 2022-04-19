@@ -1,5 +1,5 @@
-package com.major.knowledgePlanet.entity;
-
+package
+        com.major.knowledgePlanet.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -9,18 +9,19 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 资源实体类
+ * 用户资源类
+ * 包含资源和用户之间关系
  *
- * @author cj
- * @date 2022/4/8 20:33
+ * @author 孟繁霖
+ * @date 2022/4/15 22:12
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resource {
+public class ResourceVO {
 
     private Long resourceId;
-    private Long userId;
+    private Long uploaderId;
     private Long planetCode;
     private String resourceName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -34,5 +35,12 @@ public class Resource {
     private Integer likeCount;
     private Integer collectCount;
     private String details;
+
+
+    private Boolean liked;
+    private Boolean collected;
+
+    private String uploaderName;
+    private String uploaderAvatar;
 
 }
