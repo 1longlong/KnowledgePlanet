@@ -2,6 +2,7 @@ package
         com.major.knowledgePlanet.controller;
 
 import com.major.knowledgePlanet.entity.Planet;
+import com.major.knowledgePlanet.entity.RecommendPlanetVO;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.PlanetService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
@@ -72,7 +73,7 @@ public class PlanetController {
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
         }
         //TODO: 获得推荐的星球
-        List<Planet> planetList=planetService.getRecommendPlanet(userId);
+        List<RecommendPlanetVO> planetList=planetService.getRecommendPlanet(userId);
         return Response.success().data("planetList",planetList);
     }
 

@@ -1,6 +1,7 @@
 package com.major.knowledgePlanet.mapper;
 
 import com.major.knowledgePlanet.entity.Planet;
+import com.major.knowledgePlanet.entity.RecommendPlanetVO;
 import com.major.knowledgePlanet.entity.UserPlanetDTO;
 import com.major.knowledgePlanet.entity.UserPlanetRel;
 import org.apache.ibatis.annotations.Mapper;
@@ -34,4 +35,13 @@ public interface PlanetMapper {
     List<UserPlanetDTO> getAllPlanetByUserId(Long userId);
 
     List<Planet> getHotestPlanet();
+
+
+    /**
+    * 获取推荐的星球
+    * @return : java.util.List<com.major.knowledgePlanet.entity.RecommendPlanetVO>
+    * @author Covenant
+    * @date 2022-04-20 15:26
+    */
+    List<RecommendPlanetVO> getRecommendPlanet();
 }

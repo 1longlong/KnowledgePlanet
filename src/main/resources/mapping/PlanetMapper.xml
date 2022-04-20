@@ -16,6 +16,11 @@
         <result property="integral" column="integral"/>
         <association property="planet" resultMap="Planet"/>
     </resultMap>
+    <resultMap id="RecommendPlanetVO" type="RecommendPlanetVO">
+        <result property="uploaderName" column="u_name"/>
+        <result property="uploaderAvatar" column="avatar"/>
+        <association property="planet" resultMap="Planet"/>
+    </resultMap>
     
 
 
@@ -33,6 +38,15 @@
         select * from knowledge_planet.planet
         order by hot desc limit 5;
     </select>
+
+    <select id="getRecommendPlanet" resultMap="RecommendPlanetVO">
+        select p.p_code,p_name,p.create_time,max_number,p_description,p_avatar,hot,u_name ,avatar 
+        from knowledge_planet.user u,knowledge_planet.planet p,knowledge_planet.user_planet_rel upr
+        where u.u_id=upr.u_id and p.p_code=upr.p_code and role=1
+        order by hot desc limit 5;
+    </select>
+
+
 
     <select id="searchPlanet" resultMap="Planet">
         <bind name="bindInfo" value="'%'+info+'%'"></bind>
