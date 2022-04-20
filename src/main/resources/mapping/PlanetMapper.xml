@@ -35,7 +35,7 @@
     </insert>
 
     <select id="getHotestPlanet" resultType="Planet" resultMap="Planet">
-        select * from knowledge_planet.planet
+        select p_code , p_name ,create_time ,max_number,p_description , p_avatar ,hot from knowledge_planet.planet
         order by hot desc limit 5;
     </select>
 

@@ -17,7 +17,8 @@
 
 <select id="getAllNotice" resultMap="Notice" resultType="Notice">
     select notice_id,admin_id,title,create_time,status,content
-    from knowledge_planet.notice;
+    from knowledge_planet.notice
+    order by create_time desc ;
 </select>
 
 </mapper>

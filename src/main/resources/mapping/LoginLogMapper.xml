@@ -18,7 +18,7 @@
 
 
     <select id="getLoginLogById" parameterType="Long"  resultMap="LoginLog">
-        select * from knowledge_planet.login_log
+        select id,u_id,create_time,ip,browser from knowledge_planet.login_log
         where u_id = #{userId};
     </select>
 
