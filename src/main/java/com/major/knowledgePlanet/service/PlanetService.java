@@ -1,6 +1,7 @@
 package com.major.knowledgePlanet.service;
 
 import com.major.knowledgePlanet.entity.Planet;
+import com.major.knowledgePlanet.entity.RecommendPlanetVO;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public interface PlanetService {
     * @author Covenant
     * @date 2022-04-13 15:58
     */
-    List<Planet> getRecommendPlanet(Long userId);
+    List<RecommendPlanetVO> getRecommendPlanet(Long userId);
 
     List<Planet> getHotestPlanet();
 

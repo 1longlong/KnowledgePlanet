@@ -225,7 +225,7 @@ public class SystemController {
         System.out.println("userId:" + userId);
         List<String> result = loginLogService.getActiveCalender(userId);
         if(result!=null) {
-            return Response.success().message("查找成功").data("date:", result);
+            return Response.success().message("查找成功").data("date", result);
         }else{
             return  Response.serverError().message("未查到相关记录");
         }

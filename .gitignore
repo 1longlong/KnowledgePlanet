@@ -20,7 +20,7 @@ target/
 *.iml
 *.ipr
 *.log
-.gz
+*.gz
 
 ### NetBeans ###
 /nbproject/private/
