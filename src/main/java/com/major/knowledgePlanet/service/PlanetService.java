@@ -38,6 +38,12 @@ public interface PlanetService {
     */
     List<RecommendPlanetVO> getRecommendPlanet(Long userId);
 
+    /**
+     *返回星球热度排名前五的星球
+     *@author cj
+     *@date 2022/4/20 16:33
+     * @return List<Planet>
+     */
     List<Planet> getHotestPlanet();
 
 
