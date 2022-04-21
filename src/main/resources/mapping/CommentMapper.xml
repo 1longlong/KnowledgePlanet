@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.major.knowledgePlanet.mapper.CommentMapper">
+
+    <resultMap id="Comment" type="Comment">
+        <id property="commentId" column="comment_id"/>
+        <result property="topicId" column="topicId"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="time" column="time"/>
+        <result property="praiseCount" column="praise_count"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+
+    <select id="getCommentOfTopic" resultMap="Comment">
+        select comment_id ,topic_id, parent_id,time , praise_count ,content
+        from knowledge_planet.comment
+        where topic_id = #{topicId};
+    </select>
+</mapper>

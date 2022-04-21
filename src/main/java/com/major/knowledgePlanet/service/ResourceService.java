@@ -8,12 +8,42 @@ import com.major.knowledgePlanet.entity.UploadResourceVO;
 import java.util.List;
 
 public interface ResourceService {
+    /**
+     *上传资源
+     *@author Covenant
+     *@date 2022/4/21 9:35
+     * @param uploadResourceVO
+     * @param userId
+     * @return Integer
+     */
     Integer uploadResource (UploadResourceVO uploadResourceVO, Long userId);
 
+    /**
+     *更新点赞数
+     *@author Covenant
+     *@date 2022/4/21 9:36
+     * @param resource
+     * @return Integer
+     */
     Integer upDatePraise(Resource resource);
 
+    /**
+     *根据id获取资源
+     *@author Covenant
+     *@date 2022/4/21 9:36
+     * @param resourceId
+     * @return Resource
+     */
     Resource getResourceById(Long resourceId);
 
+    /**
+     *根据星球id获取资源
+     *@author Covenant
+     *@date 2022/4/21 9:36
+     * @param planetCode
+     * @param userId
+     * @return List<ResourceVO>
+     */
     List<ResourceVO> getResourceByPCode(Long planetCode,Long userId);
 
     /**

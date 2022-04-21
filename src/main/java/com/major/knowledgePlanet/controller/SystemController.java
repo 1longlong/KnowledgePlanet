@@ -12,14 +12,17 @@ import com.major.knowledgePlanet.constValue.SystemConst;
 import com.major.knowledgePlanet.constValue.UserStatusEnum;
 import com.major.knowledgePlanet.entity.LoginLog;
 import com.major.knowledgePlanet.entity.Notice;
+import com.major.knowledgePlanet.entity.Topic;
 import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.NoticeService;
+import com.major.knowledgePlanet.service.TopicService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
 import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.*;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -73,6 +76,9 @@ public class SystemController {
 
     @Resource(name="noticeServiceImpl")
     private NoticeService noticeService;
+
+    @Resource(name="topicServiceImpl")
+    private TopicService topicService;
 
     @GetMapping("system/getVerificationCode/{email}")
     @ApiOperation(value="向邮箱发送验证码")
@@ -230,7 +236,6 @@ public class SystemController {
             return  Response.serverError().message("未查到相关记录");
         }
     }
-
 
 }
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.major.knowledgePlanet.mapper.TopicMapper">
+    <resultMap id="Topic" type="Topic">
+        <id property="topicId" column="topic_id"/>
+        <result property="planetCode" column="p_code"/>
+        <result property="userId" column="user_id"/>
+        <result property="time" column="time"/>
+        <result property="praiseCount" column="praiseCount"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="content" column="content"/>
+        <result property="picture" column="picture"/>
+    </resultMap>
+
+    <insert id="insertTopic" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId">
+        insert into knowledge_planet.topic(p_code,u_id,content,picture)
+        values (#{p_code},#{u_id},#{time},#{content},#{picture});
+    </insert>
+
+    <select id="getAllTopic" parameterType="Long" resultMap="Topic">
+        select topic_id, u_id,time,praise_count,comment_count,picture,content
+        from knowledge_planet.topic
+        where p_code = #{planetCode};
+    </select>
+
+</mapper>

@@ -65,8 +65,9 @@
 
 
     <select id="getResourceById" resultType="Resource">
-       select * from knowledge_planet.resource
-        where resource.r_id=#{resourceId};
+       select r_id, u_id, p_code, r_name, upload_time, link, coverage, r_description,
+              status, check_info, is_recommended, like_count, collect_count,details from knowledge_planet.resource
+        where r_id=#{resourceId};
     </select>
 
 
