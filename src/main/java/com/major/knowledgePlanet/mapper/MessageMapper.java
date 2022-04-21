@@ -18,5 +18,11 @@ import java.util.Date;
 @Repository
 public interface MessageMapper {
 
+    /**
+    * 添加消息通知
+    * @param message 1
+    * @author Covenant
+    * @date 2022-04-21 14:27
+    */
     void addMessage(Message message);
 }

@@ -27,6 +27,10 @@
         <result property="integral" column="integral"/>
         <result property="planetCode" column="p_code"/>
     </resultMap>
+    <resultMap id="UserPlanetVO" type="UserPlanetVO">
+        <result property="integral" column="integral"/>
+        <association property="planet" resultMap="Planet"/>
+    </resultMap>
     
 
 
@@ -70,7 +74,7 @@
     <select id="getMemNumOfPlanet"  resultType="Integer">
         select count(u_id) from knowledge_planet.user_planet_rel
         where p_code =#{p_code};
-    </result>
+    </select>
     <select id="getPlanetOwnerId" resultType="Long">
         select u_id
         from knowledge_planet.user_planet_rel
@@ -81,8 +85,12 @@
         select p_code, p_name, create_time, max_number, p_description, p_avatar, hot
         from knowledge_planet.planet
         where p_code=#{planetCode};
-
     </select>
 
+    <select id="getPlanet" resultMap="UserPlanetVO">
+        select p.p_code as p_code, p_name, create_time, max_number, p_description, p_avatar, hot,integral
+        from knowledge_planet.planet p,knowledge_planet.user_planet_rel upr
+        where p.p_code=upr.p_code and upr.u_id=#{userId} and role=#{role};
+    </select>
 
 </mapper>

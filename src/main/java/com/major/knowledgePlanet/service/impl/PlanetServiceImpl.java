@@ -2,10 +2,7 @@ package
         com.major.knowledgePlanet.service.impl;
 
 import com.major.knowledgePlanet.constValue.UserPlanetEnum;
-import com.major.knowledgePlanet.entity.Planet;
-import com.major.knowledgePlanet.entity.RecommendPlanetVO;
-import com.major.knowledgePlanet.entity.UserPlanetDTO;
-import com.major.knowledgePlanet.entity.UserPlanetRel;
+import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.PlanetMapper;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.PlanetService;
@@ -83,5 +80,10 @@ public class PlanetServiceImpl implements PlanetService {
         Integer result = planetMapper.getMemNumOfPlanet(planetCode);
         System.out.println(result);
         return result;
+    }
+
+    @Override
+    public List<UserPlanetVO> getPlanet(Long userId, Integer role) {
+        return planetMapper.getPlanet(userId,role);
     }
 }

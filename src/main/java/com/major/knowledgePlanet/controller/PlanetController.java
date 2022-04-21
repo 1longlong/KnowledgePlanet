@@ -2,10 +2,7 @@ package
         com.major.knowledgePlanet.controller;
 
 import cn.hutool.jwt.JWTUtil;
-import com.major.knowledgePlanet.entity.Comment;
-import com.major.knowledgePlanet.entity.Planet;
-import com.major.knowledgePlanet.entity.RecommendPlanetVO;
-import com.major.knowledgePlanet.entity.Topic;
+import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.TopicMapper;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.CommentService;
@@ -76,6 +73,7 @@ public class PlanetController {
 
 
     @GetMapping("planet/getRecommendPlanet")
+    @ApiOperation(value="获取推荐星球")
     public Response getRecommendPlanet(HttpServletRequest request){
         Long userId=TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
@@ -108,6 +106,27 @@ public class PlanetController {
             return Response.serverError().message("查找失败");
         }
     }
+
+    @GetMapping("planet/getPlanet/{role}")
+    @ApiOperation(value="获取用户创建或加入的星球及积分")
+    @ApiImplicitParam(name="role",value="查询的星球类型",dataType="Integer",dataTypeClass = Integer.class,paramType = "path",required = true)
+    public Response getPlanet(HttpServletRequest request,@PathVariable("role")Integer role){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        //查创建的星球，加入的星球
+        if(role!=1&&role!=2){
+            return Response.clientError().code("A0304").message("参数错误");
+        }
+        List<UserPlanetVO> userPlanetVOList = planetService.getPlanet(userId, role);
+        return Response.success().data("planetList",userPlanetVOList);
+    }
+
+
+
+
+
 
     @PostMapping("planet/insertTopic")
     @ApiOperation(value = "发帖功能")
