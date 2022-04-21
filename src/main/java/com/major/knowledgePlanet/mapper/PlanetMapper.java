@@ -44,4 +44,23 @@ public interface PlanetMapper {
     * @date 2022-04-20 15:26
     */
     List<RecommendPlanetVO> getRecommendPlanet();
+
+    /**
+    * 获取星主的id
+    * @param planetCode 1
+    * @return : java.lang.Long
+    * @author Covenant
+    * @date 2022-04-20 17:43
+    */
+    Long getPlanetOwnerId(Long planetCode);
+
+
+    /**
+    * 通过星球id查找星球信息
+    * @param planetCode 1
+    * @return : com.major.knowledgePlanet.entity.Planet
+    * @author Covenant
+    * @date 2022-04-20 17:47
+    */
+    Planet getPlanetByPlanetCode(Long planetCode);
 }
