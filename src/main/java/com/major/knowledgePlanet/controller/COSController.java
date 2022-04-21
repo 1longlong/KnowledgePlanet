@@ -57,6 +57,8 @@ public class COSController {
             String[] allowActions = new String[] {
                     // 简单上传
                     "name/cos:PutObject",
+                    //单个文件删除
+                    "name/cos:DeleteObject",
                     // 表单上传、小程序上传
                     "name/cos:PostObject",
                     // 分块上传
