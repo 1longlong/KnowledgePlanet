@@ -59,7 +59,7 @@ public class ResourceController {
         System.out.println("userId:" + userId);
         int result = resourceService.uploadResource(uploadResourceVO,userId);
         if (result != 0) {
-            return Response.success().message("上传成功");
+            return Response.success().message("上传成功,请等待审核结果！");
         } else {
             return Response.serverError().message("上传失败");
         }

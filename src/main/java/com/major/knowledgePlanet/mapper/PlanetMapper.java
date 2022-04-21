@@ -66,6 +66,7 @@ public interface PlanetMapper {
     List<RecommendPlanetVO> getRecommendPlanet();
 
 
+
     /**
      *根据星球id获取用户人数
      *@author cj
@@ -74,4 +75,24 @@ public interface PlanetMapper {
      * @return Integer
      */
     Integer getMemNumOfPlanet(Long planetCode);
+
+    /**
+    * 获取星主的id
+    * @param planetCode 1
+    * @return : java.lang.Long
+    * @author Covenant
+    * @date 2022-04-20 17:43
+    */
+    Long getPlanetOwnerId(Long planetCode);
+
+
+    /**
+    * 通过星球id查找星球信息
+    * @param planetCode 1
+    * @return : com.major.knowledgePlanet.entity.Planet
+    * @author Covenant
+    * @date 2022-04-20 17:47
+    */
+    Planet getPlanetByPlanetCode(Long planetCode);
+
 }

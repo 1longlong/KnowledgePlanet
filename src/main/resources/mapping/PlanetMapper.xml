@@ -46,7 +46,7 @@
     </select>
 
     <select id="getRecommendPlanet" resultMap="RecommendPlanetVO">
-        select p.p_code,p_name,p.create_time,max_number,p_description,p_avatar,hot,u_name ,avatar 
+        select p.p_code,p_name,p.create_time,max_number,p_description,p_avatar,hot,u_name ,avatar
         from knowledge_planet.user u,knowledge_planet.planet p,knowledge_planet.user_planet_rel upr
         where u.u_id=upr.u_id and p.p_code=upr.p_code and role=1
         order by hot desc limit 5;
@@ -66,9 +66,22 @@
         where user_planet_rel.p_code=planet.p_code and u_id=#{userId};
     </select>
 
+
     <select id="getMemNumOfPlanet"  resultType="Integer">
         select count(u_id) from knowledge_planet.user_planet_rel
         where p_code =#{p_code};
+    </result>
+    <select id="getPlanetOwnerId" resultType="Long">
+        select u_id
+        from knowledge_planet.user_planet_rel
+        where p_code=#{planetCode};
+    </select>
+
+    <select id="getPlanetByPlanetCode" resultMap="Planet">
+        select p_code, p_name, create_time, max_number, p_description, p_avatar, hot
+        from knowledge_planet.planet
+        where p_code=#{planetCode};
+
     </select>
 
 
