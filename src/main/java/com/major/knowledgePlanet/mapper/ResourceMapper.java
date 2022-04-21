@@ -14,18 +14,73 @@ import java.util.List;
 @Repository
 public interface ResourceMapper {
 
+    /**
+     *上传资源
+     *@author Covenant
+     *@date 2022/4/21 9:18
+     * @param resource
+     * @return Integer
+     */
     Integer addResource (Resource resource);
 
+    /**
+     *更新点赞数
+     *@author Covenant
+     *@date 2022/4/21 9:18
+     * @param resource
+     * @return Integer
+     */
     Integer upDatePraise(Resource resource);
 
+    /**
+     *根据资源id获取资源
+     *@author Covenant
+     *@date 2022/4/21 9:18
+     * @param resourceId
+     * @return Resource
+     */
     Resource getResourceById(Long resourceId);
 
+    /**
+     *根据星球编号获取资源
+     *@author Covenant
+     *@date 2022/4/21 9:19
+     * @param planetCode
+     * @param userId
+     * @return List<ResourceVO>
+     */
     List<ResourceVO> getResourceByPCode(Long planetCode, Long userId);
 
+    /**
+     *点赞资源
+     *@author Covenant
+     *@date 2022/4/21 9:19
+     * @param resourceId
+     * @param delta
+     * @return Integer
+     */
     Integer addResourceLikeCount(Long resourceId,Integer delta);
 
+    /**
+     *收藏资源
+     *@author Covenant
+     *@date 2022/4/21 9:20
+     * @param resourceId
+     * @param delta
+     * @return Integer
+     */
     Integer addResourceCollectCount(Long resourceId,Integer delta);
 
+    /**
+     *修改用户资源关系表
+     *@author Covenant
+     *@date 2022/4/21 9:20
+     * @param resourceId
+     * @param userId
+     * @param liked
+     * @param collected
+     * @return Integer
+     */
     Integer changeUserResourceUserRel(Long resourceId,Long userId,Boolean liked,Boolean collected);
 
     /**

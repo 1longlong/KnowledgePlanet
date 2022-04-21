@@ -12,8 +12,22 @@ import java.util.List;
 @Mapper
 @Repository
 public interface PlanetMapper {
+    /**
+     *创建星球
+     *@author Covenant
+     *@date 2022/4/21 9:17
+     * @param planet
+     * @return Integer
+     */
     Integer addPlanet(Planet planet);
 
+    /**
+     *添加用户和星球关系
+     *@author cj
+     *@date 2022/4/21 9:17
+     * @param userPlanetRel
+     * @return Integer
+     */
     Integer addUserPlanetRel(UserPlanetRel userPlanetRel);
 
     /**
@@ -34,6 +48,12 @@ public interface PlanetMapper {
     */
     List<UserPlanetDTO> getAllPlanetByUserId(Long userId);
 
+    /**
+     *获取热度前五的星球
+     *@author cj
+     *@date 2022/4/21 10:58
+     * @return List<Planet>
+     */
     List<Planet> getHotestPlanet();
 
 
@@ -44,4 +64,14 @@ public interface PlanetMapper {
     * @date 2022-04-20 15:26
     */
     List<RecommendPlanetVO> getRecommendPlanet();
+
+
+    /**
+     *根据星球id获取用户人数
+     *@author cj
+     *@date 2022/4/21 10:59
+     * @param planetCode
+     * @return Integer
+     */
+    Integer getMemNumOfPlanet(Long planetCode);
 }

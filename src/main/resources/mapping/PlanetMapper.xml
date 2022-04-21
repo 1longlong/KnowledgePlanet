@@ -21,6 +21,12 @@
         <result property="uploaderAvatar" column="avatar"/>
         <association property="planet" resultMap="Planet"/>
     </resultMap>
+    <resultMap id="UserPlanetRel" type="UserPlanetRel">
+        <id property="userId" column="u_id"/>
+        <result property="role" column="role"/>
+        <result property="integral" column="integral"/>
+        <result property="planetCode" column="p_code"/>
+    </resultMap>
     
 
 
@@ -60,6 +66,10 @@
         where user_planet_rel.p_code=planet.p_code and u_id=#{userId};
     </select>
 
+    <select id="getMemNumOfPlanet"  resultType="Integer">
+        select count(u_id) from knowledge_planet.user_planet_rel
+        where p_code =#{p_code};
+    </select>
 
 
 </mapper>

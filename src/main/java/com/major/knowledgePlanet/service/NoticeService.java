@@ -23,4 +23,5 @@ public interface NoticeService {
     * @return List<Notice>
     */
     List<Notice> getAllNotice();
+
 }

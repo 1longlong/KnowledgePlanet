@@ -46,5 +46,13 @@ public interface PlanetService {
      */
     List<Planet> getHotestPlanet();
 
+    /**
+     *根据星球id获取用户人数
+     *@author cj
+     *@date 2022/4/21 10:59
+     * @param planetCode
+     * @return Integer
+     */
+    Integer getMemNumOfPlanet(Long planetCode);
 
 }

@@ -9,6 +9,7 @@ import com.major.knowledgePlanet.entity.UserPlanetRel;
 import com.major.knowledgePlanet.mapper.PlanetMapper;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.PlanetService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,5 +76,12 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
-    public List<Planet> getHotestPlanet(){return planetMapper.getHotestPlanet();}
+    public List<Planet> getHotestPlanet(){return planetMapper.getHotestPlanet();   }
+
+    @Override
+    public Integer getMemNumOfPlanet(Long planetCode){
+        Integer result = planetMapper.getMemNumOfPlanet(planetCode);
+        System.out.println(result);
+        return result;
+    }
 }
