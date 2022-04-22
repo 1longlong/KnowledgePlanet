@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -121,6 +122,27 @@ public class PlanetController {
         }
         List<UserPlanetVO> userPlanetVOList = planetService.getPlanet(userId, role);
         return Response.success().data("planetList",userPlanetVOList);
+    }
+
+
+    @PostMapping("planet/joinPlanet")
+    @ApiOperation(value="加入星球")
+    @ApiImplicitParam(name="planetCode",value = "星球号",dataType="Long",dataTypeClass = Long.class,paramType = "query",required = true)
+    public Response joinPlanet(HttpServletRequest request,@RequestParam("planetCode")Long planetCode){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        try {
+            planetService.joinPlanet(userId,planetCode);
+            return Response.success().message("加入成功！");
+        } catch (DuplicateKeyException e) {
+            e.printStackTrace();
+            return Response.clientError().message("已加入该星球");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().message("加入失败");
+        }
     }
 
 

@@ -3,6 +3,7 @@ package com.major.knowledgePlanet.controller;
 
 import com.major.knowledgePlanet.constValue.RedisKey;
 import com.major.knowledgePlanet.entity.Resource;
+import com.major.knowledgePlanet.entity.ResourceCheckVO;
 import com.major.knowledgePlanet.entity.ResourceVO;
 import com.major.knowledgePlanet.entity.UploadResourceVO;
 import com.major.knowledgePlanet.result.Response;
@@ -199,6 +200,23 @@ public class ResourceController {
             }
         }
         return Response.success().data("resourceList",resourceVOList).message("获取成功");
+    }
+
+
+   @PostMapping("resource/checkResource")
+   @ApiOperation(value="审核资源")
+    public Response checkResource(HttpServletRequest request,@RequestBody ResourceCheckVO resourceCheckVO){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        try {
+            resourceService.checkResource(userId, resourceCheckVO.getUploaderId(), resourceCheckVO.getResourceId(), resourceCheckVO.getResourceName(), resourceCheckVO.getCheckInfo(), resourceCheckVO.getCheckResult());
+            return Response.success().message("审核成功");
+        }catch(Exception e){
+            return Response.serverError().message(e.getMessage());
+        }
+
     }
 
 

@@ -66,4 +66,13 @@ public interface PlanetService {
     */
     List<UserPlanetVO> getPlanet(Long userId, Integer role);
 
+    /**
+    * 用户加入指定星球
+    * @param userId 1
+    * @param planetCode 2
+    * @author Covenant
+    * @date 2022-04-22 10:22
+    */
+    void joinPlanet(Long userId,Long planetCode) throws Exception;
+
 }
