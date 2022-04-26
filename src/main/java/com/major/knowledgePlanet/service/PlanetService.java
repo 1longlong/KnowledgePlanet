@@ -2,6 +2,7 @@ package com.major.knowledgePlanet.service;
 
 import com.major.knowledgePlanet.entity.Planet;
 import com.major.knowledgePlanet.entity.RecommendPlanetVO;
+import com.major.knowledgePlanet.entity.UserPlanetVO;
 
 import java.util.List;
 
@@ -54,5 +55,24 @@ public interface PlanetService {
      * @return Integer
      */
     Integer getMemNumOfPlanet(Long planetCode);
+
+    /**
+    * 获取用户创建或加入的星球及积分
+    * @param userId 1
+    * @param role 2 1表示创建的，2表示加入的
+    * @return : com.major.knowledgePlanet.entity.UserPlanetVO
+    * @author Covenant
+    * @date 2022-04-21 21:06
+    */
+    List<UserPlanetVO> getPlanet(Long userId, Integer role);
+
+    /**
+    * 用户加入指定星球
+    * @param userId 1
+    * @param planetCode 2
+    * @author Covenant
+    * @date 2022-04-22 10:22
+    */
+    void joinPlanet(Long userId,Long planetCode) throws Exception;
 
 }

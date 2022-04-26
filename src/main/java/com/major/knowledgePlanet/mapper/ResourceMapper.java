@@ -122,4 +122,16 @@ public interface ResourceMapper {
     */
     void addTag(ArrayList<String> tagList,Long resourceId);
 
+
+    /**
+    * 改变资源状态、审核信息、是否精选等参数
+    * @param resourceId 1
+    * @param resourceStatus 2 为bull则不更改
+    * @param checkInfo 3 为null则不更改
+    * @param isRecommended 4 为null则不更改
+    * @author Covenant
+    * @date 2022-04-22 15:48
+    */
+    void changeResourceStatus(Long resourceId,Integer resourceStatus,String checkInfo,Boolean isRecommended);
+
 }

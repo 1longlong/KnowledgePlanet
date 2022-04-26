@@ -107,4 +107,15 @@
     </insert>
 
 
+    <update id="changeResourceStatus">
+        update knowledge_planet.resource
+        <set>
+            <if test="resourceStatus!=null">status=#{resourceStatus},</if>
+            <if test="checkInfo!=null">check_info=#{checkInfo},</if>
+            <if test="isRecommended!=null">is_recommended=#{isRecommended}</if>
+        </set>
+        where r_id=#{resourceId};
+    </update>
+
+
 </mapper>

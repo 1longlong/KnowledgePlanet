@@ -4,7 +4,7 @@
 
     <resultMap id="Comment" type="Comment">
         <id property="commentId" column="comment_id"/>
-        <result property="topicId" column="topicId"/>
+        <result property="topicId" column="topic_id"/>
         <result property="parentId" column="parent_id"/>
         <result property="time" column="time"/>
         <result property="praiseCount" column="praise_count"/>

@@ -2,10 +2,7 @@ package
         com.major.knowledgePlanet.controller;
 
 import cn.hutool.jwt.JWTUtil;
-import com.major.knowledgePlanet.entity.Comment;
-import com.major.knowledgePlanet.entity.Planet;
-import com.major.knowledgePlanet.entity.RecommendPlanetVO;
-import com.major.knowledgePlanet.entity.Topic;
+import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.TopicMapper;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.CommentService;
@@ -17,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,11 +37,6 @@ public class PlanetController {
     @Resource(name="planetServiceImpl")
     private PlanetService planetService;
 
-    @Resource(name="topicServiceImpl")
-    private TopicService topicService;
-
-    @Resource(name="commentServiceImpl")
-    private CommentService commentService;
 
 
     @PostMapping("planet/createPlanet")
@@ -76,6 +69,7 @@ public class PlanetController {
 
 
     @GetMapping("planet/getRecommendPlanet")
+    @ApiOperation(value="获取推荐星球")
     public Response getRecommendPlanet(HttpServletRequest request){
         Long userId=TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
@@ -109,45 +103,47 @@ public class PlanetController {
         }
     }
 
-    @PostMapping("planet/insertTopic")
-    @ApiOperation(value = "发帖功能")
-    public Response insertTopic(HttpServletRequest request , @RequestBody Topic topic){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-
-            Integer result = topicService.insertTopic(topic , userId);
-            if(result!=0){
-                return Response.success().message("发帖成功").data("topicId",topic.getTopicId()).data("createTime",topic.getTime());
-            }else{
-                return Response.serverError().message("发帖失败");
-            }
+    @GetMapping("planet/getPlanet/{role}")
+    @ApiOperation(value="获取用户创建或加入的星球及积分")
+    @ApiImplicitParam(name="role",value="查询的星球类型",dataType="Integer",dataTypeClass = Integer.class,paramType = "path",required = true)
+    public Response getPlanet(HttpServletRequest request,@PathVariable("role")Integer role){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
         }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        //查创建的星球，加入的星球
+        if(role!=1&&role!=2){
+            return Response.clientError().code("A0304").message("参数错误");
+        }
+        List<UserPlanetVO> userPlanetVOList = planetService.getPlanet(userId, role);
+        return Response.success().data("planetList",userPlanetVOList);
     }
 
-    @GetMapping("planet/getAllTopic")
-    @ApiOperation(value = " 获取星球下所有帖子")
-    public Response getAllTopic(Long planetCode){
-        List<Topic> result= topicService.getAllTopic(planetCode);
-        if(!result.isEmpty()){
-            return Response.success().message("查找成功").data("result", result);
-        }else{
-            return  Response.success().message("未查询到相关信息");
+
+    @PostMapping("planet/joinPlanet")
+    @ApiOperation(value="加入星球")
+    @ApiImplicitParam(name="planetCode",value = "星球号",dataType="Long",dataTypeClass = Long.class,paramType = "query",required = true)
+    public Response joinPlanet(HttpServletRequest request,@RequestParam("planetCode")Long planetCode){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        try {
+            planetService.joinPlanet(userId,planetCode);
+            return Response.success().message("加入成功！");
+        } catch (DuplicateKeyException e) {
+            e.printStackTrace();
+            return Response.clientError().message("已加入该星球");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().message("加入失败");
         }
     }
 
-    @GetMapping("planet/getCommentOfTopic")
-    @ApiOperation(value = "获取topic下所有评论")
-    public Response getCommentOfTopic(Long topicId) {
-        List<Comment> result = commentService.getCommentOfTopic(topicId);
-        if(!result.isEmpty()){
-            return Response.success().message("查找成功").data("result", result);
-        }else{
-            return  Response.success().message("未查询到相关信息");
-        }
-    }
+
+
+
+
+
+
 }

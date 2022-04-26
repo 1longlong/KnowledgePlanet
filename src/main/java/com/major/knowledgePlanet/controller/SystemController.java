@@ -10,10 +10,7 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.jwt.JWTUtil;
 import com.major.knowledgePlanet.constValue.SystemConst;
 import com.major.knowledgePlanet.constValue.UserStatusEnum;
-import com.major.knowledgePlanet.entity.LoginLog;
-import com.major.knowledgePlanet.entity.Notice;
-import com.major.knowledgePlanet.entity.Topic;
-import com.major.knowledgePlanet.entity.User;
+import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.NoticeService;
@@ -235,6 +232,18 @@ public class SystemController {
         }else{
             return  Response.serverError().message("未查到相关记录");
         }
+    }
+
+    @GetMapping("system/getMessage")
+    @ApiOperation(value="获取所有通知消息")
+    public Response getMessage(HttpServletRequest request){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        System.out.println("userId:" + userId);
+        List<Message> messageList = noticeService.getMessageById(userId);
+        return Response.success().data("messageList",messageList);
     }
 
 }

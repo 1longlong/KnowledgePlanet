@@ -55,4 +55,7 @@ public interface ResourceService {
     */
     List<ResourceVO> getCollectResourceByUserId (Long userId);
 
+
+    void checkResource(Long fromId,Long toId,Long resourceId, String resourceName, String checkInfo,Integer checkResult) throws Exception;
+
 }

@@ -10,6 +10,7 @@ import com.major.knowledgePlanet.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ public class ResourceServiceImpl implements ResourceService {
     private MessageMapper messageMapper;
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer uploadResource (UploadResourceVO uploadResourceVO, Long userId){
         Resource resource=new Resource(uploadResourceVO);
@@ -75,6 +76,25 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public List<ResourceVO> getCollectResourceByUserId(Long userId) {
         return resourceMapper.getCollectResourceByUserId(userId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void checkResource(Long fromId, Long toId,Long resourceId, String resourceName, String checkInfo, Integer checkResult) throws Exception {
+        Message message = new Message();
+        message.setFrom(fromId);
+        message.setTo(toId);
+        String result=checkResult==1?"通过":"拒绝,原因如下："+checkInfo;
+        message.setContent("您申请上传的资源结果为"+result);
+        message.setTime(new Date());
+        message.setStatus(0);
+        try{
+        messageMapper.addMessage(message);
+        resourceMapper.changeResourceStatus(resourceId,checkResult,checkInfo,null);
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new Exception("sql执行错误");
+        }
     }
 
 

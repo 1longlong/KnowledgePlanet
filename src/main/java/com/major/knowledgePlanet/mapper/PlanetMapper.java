@@ -1,9 +1,6 @@
 package com.major.knowledgePlanet.mapper;
 
-import com.major.knowledgePlanet.entity.Planet;
-import com.major.knowledgePlanet.entity.RecommendPlanetVO;
-import com.major.knowledgePlanet.entity.UserPlanetDTO;
-import com.major.knowledgePlanet.entity.UserPlanetRel;
+import com.major.knowledgePlanet.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -94,5 +91,16 @@ public interface PlanetMapper {
     * @date 2022-04-20 17:47
     */
     Planet getPlanetByPlanetCode(Long planetCode);
+
+    /**
+    * 获取创建/加入的星球
+    * @param userId 1
+    * @param role 2 1表示创建的星球，2表示加入的星球
+    * @return : com.major.knowledgePlanet.entity.Planet
+    * @author Covenant
+    * @date 2022-04-21 20:50
+    */
+    List<UserPlanetVO> getPlanet(Long userId, Integer role);
+
 
 }

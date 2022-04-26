@@ -2,10 +2,7 @@ package
         com.major.knowledgePlanet.service.impl;
 
 import com.major.knowledgePlanet.constValue.UserPlanetEnum;
-import com.major.knowledgePlanet.entity.Planet;
-import com.major.knowledgePlanet.entity.RecommendPlanetVO;
-import com.major.knowledgePlanet.entity.UserPlanetDTO;
-import com.major.knowledgePlanet.entity.UserPlanetRel;
+import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.PlanetMapper;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.PlanetService;
@@ -13,6 +10,7 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,5 +81,25 @@ public class PlanetServiceImpl implements PlanetService {
         Integer result = planetMapper.getMemNumOfPlanet(planetCode);
         System.out.println(result);
         return result;
+    }
+
+    @Override
+    public List<UserPlanetVO> getPlanet(Long userId, Integer role) {
+        return planetMapper.getPlanet(userId,role);
+    }
+
+    @Override
+    public void joinPlanet(Long userId, Long planetCode) throws Exception {
+        UserPlanetRel userPlanetRel = new UserPlanetRel();
+        userPlanetRel.setUserId(userId);
+        userPlanetRel.setPlanetCode(planetCode);
+        userPlanetRel.setRole(UserPlanetEnum.COMMON_MEMBER.getRole());
+        userPlanetRel.setIntegral(0);
+        try{
+            planetMapper.addUserPlanetRel(userPlanetRel);
+        }
+        catch(DuplicateKeyException e){
+            throw new DuplicateKeyException(e.getMessage());
+        };
     }
 }
