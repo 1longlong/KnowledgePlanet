@@ -102,4 +102,14 @@ public class PlanetServiceImpl implements PlanetService {
             throw new DuplicateKeyException(e.getMessage());
         };
     }
+
+    @Override
+    public List<User> getMemberListOfPlanet(Long planetId){
+        return planetMapper.getMemberListOfPlanet(planetId);
+    }
+
+    @Override
+    public  Integer deleteMember(Long userId ,Long planetCode){
+        return planetMapper.deleteMember(userId ,planetCode);
+    }
 }

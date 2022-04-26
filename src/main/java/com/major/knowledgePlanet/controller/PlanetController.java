@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
@@ -141,6 +142,32 @@ public class PlanetController {
     }
 
 
+    @GetMapping("planet/getMember")
+    @ApiOperation(value ="查找星球内成员列表")
+    @ApiImplicitParam(name="planetCode",value="星球号" ,dataType="Long",paramType = "query" ,required = true)
+    public Response getMember(@RequestParam("planetCode")Long planetCode){
+        List <User> result = planetService.getMemberListOfPlanet(planetCode);
+        if(!result.isEmpty()){
+            return Response.success().message("查找成功").data("result",result);
+        }else{
+            return Response.success().message("星球暂无成员");
+        }
+    }
+
+    @PostMapping("planet/deleteMember")
+    @ApiOperation(value = "踢出成员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="userId",value="用户id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true),
+            @ApiImplicitParam(name="planetCode",value="星球编号",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)
+    })
+    public Response deleteMember(@RequestParam("userId")Long userId ,@RequestParam("planetCode") Long planetCode){
+        Integer result = planetService.deleteMember(userId,planetCode);
+        if(result!=0){
+            return Response.success().message("踢出成功").data("result",result);
+        }else{
+            return Response.serverError().message("删除失败");
+        }
+    }
 
 
 

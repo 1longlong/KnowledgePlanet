@@ -219,6 +219,18 @@ public class ResourceController {
 
     }
 
+    @PostMapping("resource/changeRecommendStatus")
+    @ApiOperation(value="推荐或者取消推荐资源")
+    public Response changeRecommendStatus(Long resourceId , Integer resourceStatus){
+        int result = resourceService.changeRecommendStatus(resourceId , resourceStatus);
+        if(result!=0){
+            return Response.success().message("修改成功");
+        }else{
+            return Response.serverError().message("修改失败");
+        }
+    }
+
+
 
 
 }
