@@ -37,11 +37,6 @@ public class PlanetController {
     @Resource(name="planetServiceImpl")
     private PlanetService planetService;
 
-    @Resource(name="topicServiceImpl")
-    private TopicService topicService;
-
-    @Resource(name="commentServiceImpl")
-    private CommentService commentService;
 
 
     @PostMapping("planet/createPlanet")
@@ -150,45 +145,5 @@ public class PlanetController {
 
 
 
-    @PostMapping("planet/insertTopic")
-    @ApiOperation(value = "发帖功能")
-    public Response insertTopic(HttpServletRequest request , @RequestBody Topic topic){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
 
-            Integer result = topicService.insertTopic(topic , userId);
-            if(result!=0){
-                return Response.success().message("发帖成功").data("topicId",topic.getTopicId()).data("createTime",topic.getTime());
-            }else{
-                return Response.serverError().message("发帖失败");
-            }
-        }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
-    }
-
-    @GetMapping("planet/getAllTopic")
-    @ApiOperation(value = " 获取星球下所有帖子")
-    public Response getAllTopic(Long planetCode){
-        List<Topic> result= topicService.getAllTopic(planetCode);
-        if(!result.isEmpty()){
-            return Response.success().message("查找成功").data("result", result);
-        }else{
-            return  Response.success().message("未查询到相关信息");
-        }
-    }
-
-    @GetMapping("planet/getCommentOfTopic")
-    @ApiOperation(value = "获取topic下所有评论")
-    public Response getCommentOfTopic(Long topicId) {
-        List<Comment> result = commentService.getCommentOfTopic(topicId);
-        if(!result.isEmpty()){
-            return Response.success().message("查找成功").data("result", result);
-        }else{
-            return  Response.success().message("未查询到相关信息");
-        }
-    }
 }

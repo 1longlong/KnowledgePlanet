@@ -5,4 +5,10 @@
         insert knowledge_planet.message( `from`, `to`, content, time, status) values
         (#{from},#{to},#{content},#{time},#{status});
     </insert>
+    <select id="getMessageById" resultType="Message">
+        select message_id ,content,time,status,`from`,`to`
+        from knowledge_planet.message
+        where `to`=#{userId}
+        order by time desc;
+    </select>
 </mapper>

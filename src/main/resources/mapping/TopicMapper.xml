@@ -13,8 +13,8 @@
     </resultMap>
 
     <insert id="insertTopic" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId">
-        insert into knowledge_planet.topic(p_code,u_id,content,picture)
-        values (#{p_code},#{u_id},#{time},#{content},#{picture});
+        insert into knowledge_planet.topic(p_code,u_id,time,content,picture)
+        values (#{planetCode},#{userId},#{time},#{content},#{picture});
     </insert>
 
     <select id="getAllTopic" parameterType="Long" resultMap="Topic">

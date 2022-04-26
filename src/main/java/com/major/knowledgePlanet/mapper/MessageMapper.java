@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * TODO:此处写MessageMapper类的描述
@@ -25,4 +26,13 @@ public interface MessageMapper {
     * @date 2022-04-21 14:27
     */
     void addMessage(Message message);
+
+    /**
+    * 查找所有收到的消息通知
+    * @param userId 1
+    * @return : java.util.List<com.major.knowledgePlanet.entity.Message>
+    * @author Covenant
+    * @date 2022-04-26 14:49
+    */
+    List<Message> getMessageById(Long userId);
 }

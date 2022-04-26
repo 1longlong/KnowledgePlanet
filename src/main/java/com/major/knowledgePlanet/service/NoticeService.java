@@ -1,5 +1,6 @@
 package com.major.knowledgePlanet.service;
 
+import com.major.knowledgePlanet.entity.Message;
 import com.major.knowledgePlanet.entity.Notice;
 
 import java.util.List;
@@ -23,5 +24,14 @@ public interface NoticeService {
     * @return List<Notice>
     */
     List<Notice> getAllNotice();
+
+    /**
+    * 获取所有消息通知
+    * @param userId 1
+    * @return : java.util.List<com.major.knowledgePlanet.entity.Message>
+    * @author Covenant
+    * @date 2022-04-26 14:51
+    */
+    List<Message> getMessageById(Long userId);
 
 }
