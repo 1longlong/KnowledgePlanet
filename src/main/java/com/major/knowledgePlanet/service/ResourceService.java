@@ -58,4 +58,14 @@ public interface ResourceService {
 
     void checkResource(Long fromId,Long toId,Long resourceId, String resourceName, String checkInfo,Integer checkResult) throws Exception;
 
+    /**
+     *
+     *@author cj
+     *@date 2022/4/26 21:01
+     * @param resourceId
+     * @param isRecommended
+     * @return Integer
+     */
+
+    Integer changeRecommendStatus(Long resourceId,Integer isRecommended);
 }

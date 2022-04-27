@@ -109,20 +109,29 @@ public class PlanetServiceImpl implements PlanetService {
     @Override
     public JSONObject getLeaderboard(Long userId, Long planetCode) {
         Integer integral = planetMapper.getIntegral(userId, planetCode);
-        JSONObject object=new JSONObject();
-        object.put("integral",integral);
-        Integer rank=null;
-        int count=1;
+        JSONObject object = new JSONObject();
+        object.put("integral", integral);
+        Integer rank = null;
+        int count = 1;
         List<Map<String, Object>> userList = planetMapper.getUserRank(planetCode);
         for (Map<String, Object> stringObjectMap : userList) {
-            if(stringObjectMap.get("userId").equals(userId)){
-                rank=count;
+            if (stringObjectMap.get("userId").equals(userId)) {
+                rank = count;
             }
-            stringObjectMap.put("rank",count);
+            stringObjectMap.put("rank", count);
             count++;
         }
-        object.put("rank",rank);
-        object.put("userList",userList);
+        object.put("rank", rank);
+        object.put("userList", userList);
         return object;
+    }
+    @Override
+    public List<User> getMemberListOfPlanet(Long planetId){
+        return planetMapper.getMemberListOfPlanet(planetId);
+    }
+
+    @Override
+    public  Integer deleteMember(Long userId ,Long planetCode){
+        return planetMapper.deleteMember(userId ,planetCode);
     }
 }

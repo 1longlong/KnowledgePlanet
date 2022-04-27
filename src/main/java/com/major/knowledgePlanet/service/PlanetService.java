@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.entity.Planet;
 import com.major.knowledgePlanet.entity.RecommendPlanetVO;
+import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.entity.UserPlanetVO;
 
 
@@ -78,6 +79,7 @@ public interface PlanetService {
     */
     void joinPlanet(Long userId,Long planetCode) throws Exception;
 
+
     /**
     * 查找用户在星球中的积分和星球排行榜前50
     * @param userId 1
@@ -89,4 +91,22 @@ public interface PlanetService {
      JSONObject getLeaderboard(Long userId, Long planetCode);
 
 
+
+    /**
+     *获取星球内的用户列表
+     *@author cj
+     *@date 2022/4/26 21:30
+     * @param planetId
+     * @return List<User>
+     */
+    List<User> getMemberListOfPlanet(Long planetId);
+
+    /**
+     *删除成员
+     *@author cj
+     *@date 2022/4/26 22:03
+     * @param userId
+     * @return Integer
+     */
+    Integer deleteMember(Long userId ,Long planetCode);
 }

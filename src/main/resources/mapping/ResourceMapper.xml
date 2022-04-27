@@ -117,5 +117,11 @@
         where r_id=#{resourceId};
     </update>
 
+    <update id="changeRecommendStatus">
+        update knowledge_planet.resource
+        set is_recommended =#{isRecommended}
+        where r_id=#{resourceId};
+    </update>
+
 
 </mapper>

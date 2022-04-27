@@ -97,6 +97,11 @@ public class ResourceServiceImpl implements ResourceService {
         }
     }
 
+    @Override
+    public Integer changeRecommendStatus(Long resourceId,Integer isRecommended){
+        return resourceMapper.changeRecommendStatus(resourceId,isRecommended);
+    };
+
 
 }
 
