@@ -2,6 +2,7 @@ package com.major.knowledgePlanet.mapper;
 
 
 import com.major.knowledgePlanet.entity.Topic;
+import com.major.knowledgePlanet.entity.TopicVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,5 @@ public interface TopicMapper {
      * @param planetCode
      * @return List<Topic>
      */
-    List<Topic> getAllTopic(Long planetCode);
+    List<TopicVO> getAllTopic(Long planetCode);
 }

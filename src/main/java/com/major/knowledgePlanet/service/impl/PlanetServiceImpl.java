@@ -1,6 +1,8 @@
 package
         com.major.knowledgePlanet.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.constValue.UserPlanetEnum;
 import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.PlanetMapper;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO:此处写PlanetServiceImpl类的描述
@@ -103,6 +106,25 @@ public class PlanetServiceImpl implements PlanetService {
         };
     }
 
+    @Override
+    public JSONObject getLeaderboard(Long userId, Long planetCode) {
+        Integer integral = planetMapper.getIntegral(userId, planetCode);
+        JSONObject object = new JSONObject();
+        object.put("integral", integral);
+        Integer rank = null;
+        int count = 1;
+        List<Map<String, Object>> userList = planetMapper.getUserRank(planetCode);
+        for (Map<String, Object> stringObjectMap : userList) {
+            if (stringObjectMap.get("userId").equals(userId)) {
+                rank = count;
+            }
+            stringObjectMap.put("rank", count);
+            count++;
+        }
+        object.put("rank", rank);
+        object.put("userList", userList);
+        return object;
+    }
     @Override
     public List<User> getMemberListOfPlanet(Long planetId){
         return planetMapper.getMemberListOfPlanet(planetId);

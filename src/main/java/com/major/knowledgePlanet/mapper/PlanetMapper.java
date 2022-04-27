@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -104,6 +105,29 @@ public interface PlanetMapper {
 
 
     /**
+    * 获取用户在星球中的积分
+    * @param userId 1
+    * @param planetCode 2
+    * @return : java.lang.Integer
+    * @author Covenant
+    * @date 2022-04-26 20:08
+    */
+    Integer getIntegral(Long userId, Long planetCode);
+
+    /**
+    * 获取用户积分排行
+    * @param planetCode 1
+    * @return : java.util.List<java.util.Map<java.lang.String,java.lang.Integer>>
+    * @author Covenant
+    * @date 2022-04-26 22:54
+    */
+    List<Map<String,Object>>getUserRank(Long planetCode);
+
+
+
+
+
+    /**
      *获取星球内的用户
      *@author cj
      *@date 2022/4/26 21:27
@@ -120,4 +144,5 @@ public interface PlanetMapper {
      * @return Integer
      */
     Integer deleteMember(Long userId ,Long planetCode);
+
 }

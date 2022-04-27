@@ -1,6 +1,7 @@
 package com.major.knowledgePlanet.service;
 
 import com.major.knowledgePlanet.entity.Topic;
+import com.major.knowledgePlanet.entity.TopicVO;
 
 import java.util.List;
 
@@ -23,5 +24,5 @@ public interface TopicService {
      * @param planetCode
      * @return List<Topic>
      */
-    List<Topic> getAllTopic(Long planetCode);
+    List<TopicVO> getAllTopic(Long planetCode);
 }
