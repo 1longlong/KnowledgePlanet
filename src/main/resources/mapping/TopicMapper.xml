@@ -4,23 +4,30 @@
     <resultMap id="Topic" type="Topic">
         <id property="topicId" column="topic_id"/>
         <result property="planetCode" column="p_code"/>
-        <result property="userId" column="user_id"/>
+        <result property="userId" column="u_id"/>
         <result property="time" column="time"/>
-        <result property="praiseCount" column="praiseCount"/>
+        <result property="praiseCount" column="praise_count"/>
         <result property="commentCount" column="comment_count"/>
         <result property="content" column="content"/>
         <result property="picture" column="picture"/>
     </resultMap>
+    <resultMap id="TopicVO" type="TopicVO">
+        <result property="userName" column="u_name"/>
+        <result property="avatar" column="avatar"/>
+        <association property="topic" resultMap="Topic"/>
+    </resultMap>
+
 
     <insert id="insertTopic" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId">
         insert into knowledge_planet.topic(p_code,u_id,time,content,picture)
         values (#{planetCode},#{userId},#{time},#{content},#{picture});
     </insert>
 
-    <select id="getAllTopic" parameterType="Long" resultMap="Topic">
-        select topic_id, u_id,time,praise_count,comment_count,picture,content
-        from knowledge_planet.topic
-        where p_code = #{planetCode};
+    <select id="getAllTopic" parameterType="Long" resultMap="TopicVO">
+        select topic_id, t.u_id,time,praise_count,comment_count,picture,content,u.u_name,avatar,p_code
+        from knowledge_planet.topic t join knowledge_planet.user u on u.u_id=t.u_id
+        where p_code = #{planetCode} and status=1
+        order by time desc;
     </select>
 
 </mapper>

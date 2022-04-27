@@ -2,6 +2,7 @@ package
         com.major.knowledgePlanet.controller;
 
 import cn.hutool.jwt.JWTUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.TopicMapper;
 import com.major.knowledgePlanet.result.Response;
@@ -138,6 +139,18 @@ public class PlanetController {
             e.printStackTrace();
             return Response.serverError().message("加入失败");
         }
+    }
+
+    @GetMapping("planet/getLeaderboard/{planetCode}")
+    public Response getLeaderboard(HttpServletRequest request,@PathVariable("planetCode") Long planetCode){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        JSONObject obj = planetService.getLeaderboard(userId, planetCode);
+        return Response.success().data("result",obj);
+
+
     }
 
 

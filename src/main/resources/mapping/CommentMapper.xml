@@ -4,17 +4,68 @@
 
     <resultMap id="Comment" type="Comment">
         <id property="commentId" column="comment_id"/>
+        <result property="userId" column="u_id"/>
         <result property="topicId" column="topic_id"/>
         <result property="parentId" column="parent_id"/>
         <result property="time" column="time"/>
         <result property="praiseCount" column="praise_count"/>
         <result property="content" column="content"/>
     </resultMap>
+    <resultMap id="User" type="User">
+        <id property="userId" column="u_id"/>
+        <result property="userName" column="u_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="avatar" column="avatar"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+    </resultMap>
+    <resultMap id="CommentDTO" type="CommentDTO">
+        <result property="userName" column="u_name"/>
+        <result property="avatar" column="avatar"/>
+        <association property="comment" resultMap="Comment"/>
+    </resultMap>
+    <resultMap id="Reply" type="Reply">
+        <association property="author" select="getAuthor" column="u_id"/>
+        <association property="replyToUser" select="getRelyToUser" column="to_id"/>
+        <association property="comment" resultMap="Comment"/>
+    </resultMap>
 
 
-    <select id="getCommentOfTopic" resultMap="Comment">
-        select comment_id ,topic_id, parent_id,time , praise_count ,content
-        from knowledge_planet.comment
-        where topic_id = #{topicId};
+
+
+    <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
+        insert knowledge_planet.comment(u_id, topic_id, parent_id, time, praise_count, content)values
+        (#{userId},#{topicId},#{parentId},#{time},#{praiseCount},#{content});
+    </insert>
+
+    <select id="getFirstComment" resultMap="CommentDTO">
+        select u_name,avatar,comment_id,u.u_id,topic_id,parent_id,time,praise_count,content
+        from knowledge_planet.comment c join knowledge_planet.user u on c.u_id=u.u_id
+        where parent_id is null and topic_id=#{topicId};
     </select>
+
+    <select id="getReplyCount" resultType="Integer">
+        select count(*)
+        from knowledge_planet.comment
+        where topic_id=#{topicId};
+    </select>
+
+    <select id="getAuthor" resultMap="User">
+        select *
+        from knowledge_planet.user
+        where u_id=#{id};
+    </select>
+    <select id="getRelyToUser" resultMap="User">
+        select *
+        from knowledge_planet.user
+        where u_id=#{id}
+    </select>
+    <select id="getAllReply" resultMap="Reply">
+        select c1.comment_id, c1.topic_id, c1.parent_id, c1.time, c1.praise_count, c1.content, c1.u_id,c2.u_id as to_id
+        from knowledge_planet.comment c1,knowledge_planet.comment c2
+        where c1.parent_id=#{parentId} and c1.parent_id=c2.comment_id;
+    </select>
+
 </mapper>

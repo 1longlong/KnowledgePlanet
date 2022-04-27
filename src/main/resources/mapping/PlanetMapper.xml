@@ -31,6 +31,10 @@
         <result property="integral" column="integral"/>
         <association property="planet" resultMap="Planet"/>
     </resultMap>
+    <resultMap id="UserIntegral" type="Map">
+        <id property="userId" column="u_id"/>
+        <result property="integral" column="integral"/>
+    </resultMap>
     
 
 
@@ -92,5 +96,22 @@
         from knowledge_planet.planet p,knowledge_planet.user_planet_rel upr
         where p.p_code=upr.p_code and upr.u_id=#{userId} and role=#{role};
     </select>
+
+    <select id="getIntegral" resultType="Integer">
+        select integral
+        from knowledge_planet.user_planet_rel
+        where p_code=#{planetCode} and u_id=#{userId};
+    </select>
+
+    <select id="getUserRank" resultType="Map">
+        select u.u_id as userId,integral,u_name as userName,avatar
+        from knowledge_planet.user_planet_rel upl,knowledge_planet.user u
+        where p_code=#{planetCode} and upl.u_id=u.u_id
+        order by integral desc
+        limit 50;
+    </select>
+
+
+
 
 </mapper>

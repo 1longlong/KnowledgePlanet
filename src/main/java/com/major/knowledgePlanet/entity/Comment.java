@@ -18,6 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
+    private Long userId;
     private Long commentId;
     private Long topicId;
     private Long parentId;

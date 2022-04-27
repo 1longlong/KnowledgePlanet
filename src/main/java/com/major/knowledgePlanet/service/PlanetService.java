@@ -1,8 +1,11 @@
 package com.major.knowledgePlanet.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.entity.Planet;
 import com.major.knowledgePlanet.entity.RecommendPlanetVO;
 import com.major.knowledgePlanet.entity.UserPlanetVO;
+
 
 import java.util.List;
 
@@ -74,5 +77,16 @@ public interface PlanetService {
     * @date 2022-04-22 10:22
     */
     void joinPlanet(Long userId,Long planetCode) throws Exception;
+
+    /**
+    * 查找用户在星球中的积分和星球排行榜前50
+    * @param userId 1
+    * @param planetCode 2
+    * @return : java.lang.Integer
+    * @author Covenant
+    * @date 2022-04-26 20:04
+    */
+     JSONObject getLeaderboard(Long userId, Long planetCode);
+
 
 }

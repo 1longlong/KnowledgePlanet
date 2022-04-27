@@ -1,6 +1,7 @@
 package com.major.knowledgePlanet.service.impl;
 
 import com.major.knowledgePlanet.entity.Topic;
+import com.major.knowledgePlanet.entity.TopicVO;
 import com.major.knowledgePlanet.mapper.TopicMapper;
 import com.major.knowledgePlanet.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,5 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> getAllTopic(Long planetCode){return topicMapper.getAllTopic(planetCode);}
+    public List<TopicVO> getAllTopic(Long planetCode){return topicMapper.getAllTopic(planetCode);}
 }
