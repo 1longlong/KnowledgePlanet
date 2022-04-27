@@ -2,6 +2,7 @@ package com.major.knowledgePlanet.service;
 
 import com.major.knowledgePlanet.entity.Planet;
 import com.major.knowledgePlanet.entity.RecommendPlanetVO;
+import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.entity.UserPlanetVO;
 
 import java.util.List;
@@ -75,4 +76,22 @@ public interface PlanetService {
     */
     void joinPlanet(Long userId,Long planetCode) throws Exception;
 
+
+    /**
+     *获取星球内的用户列表
+     *@author cj
+     *@date 2022/4/26 21:30
+     * @param planetId
+     * @return List<User>
+     */
+    List<User> getMemberListOfPlanet(Long planetId);
+
+    /**
+     *删除成员
+     *@author cj
+     *@date 2022/4/26 22:03
+     * @param userId
+     * @return Integer
+     */
+    Integer deleteMember(Long userId ,Long planetCode);
 }

@@ -103,4 +103,21 @@ public interface PlanetMapper {
     List<UserPlanetVO> getPlanet(Long userId, Integer role);
 
 
+    /**
+     *获取星球内的用户
+     *@author cj
+     *@date 2022/4/26 21:27
+     * @param planetId
+     * @return List<User>
+     */
+    List<User> getMemberListOfPlanet(Long planetId);
+
+    /**
+     *删除成员
+     *@author cj
+     *@date 2022/4/26 22:02
+     * @param userId
+     * @return Integer
+     */
+    Integer deleteMember(Long userId ,Long planetCode);
 }

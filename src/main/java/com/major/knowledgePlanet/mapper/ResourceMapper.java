@@ -134,4 +134,15 @@ public interface ResourceMapper {
     */
     void changeResourceStatus(Long resourceId,Integer resourceStatus,String checkInfo,Boolean isRecommended);
 
+
+    /**
+     *
+     *@author cj
+     *@date 2022/4/26 21:00
+     * @param resourceId
+     * @param isRecommended
+     * @return Integer
+     */
+
+    Integer changeRecommendStatus(Long resourceId,Integer isRecommended);
 }
