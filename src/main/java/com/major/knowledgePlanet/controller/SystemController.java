@@ -19,23 +19,17 @@ import com.major.knowledgePlanet.service.UserInfoService;
 import com.major.knowledgePlanet.util.EmailUtil;
 import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.*;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,12 +52,6 @@ public class SystemController {
 
     @Value("${defaultAvatar}")
     private String defaultAvatar;
-
-    @Value("${server.IP}")
-    private String cookieDomain;
-
-    @Value("${server.servlet.context-path}")
-    private String cookiePath;
 
     @Resource(name="userInfoServiceImpl")
     private UserInfoService userInfoService;
@@ -245,6 +233,19 @@ public class SystemController {
         List<Message> messageList = noticeService.getMessageById(userId);
         return Response.success().data("messageList",messageList);
     }
+
+
+    @PostMapping("system/setMessageStatus")
+    @ApiOperation(value="设置消息状态，1表示已读，0表示未读")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="messageId",value="消息id",dataType="Long",dataTypeClass = Long.class,paramType="query",required = true),
+            @ApiImplicitParam(name="status",value="消息状态",dataType = "Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
+    })
+    public Response setMessageStatus(@RequestParam("messageId")Long messageId,@RequestParam("status")Integer status){
+        noticeService.setMessageStatus(messageId,status);
+        return Response.success();
+    }
+
 
 }
 

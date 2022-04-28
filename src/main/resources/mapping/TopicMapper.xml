@@ -30,4 +30,10 @@
         order by time desc;
     </select>
 
+    <update id="changeCommentCount">
+        update knowledge_planet.topic
+        set comment_count=comment_count+#{delta}
+        where topic_id=#{topicId};
+    </update>
+
 </mapper>

@@ -8,7 +8,12 @@
     <select id="getMessageById" resultType="Message">
         select message_id ,content,time,status,`from`,`to`
         from knowledge_planet.message
-        where `to`=#{userId}
+        where `to`=#{userId} and status=0
         order by time desc;
     </select>
+    <update id="setMessageStatus" >
+        update knowledge_planet.message
+        set status=#{status}
+        where message_id=#{messageId};
+    </update>
 </mapper>

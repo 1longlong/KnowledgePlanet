@@ -33,4 +33,9 @@ public class NoticeServiceImpl implements NoticeService {
     public List<Message> getMessageById(Long userId) {
         return messageMapper.getMessageById(userId);
     }
+
+    @Override
+    public void setMessageStatus(Long messageId, Integer status) {
+         messageMapper.setMessageStatus(messageId,status);
+    }
 }

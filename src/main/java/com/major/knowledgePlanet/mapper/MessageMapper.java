@@ -35,4 +35,13 @@ public interface MessageMapper {
     * @date 2022-04-26 14:49
     */
     List<Message> getMessageById(Long userId);
+
+    /**
+    * 设置消息状态
+    * @param messageId 1
+    * @param status 消息状态 1表示已读，0表示未读
+    * @author Covenant
+    * @date 2022-04-27 14:03
+    */
+    void setMessageStatus(Long messageId,Integer status);
 }
