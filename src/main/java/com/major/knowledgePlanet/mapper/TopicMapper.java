@@ -29,4 +29,12 @@ public interface TopicMapper {
      * @return List<Topic>
      */
     List<TopicVO> getAllTopic(Long planetCode);
+
+    /**
+    * 更新帖子的评论数量
+    * @param delta 正数表示增加，负数表示减少
+    * @author Covenant
+    * @date 2022-04-28 17:18
+    */
+    void changeCommentCount(Long topicId,Integer delta);
 }

@@ -10,6 +10,7 @@ import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.CommentService;
 import com.major.knowledgePlanet.service.TopicService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,7 @@ import java.util.List;
  * @date 2022/4/26 17:14
  */
 @RestController
+@Api(tags="讨论区模块",value="TopicCOntroller")
 public class TopicController {
     @Value("${saltValue}")
     private String saltValue;
@@ -108,6 +110,24 @@ public class TopicController {
     public Response getAllReply(@PathVariable("commentId")Long commentId){
         List<Reply> replyList = commentService.getAllReply(commentId);
         return Response.success().data("replyList",replyList);
+    }
+
+    @PostMapping("topic/praise")
+    @ApiOperation(value="给话题或者评论点赞")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="id",value="评论或者话题id",dataType="Long",dataTypeClass = Long.class,paramType = "query",required = true),
+            @ApiImplicitParam(name="type",value="点赞对象类型，1表示话题，0表示评论",dataType="Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
+    })
+    public Response praise(HttpServletRequest request,@RequestParam("id")Long id,@RequestParam("type")Integer type){
+        //TODO:
+        return null;
+    }
+
+    @PostMapping("topic/unPraise")
+    @ApiOperation(value="给话题或者评论取消点赞")
+    public Response unPraise(HttpServletRequest request,@RequestParam("id")Long id,@RequestParam("type")Integer type){
+        //TODO:
+        return null;
     }
 
 

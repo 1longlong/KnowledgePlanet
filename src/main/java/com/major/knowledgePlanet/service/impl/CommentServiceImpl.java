@@ -6,9 +6,11 @@ import com.major.knowledgePlanet.entity.Comment;
 import com.major.knowledgePlanet.entity.CommentDTO;
 import com.major.knowledgePlanet.entity.Reply;
 import com.major.knowledgePlanet.mapper.CommentMapper;
+import com.major.knowledgePlanet.mapper.TopicMapper;
 import com.major.knowledgePlanet.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -23,10 +25,14 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     @Autowired
-    public CommentMapper commentMapper;
+    private CommentMapper commentMapper;
+
+    @Autowired
+    private TopicMapper topicMapper;
 
 
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void addComment(Long userId, Long topicId, Long parentId, String content) throws Exception {
         Comment comment=new Comment();
@@ -37,7 +43,8 @@ public class CommentServiceImpl implements CommentService {
         comment.setTime(new Date());
         comment.setPraiseCount(0);
         try{
-        commentMapper.addComment(comment);}
+            topicMapper.changeCommentCount(topicId,1);
+            commentMapper.addComment(comment);}
         catch(Exception e){
             throw new Exception();
         }

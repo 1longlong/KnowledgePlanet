@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * TODO:此处写CommentVO类的描述
  *
@@ -18,4 +20,5 @@ public class CommentDTO {
     private Comment comment;
     private String userName;
     private String avatar;
+    private List<Reply> replyList;
 }

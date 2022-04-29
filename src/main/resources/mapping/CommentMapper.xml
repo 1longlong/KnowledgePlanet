@@ -22,9 +22,11 @@
         <result property="password" column="password"/>
     </resultMap>
     <resultMap id="CommentDTO" type="CommentDTO">
+        <id property="comment.commentId" column="comment_id"/>
         <result property="userName" column="u_name"/>
         <result property="avatar" column="avatar"/>
         <association property="comment" resultMap="Comment"/>
+        <collection property="replyList" select="getAllReply" column="comment_id"/>
     </resultMap>
     <resultMap id="Reply" type="Reply">
         <association property="author" select="getAuthor" column="u_id"/>
@@ -67,5 +69,6 @@
         from knowledge_planet.comment c1,knowledge_planet.comment c2
         where c1.parent_id=#{parentId} and c1.parent_id=c2.comment_id;
     </select>
+
 
 </mapper>
