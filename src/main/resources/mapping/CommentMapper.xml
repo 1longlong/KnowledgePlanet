@@ -22,6 +22,7 @@
         <result property="password" column="password"/>
     </resultMap>
     <resultMap id="CommentDTO" type="CommentDTO">
+        <id property="comment.commentId" column="comment_id"/>
         <result property="userName" column="u_name"/>
         <result property="avatar" column="avatar"/>
         <association property="comment" resultMap="Comment"/>

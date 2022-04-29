@@ -12,6 +12,7 @@
         <result property="picture" column="picture"/>
     </resultMap>
     <resultMap id="TopicVO" type="TopicVO">
+        <id property="topic.topicId" column="topic_id"/>
         <result property="userName" column="u_name"/>
         <result property="avatar" column="avatar"/>
         <association property="topic" resultMap="Topic"/>

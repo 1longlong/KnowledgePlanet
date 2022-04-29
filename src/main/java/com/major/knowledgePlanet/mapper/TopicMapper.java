@@ -36,5 +36,5 @@ public interface TopicMapper {
     * @author Covenant
     * @date 2022-04-28 17:18
     */
-    void changeCommentCount(Long planetCode,Integer delta);
+    void changeCommentCount(Long topicId,Integer delta);
 }

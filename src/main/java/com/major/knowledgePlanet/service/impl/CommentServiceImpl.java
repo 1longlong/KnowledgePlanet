@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setTime(new Date());
         comment.setPraiseCount(0);
         try{
-            topicMapper.changeCommentCount(null,1);
+            topicMapper.changeCommentCount(topicId,1);
             commentMapper.addComment(comment);}
         catch(Exception e){
             throw new Exception();
