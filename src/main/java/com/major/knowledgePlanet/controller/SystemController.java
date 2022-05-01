@@ -152,7 +152,7 @@ public class SystemController {
             }
         };
         String token = JWTUtil.createToken(map, saltValue.getBytes());
-        return Response.success().message("登录成功").data("token",token);
+        return Response.success().message("登录成功").data("token",token).data("user",user);
     }
 
     @GetMapping("system/getLoginLog")

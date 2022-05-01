@@ -17,9 +17,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *评论类
- *@author cj
- *@date 2022/4/21 12:52
+ * 评论类
+ *
+ * @author cj
+ * @date 2022/4/21 12:52
  */
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -31,37 +32,61 @@ public class CommentServiceImpl implements CommentService {
     private TopicMapper topicMapper;
 
 
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void addComment(Long userId, Long topicId, Long parentId, String content) throws Exception {
-        Comment comment=new Comment();
+        Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setParentId(parentId);
         comment.setContent(content);
         comment.setTopicId(topicId);
         comment.setTime(new Date());
         comment.setPraiseCount(0);
-        try{
-            topicMapper.changeCommentCount(topicId,1);
-            commentMapper.addComment(comment);}
-        catch(Exception e){
+        try {
+            topicMapper.changeCommentCount(topicId, 1);
+            commentMapper.addComment(comment);
+        } catch (Exception e) {
             throw new Exception();
         }
     }
 
     @Override
-    public JSONObject getFirstCommentWithReplyCount(Long topicId) {
-        JSONObject obj=new JSONObject();
-        List<CommentDTO> firstComment = commentMapper.getFirstComment(topicId);
+    public JSONObject getFirstCommentWithReplyCount(Long topicId, Long userId) {
+        JSONObject obj = new JSONObject();
+        List<CommentDTO> firstComment = commentMapper.getFirstComment(topicId, userId);
         Integer replyCount = commentMapper.getReplyCount(topicId);
-        obj.put("commentList",firstComment);
-        obj.put("replyCount",replyCount);
+        obj.put("commentList", firstComment);
+        obj.put("replyCount", replyCount);
         return obj;
     }
 
     @Override
     public List<Reply> getAllReply(Long parentId) {
         return commentMapper.getAllReply(parentId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void praise(Long commentId, Long userId) throws Exception {
+        try {
+            commentMapper.changeCommentUserRel(commentId, userId, true);
+            commentMapper.addPraiseCount(commentId, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void unPraise(Long commentId, Long userId)throws Exception {
+        try {
+            commentMapper.changeCommentUserRel(commentId,userId,false);
+            commentMapper.addPraiseCount(commentId,-1);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+
     }
 }

@@ -37,4 +37,25 @@ public interface TopicMapper {
     * @date 2022-04-28 17:18
     */
     void changeCommentCount(Long topicId,Integer delta);
+
+    /**
+    * 更改话题点赞表,没有就添加一条记录
+    * @param topicId 1
+    * @param userId 2
+    * @param liked 是否点赞
+    * @author Covenant
+    * @date 2022-05-01 14:43
+    */
+    void changeTopicUserRel(Long topicId,Long userId,Boolean liked);
+
+    /**
+    * 更新帖子的点赞数量
+    * @param topicId 1
+    * @param delta 2 正数表示增加，负数表示减少
+    * @author Covenant
+    * @date 2022-05-01 14:51
+    */
+    void changePraiseCount(Long topicId,Integer delta);
+
+
 }

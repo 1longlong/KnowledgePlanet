@@ -28,7 +28,7 @@ public interface CommentMapper {
     * @author Covenant
     * @date 2022-04-27 9:55
     */
-    List<CommentDTO> getFirstComment(Long topicId);
+    List<CommentDTO> getFirstComment(Long topicId,Long userId);
 
     /**
     * 获取话题下所有评论数量
@@ -47,4 +47,24 @@ public interface CommentMapper {
     * @date 2022-04-27 10:26
     */
     List<Reply> getAllReply(Long parentId);
+
+    /**
+    * 更改评论点赞表,没有就添加一条记录
+    * @param commentId 1
+    * @param userId 2
+    * @param liked 是否点赞
+    * @author Covenant
+    * @date 2022-05-01 14:01
+    */
+    void changeCommentUserRel(Long commentId,Long userId,Boolean liked);
+
+    /**
+    * 修改点赞数
+    * @param commentId 评论id
+    * @param count 正数表示点赞，负数表示取消点赞
+    * @author Covenant
+    * @date 2022-05-01 14:20
+    */
+    void addPraiseCount(Long commentId,Integer count);
+
 }
