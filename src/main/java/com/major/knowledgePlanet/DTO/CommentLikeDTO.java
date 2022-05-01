@@ -28,4 +28,5 @@ public class CommentLikeDTO {
     private Integer praiseCount;
     private String content;
     private Boolean liked;
+    private Long firstCommentId;
 }

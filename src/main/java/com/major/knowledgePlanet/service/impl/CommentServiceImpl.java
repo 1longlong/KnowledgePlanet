@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void addComment(Long userId, Long topicId, Long parentId, String content) throws Exception {
+    public void addComment(Long userId, Long topicId, Long parentId, String content,Long firstCommentId) throws Exception {
         Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setParentId(parentId);
@@ -42,10 +42,12 @@ public class CommentServiceImpl implements CommentService {
         comment.setTopicId(topicId);
         comment.setTime(new Date());
         comment.setPraiseCount(0);
+        comment.setFirstCommentId(firstCommentId);
         try {
             topicMapper.changeCommentCount(topicId, 1);
             commentMapper.addComment(comment);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception();
         }
     }
@@ -61,8 +63,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Reply> getAllReply(Long parentId) {
-        return commentMapper.getAllReply(parentId);
+    public List<Reply> getAllReply(Long commentId) {
+        return commentMapper.getAllReply(commentId);
     }
 
     @Override

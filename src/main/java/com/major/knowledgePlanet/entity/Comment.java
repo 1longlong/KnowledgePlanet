@@ -26,4 +26,5 @@ public class Comment {
     private Date time;
     private Integer praiseCount;
     private String content;
+    private Long firstCommentId;
 }
