@@ -74,18 +74,19 @@ public class TopicController {
             @ApiImplicitParam(name="topicId",value="所在topic的id",dataType="Long",dataTypeClass=Long.class,paramType="query",required=true),
             @ApiImplicitParam(name="parentId",value="上级评论id，若是对topic的评论则为null",dataType="Long",dataTypeClass = String.class,paramType = "query"),
             @ApiImplicitParam(name="content",value="评论内容",dataType="String",dataTypeClass = String.class,paramType ="query",required = true),
+            @ApiImplicitParam(name="firstCommentId",value="以及评论id，若本身为一级评论则为null",dataType = "Long",dataTypeClass = Long.class,paramType = "query"),
             @ApiImplicitParam(name="type",value="评论对象的类型，1表示topic,0表示comment",dataType="Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
     })
-    public Response addComment(HttpServletRequest request,@RequestParam("topicId")Long topicId, @RequestParam(value = "parentId",required = false) Long parentId,@RequestParam("content") String content,@RequestParam("type")Integer type) {
+    public Response addComment(HttpServletRequest request,@RequestParam("topicId")Long topicId, @RequestParam(value = "parentId",required = false) Long parentId,@RequestParam("content") String content,@RequestParam("firstCommentId")Long firstCommentId,  @RequestParam("type")Integer type) {
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
         }
         try {
             if(type==1){
-                commentService.addComment(userId,topicId,null,content);
+                commentService.addComment(userId,topicId,null,content,null);
             }else if(type==0){
-                commentService.addComment(userId,topicId,parentId,content);
+                commentService.addComment(userId,topicId,parentId,content,firstCommentId);
             }else{
                 return Response.clientError().message("参数有误");
             }

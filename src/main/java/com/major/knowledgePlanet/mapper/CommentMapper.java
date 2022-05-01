@@ -40,13 +40,13 @@ public interface CommentMapper {
     Integer getReplyCount(Long topicId);
 
     /**
-    * 获取评论的所有回复
-    * @param parentId 1
+    * 获取一级评论的所有回复
+    * @param commentId 1
     * @return : java.util.List<com.major.knowledgePlanet.entity.Reply>
     * @author Covenant
     * @date 2022-04-27 10:26
     */
-    List<Reply> getAllReply(Long parentId);
+    List<Reply> getAllReply(Long commentId);
 
     /**
     * 更改评论点赞表,没有就添加一条记录

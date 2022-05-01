@@ -15,10 +15,11 @@ public interface CommentService {
     * @param topicId 2
     * @param parentId 3
     * @param content 4
+    * @param firstCommentId 5 一级评论id,没有则为null
     * @author Covenant
     * @date 2022-04-27 9:05
     */
-    void addComment(Long userId,Long topicId,Long parentId,String content) throws Exception;
+    void addComment(Long userId,Long topicId,Long parentId,String content,Long firstCommentId) throws Exception;
 
 
 
@@ -34,13 +35,13 @@ public interface CommentService {
 
 
     /**
-    * 获取评论的所有回复
-    * @param parentId 1
+    * 获取一级评论的所有回复
+    * @param commentId 1
     * @return : java.util.List<com.major.knowledgePlanet.entity.Reply>
     * @author Covenant
     * @date 2022-04-27 10:58
     */
-    List<Reply> getAllReply(Long parentId);
+    List<Reply> getAllReply(Long commentId);
 
 
     /**
