@@ -25,4 +25,23 @@ public interface TopicService {
      * @return List<Topic>
      */
     List<TopicVO> getAllTopic(Long planetCode);
+
+    /**
+     * 点赞帖子
+     * @param topicId 1
+     * @param userId 2
+     * @author Covenant
+     * @date 2022-05-01 14:24
+     */
+    void praise(Long topicId,Long userId) throws Exception;
+
+    /**
+     * 取消点赞帖子
+     * @param topicId 1
+     * @param userId 2
+     * @author Covenant
+     * @date 2022-05-01 14:27
+     */
+    void unPraise(Long topicId,Long userId)throws Exception;
+
 }

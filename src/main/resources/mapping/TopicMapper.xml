@@ -15,6 +15,7 @@
         <id property="topic.topicId" column="topic_id"/>
         <result property="userName" column="u_name"/>
         <result property="avatar" column="avatar"/>
+        <result property="liked" column="is_liked"/>
         <association property="topic" resultMap="Topic"/>
     </resultMap>
 
@@ -25,9 +26,9 @@
     </insert>
 
     <select id="getAllTopic" parameterType="Long" resultMap="TopicVO">
-        select topic_id, t.u_id,time,praise_count,comment_count,picture,content,u.u_name,avatar,p_code
-        from knowledge_planet.topic t join knowledge_planet.user u on u.u_id=t.u_id
-        where p_code = #{planetCode} and status=1
+        select t.topic_id, t.u_id,time,praise_count,comment_count,picture,content,u.u_name,avatar,p_code,ifnull(is_liked,0) as is_liked
+        from (knowledge_planet.topic t join knowledge_planet.user u on u.u_id=t.u_id) left join knowledge_planet.topic_user_rel tul on tul.topic_id=t.topic_id
+        where p_code = #{planetCode} and status=1 and (tul.u_id=1234 or tul.u_id is null)
         order by time desc;
     </select>
 
@@ -37,4 +38,15 @@
         where topic_id=#{topicId};
     </update>
 
+
+    <insert id="changeTopicUserRel">
+        replace knowledge_planet.topic_user_rel(topic_id, u_id, is_liked)
+        values(#{topicId},#{userId},#{liked});
+    </insert>
+
+    <update id="changePraiseCount">
+        update knowledge_planet.topic
+        set praise_count=praise_count+#{delta}
+        where topic_id=#{topicId};
+    </update>
 </mapper>

@@ -99,8 +99,12 @@ public class TopicController {
     @GetMapping("topic/getFirstComment/{topicId}")
     @ApiOperation(value="获取话题的一级评论")
     @ApiImplicitParam(name="topicId",value="话题id",dataType="Long",dataTypeClass=Long.class,paramType = "path",required = true)
-    public Response getFirstComment(@PathVariable("topicId")Long topicId){
-        JSONObject result = commentService.getFirstCommentWithReplyCount(topicId);
+    public Response getFirstComment(HttpServletRequest request,@PathVariable("topicId")Long topicId){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        JSONObject result = commentService.getFirstCommentWithReplyCount(topicId,userId);
         return Response.success().data("result",result);
     }
 
@@ -118,18 +122,38 @@ public class TopicController {
             @ApiImplicitParam(name="id",value="评论或者话题id",dataType="Long",dataTypeClass = Long.class,paramType = "query",required = true),
             @ApiImplicitParam(name="type",value="点赞对象类型，1表示话题，0表示评论",dataType="Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
     })
-    public Response praise(HttpServletRequest request,@RequestParam("id")Long id,@RequestParam("type")Integer type){
-        //TODO:
-        return null;
+    public Response praise(HttpServletRequest request,@RequestParam("id")Long id,@RequestParam("type")Integer type) throws Exception {
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        if(type==1){
+            topicService.praise(id,userId);
+        }else if(type==0){
+            commentService.praise(id,userId);
+        }else{
+            return Response.clientError().code("A0300").message("参数值错误");
+        }
+        return Response.success().message("点赞成功");
     }
 
     @PostMapping("topic/unPraise")
     @ApiOperation(value="给话题或者评论取消点赞")
-    public Response unPraise(HttpServletRequest request,@RequestParam("id")Long id,@RequestParam("type")Integer type){
-        //TODO:
-        return null;
+    public Response unPraise(HttpServletRequest request,@RequestParam("id")Long id,@RequestParam("type")Integer type) throws Exception {
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        if(type==1){
+            topicService.unPraise(id,userId);
+        }else if(type==0){
+            commentService.unPraise(id,userId);
+        }else{
+            return Response.clientError().code("A0300").message("参数值错误");
+        }
+        return Response.success().message("取消点赞成功");
     }
 
-
+    
 
 }

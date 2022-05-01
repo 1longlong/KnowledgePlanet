@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.entity;
 
+import com.major.knowledgePlanet.DTO.CommentLikeDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,5 @@ import java.util.List;
 public class Reply {
     private User author;
     private User replyToUser;
-    private Comment comment;
+    private CommentLikeDTO comment;
 }

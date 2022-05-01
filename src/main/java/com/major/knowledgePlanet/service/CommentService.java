@@ -24,12 +24,13 @@ public interface CommentService {
 
     /**
     * 获取话题下的一级评论和回复数量
-    * @param topicId 1
+    * @param topicId
+    * @Param userId 当前登录的用户id
     * @return : com.alibaba.fastjson.JSONObject
     * @author Covenant
     * @date 2022-04-27 9:57
     */
-    JSONObject getFirstCommentWithReplyCount(Long topicId);
+    JSONObject getFirstCommentWithReplyCount(Long topicId,Long userId);
 
 
     /**
@@ -40,4 +41,23 @@ public interface CommentService {
     * @date 2022-04-27 10:58
     */
     List<Reply> getAllReply(Long parentId);
+
+
+    /**
+    * 点赞评论
+    * @param commentId 1
+    * @param userId 2
+    * @author Covenant
+    * @date 2022-05-01 14:24
+    */
+    void praise(Long commentId,Long userId) throws Exception;
+
+    /**
+    * 取消点赞评论
+    * @param commentId 1
+    * @param userId 2
+    * @author Covenant
+    * @date 2022-05-01 14:27
+    */
+    void unPraise(Long commentId,Long userId)throws Exception;
 }

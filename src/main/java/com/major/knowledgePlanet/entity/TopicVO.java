@@ -17,5 +17,6 @@ import lombok.NoArgsConstructor;
 public class TopicVO {
     private String userName;
     private String avatar;
+    private Boolean liked;
     private Topic topic;
 }
