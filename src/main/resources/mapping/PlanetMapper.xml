@@ -92,7 +92,7 @@
     <select id="getPlanetOwnerId" resultType="Long">
         select u_id
         from knowledge_planet.user_planet_rel
-        where p_code=#{planetCode};
+        where p_code=#{planetCode} and role=1;
     </select>
 
     <select id="getPlanetByPlanetCode" resultMap="Planet">
