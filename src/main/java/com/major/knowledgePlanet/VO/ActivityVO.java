@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ActivityVO {
     private Activity activity;
     private Integer role;
+    private Long organizerId;
     private String organizerName;
     private String organizerAvatar;
 }

@@ -46,4 +46,20 @@ public interface ActivityMapper {
     */
     List<ActivityVO> getActivity(Long userId,Long planetCode);
 
+    /**
+    * 取消活动
+    * @param activityId 1
+    * @author Covenant
+    * @date 2022-05-02 20:45
+    */
+    void setStatus(Long activityId,Integer status);
+
+    /**
+    * 根据id查活动具体信息
+    * @param activityId 1
+    * @return : com.major.knowledgePlanet.entity.Activity
+    * @author Covenant
+    * @date 2022-05-02 21:28
+    */
+    ActivityVO getActivityById(Long activityId,Long userId);
 }

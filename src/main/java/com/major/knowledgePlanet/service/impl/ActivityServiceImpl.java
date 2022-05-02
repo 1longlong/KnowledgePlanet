@@ -67,4 +67,31 @@ public class ActivityServiceImpl implements ActivityService {
         return activityMapper.getActivity(userId,planetCode);
     }
 
+    @Override
+    public void cancelActivity(Long activityId) {
+        activityMapper.setStatus(activityId,3);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void checkActivity(Long userId, Long activityId, String checkInfo, Integer checkResult) {
+        ActivityVO activity = activityMapper.getActivityById(activityId,userId);
+        String result="";
+        if(checkResult==1){
+            activityMapper.setStatus(activityId,1);
+            result="通过";
+        }else if(checkResult==2){
+            activityMapper.setStatus(activityId,2);
+            result="拒绝,原因:"+checkInfo;
+        }
+        String content="您提交的活动 "+activity.getActivity().getTitle()+" 审核结果为:"+result;
+        Message message = new Message();
+        message.setContent(content);
+        message.setFrom(userId);
+        message.setTo(activity.getOrganizerId());
+        message.setTime(new Date());
+        message.setStatus(0);
+        messageMapper.addMessage(message);
+    }
+
 }

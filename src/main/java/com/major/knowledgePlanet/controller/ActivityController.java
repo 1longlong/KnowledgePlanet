@@ -8,6 +8,7 @@ import com.major.knowledgePlanet.service.ActivityService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -46,16 +47,46 @@ public class ActivityController {
         return Response.success().message("创建成功");
     }
 
-    @GetMapping("activity/getActivity")
+    @GetMapping("activity/getActivity/{planetCode}")
     @ApiOperation(value="获取星球中的所有活动以及和登录用户的关系")
-    @ApiImplicitParam(name="星球id",value="planetCode",dataType = "Long",dataTypeClass = Long.class,paramType = "query",required = true)
-    public Response getActivity(HttpServletRequest request,@RequestParam("planetCode") Long planetCode){
+    @ApiImplicitParam(name="星球id",value="planetCode",dataType = "Long",dataTypeClass = Long.class,paramType = "path",required = true)
+    public Response getActivity(HttpServletRequest request,@PathVariable("planetCode") Long planetCode){
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("B0204").message("身份验证失败");
         }
         List<ActivityVO> activityList = activityService.getActivity(userId, planetCode);
         return Response.success().data("activityList",activityList);
+    }
+
+
+    @PostMapping("activity/cancelActivity")
+    @ApiOperation(value="取消活动")
+    @ApiImplicitParam(name="活动id",value="activityId",dataType ="Long",dataTypeClass = Long.class,paramType = "query",required = true)
+    public Response cancelActivity(@RequestParam("activityId")Long activityId){
+        activityService.cancelActivity(activityId);
+        return Response.success().message("取消成功");
+    }
+
+
+    @PostMapping("activity/checkActivity")
+    @ApiOperation(value = "审核活动")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="活动id",value="activityId",dataType ="Long",dataTypeClass = Long.class,paramType = "query",required = true),
+            @ApiImplicitParam(name="审核信息",value = "checkInfo",dataType = "String",dataTypeClass = String.class,paramType = "query",required = true),
+            @ApiImplicitParam(name="审核结果，1表示通过，2表示拒绝",value="checkResult",dataType = "Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
+    })
+    public Response checkActivity(HttpServletRequest request,@RequestParam("activityId")Long activityId,@RequestParam("checkInfo")String checkInfo,@RequestParam("checkResult")Integer checkResult){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        try {
+            activityService.checkActivity(userId,activityId,checkInfo,checkResult);
+            return Response.success().message("审核成功");
+        }catch(Exception e){
+            return Response.serverError().message(e.getMessage());
+        }
     }
 
 

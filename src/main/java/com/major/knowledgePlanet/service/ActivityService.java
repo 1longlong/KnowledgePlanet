@@ -12,4 +12,9 @@ public interface ActivityService {
 
     List<ActivityVO> getActivity(Long userId, Long planetCode);
 
+    void cancelActivity(Long activityId);
+
+
+    void checkActivity(Long userId,Long activityId,String checkInfo,Integer checkResult);
+
 }
