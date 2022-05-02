@@ -46,7 +46,7 @@ public interface CommentMapper {
     * @author Covenant
     * @date 2022-04-27 10:26
     */
-    List<Reply> getAllReply(Long commentId);
+    List<Reply> getAllReply(Long commentId,Long userId);
 
     /**
     * 更改评论点赞表,没有就添加一条记录

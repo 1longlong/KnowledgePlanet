@@ -18,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDTO {
-    private CommentLikeDTO comment;
+    private Comment comment;
+    private Boolean liked;
     private String userName;
     private String avatar;
     private List<Reply> replyList;

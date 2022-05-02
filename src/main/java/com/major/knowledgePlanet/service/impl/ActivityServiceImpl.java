@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.service.impl;
 
+import com.major.knowledgePlanet.VO.ActivityVO;
 import com.major.knowledgePlanet.entity.Activity;
 import com.major.knowledgePlanet.entity.Message;
 import com.major.knowledgePlanet.entity.Planet;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * TODO:此处写ActivityServiceImpl类的描述
@@ -59,4 +61,10 @@ public class ActivityServiceImpl implements ActivityService {
         message.setTime(new Date());
         messageMapper.addMessage(message);
     }
+
+    @Override
+    public List<ActivityVO> getActivity(Long userId, Long planetCode) {
+        return activityMapper.getActivity(userId,planetCode);
+    }
+
 }
