@@ -41,7 +41,7 @@ public interface CommentService {
     * @author Covenant
     * @date 2022-04-27 10:58
     */
-    List<Reply> getAllReply(Long commentId);
+    List<Reply> getAllReply(Long commentId,Long userId);
 
 
     /**

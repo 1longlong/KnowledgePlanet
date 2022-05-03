@@ -63,8 +63,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Reply> getAllReply(Long commentId) {
-        return commentMapper.getAllReply(commentId);
+    public List<Reply> getAllReply(Long commentId,Long userId) {
+        return commentMapper.getAllReply(commentId,userId);
     }
 
     @Override

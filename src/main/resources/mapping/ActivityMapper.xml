@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.major.knowledgePlanet.mapper.ActivityMapper">
+
+    <resultMap id="Activity" type="Activity">
+        <id property="activityId" column="activity_id"/>
+        <result property="planetCode" column="p_code"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="address" column="address"/>
+        <result property="status" column="status"/>
+        <result property="tag" column="tag"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="curNumber" column="cur_number"/>
+        <result property="maxNumber" column="max_number"/>
+    </resultMap>
+
+    <resultMap id="ActivityVO" type="com.major.knowledgePlanet.VO.ActivityVO">
+        <id property="activity.activityId" column="activity_id"/>
+        <result property="organizerName" column="u_name"/>
+        <result property="organizerAvatar" column="avatar"/>
+        <result property="organizerId" column="u_id"/>
+        <association property="role" select="getRole" column="{activityId=activity_id,userId=userId}"/>
+        <association property="activity" resultMap="Activity"/>
+    </resultMap>
+
+    <insert id="addActivity" useGeneratedKeys="true" keyProperty="activityId">
+        insert knowledge_planet.activity(p_code, title, description, address, status, tag, start_time, end_time, create_time, cur_number, max_number)
+        values(#{planetCode},#{title},#{description},#{address},#{status},#{tag},#{startTime},#{endTime},#{createTime},#{curNumber},#{maxNumber});
+    </insert>
+    <insert id="addRel">
+        insert  knowledge_planet.user_activity_rel(u_id, activity_id, role)
+        values(#{userId},#{activityId},#{role});
+    </insert>
+    <select id="getActivity" resultMap="ActivityVO">
+        select a.activity_id, p_code, title, description, address, a.status, tag, start_time, end_time, a.create_time, cur_number, max_number,u.u_id, u.u_name,u.avatar,  #{userId} as userId
+        from knowledge_planet.activity a join knowledge_planet.user_activity_rel uar on a.activity_id=uar.activity_id join knowledge_planet.user u on u.u_id=uar.u_id
+        where p_code=#{planetCode} and a.status=1 and role=1 and end_time>now();
+    </select>
+    <select id="getRole" resultType="Integer">
+        select role
+        from knowledge_planet.user_activity_rel uar join knowledge_planet.activity a on a.activity_id=uar.activity_id
+        where a.activity_id=#{activityId} and u_id=#{userId}
+    </select>
+    <update id="setStatus">
+        update knowledge_planet.activity
+        set status=#{status}
+        where activity_id=#{activityId};
+    </update>
+    <select id="getActivityById" resultMap="ActivityVO">
+        select a.activity_id, p_code, title, description, address, a.status, tag, start_time, end_time, a.create_time, cur_number, max_number,u.u_id, u.u_name,u.avatar,#{userId} as userId
+        from knowledge_planet.activity a join knowledge_planet.user_activity_rel uar on a.activity_id=uar.activity_id join knowledge_planet.user u on u.u_id=uar.u_id
+        where a.activity_id=#{activityId} and role=1;
+    </select>
+
+</mapper>

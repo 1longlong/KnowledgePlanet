@@ -23,7 +23,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<TopicVO> getAllTopic(Long planetCode){return topicMapper.getAllTopic(planetCode);}
+    public List<TopicVO> getAllTopic(Long planetCode,Long userId){return topicMapper.getAllTopic(planetCode,userId);}
 
     @Override
     public void praise(Long topicId, Long userId) throws Exception {

@@ -28,7 +28,7 @@ public interface TopicMapper {
      * @param planetCode
      * @return List<Topic>
      */
-    List<TopicVO> getAllTopic(Long planetCode);
+    List<TopicVO> getAllTopic(Long planetCode,Long userId);
 
     /**
     * 更新帖子的评论数量

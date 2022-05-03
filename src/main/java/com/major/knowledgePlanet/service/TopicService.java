@@ -24,7 +24,7 @@ public interface TopicService {
      * @param planetCode
      * @return List<Topic>
      */
-    List<TopicVO> getAllTopic(Long planetCode);
+    List<TopicVO> getAllTopic(Long planetCode,Long userId);
 
     /**
      * 点赞帖子

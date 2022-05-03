@@ -62,8 +62,12 @@ public class TopicController {
 
     @GetMapping("topic/getAllTopic/{planetCode}")
     @ApiOperation(value = " 获取星球下所有帖子")
-    public Response getAllTopic(@PathVariable("planetCode") Long planetCode){
-        List<TopicVO> topicList = topicService.getAllTopic(planetCode);
+    public Response getAllTopic(HttpServletRequest request, @PathVariable("planetCode") Long planetCode){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        List<TopicVO> topicList = topicService.getAllTopic(planetCode,userId);
         return Response.success().data("topicList",topicList);
     }
 
@@ -77,7 +81,7 @@ public class TopicController {
             @ApiImplicitParam(name="firstCommentId",value="以及评论id，若本身为一级评论则为null",dataType = "Long",dataTypeClass = Long.class,paramType = "query"),
             @ApiImplicitParam(name="type",value="评论对象的类型，1表示topic,0表示comment",dataType="Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
     })
-    public Response addComment(HttpServletRequest request,@RequestParam("topicId")Long topicId, @RequestParam(value = "parentId",required = false) Long parentId,@RequestParam("content") String content,@RequestParam("firstCommentId")Long firstCommentId,  @RequestParam("type")Integer type) {
+    public Response addComment(HttpServletRequest request,@RequestParam("topicId")Long topicId, @RequestParam(value = "parentId",required = false) Long parentId,@RequestParam("content") String content,@RequestParam(value = "firstCommentId",required = false)Long firstCommentId,  @RequestParam("type")Integer type) {
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
@@ -105,6 +109,7 @@ public class TopicController {
         if(userId==null){
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
         }
+        System.out.println("userId: "+userId);
         JSONObject result = commentService.getFirstCommentWithReplyCount(topicId,userId);
         return Response.success().data("result",result);
     }
@@ -112,8 +117,12 @@ public class TopicController {
     @GetMapping("topic/getAllReply/{commentId}")
     @ApiOperation(value="获取评论的所有回复")
     @ApiImplicitParam(name="commentId",value = "评论id",dataType = "Long",dataTypeClass = Long.class,paramType = "path",required = true)
-    public Response getAllReply(@PathVariable("commentId")Long commentId){
-        List<Reply> replyList = commentService.getAllReply(commentId);
+    public Response getAllReply(HttpServletRequest request,@PathVariable("commentId")Long commentId){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        List<Reply> replyList = commentService.getAllReply(commentId,userId);
         return Response.success().data("replyList",replyList);
     }
 

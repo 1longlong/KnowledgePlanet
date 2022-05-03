@@ -20,5 +20,6 @@ import java.util.List;
 public class Reply {
     private User author;
     private User replyToUser;
-    private CommentLikeDTO comment;
+    private Comment comment;
+    private Boolean liked;
 }

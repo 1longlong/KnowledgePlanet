@@ -26,28 +26,15 @@
         <id property="comment.commentId" column="comment_id"/>
         <result property="userName" column="u_name"/>
         <result property="avatar" column="avatar"/>
-        <association property="comment" resultMap="CommentLikeDTO"/>
+        <association property="comment" resultMap="Comment"/>
+        <association property="liked" select="getCommentUserLike" column="{userId=userId,commentId=comment_id}"/>
         <collection property="replyList" select="getReplyList" column="{first_comment_id=comment_id,userId=userId}"/>
     </resultMap>
     <resultMap id="Reply" type="Reply">
+        <association property="liked" select="getCommentUserLike" column="{userId=userId,commentId=comment_id}"/>
         <association property="author" select="getAuthor" column="u_id"/>
         <association property="replyToUser" select="getRelyToUser" column="to_id"/>
-        <association property="comment" resultMap="CommentLikeDTO" />
-    </resultMap>
-
-
-
-
-    <resultMap id="CommentLikeDTO" type="com.major.knowledgePlanet.DTO.CommentLikeDTO">
-        <id property="commentId" column="comment_id"/>
-        <result property="userId" column="u_id"/>
-        <result property="topicId" column="topic_id"/>
-        <result property="parentId" column="parent_id"/>
-        <result property="time" column="time"/>
-        <result property="praiseCount" column="praise_count"/>
-        <result property="content" column="content"/>
-        <result property="liked" column="is_liked"/>
-        <result property="firstCommentId" column="first_comment_id"/>
+        <association property="comment" resultMap="Comment" />
     </resultMap>
 
 
@@ -59,11 +46,16 @@
     </insert>
 
     <select id="getFirstComment" resultMap="CommentDTO">
-        select u_name,avatar,c.first_comment_id, c.comment_id,u.u_id,topic_id,parent_id,time,praise_count,content,cul.is_liked,#{userId} as userId
-        from (knowledge_planet.comment c join knowledge_planet.user u on c.u_id=u.u_id) left join knowledge_planet.comment_user_rel cul on cul.comment_id=c.comment_id
-        where parent_id is null and topic_id=#{topicId} and (cul.u_id=#{userId} or cul.u_id is null);
+        select u_name,avatar,c.first_comment_id, c.comment_id,u.u_id,topic_id,parent_id,time,praise_count,content,#{userId} as userId
+        from knowledge_planet.comment c join knowledge_planet.user u on c.u_id=u.u_id
+        where parent_id is null and topic_id=#{topicId};
     </select>
 
+    <select id="getCommentUserLike" resultType="Boolean">
+        select ifnull ((select is_liked
+        from knowledge_planet.comment_user_rel
+        where comment_id=#{commentId} and u_id=#{userId}),0) as is_liked;
+    </select>
     <select id="getReplyCount" resultType="Integer">
         select count(*)
         from knowledge_planet.comment
@@ -81,15 +73,15 @@
         where u_id=#{id}
     </select>
     <select id="getReplyList" resultMap="Reply">
-        select c1.comment_id, c1.first_comment_id, c1.topic_id, c1.parent_id, c1.time, c1.praise_count, c1.content, c1.u_id,c2.u_id as to_id,ifnull(is_liked,0) as is_liked
-        from (knowledge_planet.comment c1 join knowledge_planet.comment c2 on c1.parent_id=c2.comment_id) left join knowledge_planet.comment_user_rel cul on cul.comment_id=c1.comment_id
-        where c1.first_comment_id=#{first_comment_id} and (cul.u_id=#{userId} or cul.u_id is null) and c1.parent_id is not null;
+        select c1.comment_id, c1.first_comment_id, c1.topic_id, c1.parent_id, c1.time, c1.praise_count, c1.content, c1.u_id,c2.u_id as to_id ,#{userId} as userId
+        from knowledge_planet.comment c1 join knowledge_planet.comment c2 on c1.parent_id=c2.comment_id
+        where c1.first_comment_id=#{first_comment_id} and c1.parent_id is not null;
     </select>
 
-    <select id="getAllReply" resultMap="Reply" parameterType="Long">
-        select c1.comment_id,c1.first_comment_id, c1.topic_id, c1.parent_id, c1.time, c1.praise_count, c1.content, c1.u_id,c2.u_id as to_id,ifnull(is_liked,0) as is_liked
-        from (knowledge_planet.comment c1 join knowledge_planet.comment c2 on c1.parent_id=c2.comment_id) left join knowledge_planet.comment_user_rel cul on cul.comment_id=c1.comment_id
-        where c1.first_comment_id=#{commentId} and (cul.u_id=#{userId} or cul.u_id is null);
+    <select id="getAllReply" resultMap="Reply" >
+        select c1.comment_id,c1.first_comment_id, c1.topic_id, c1.parent_id, c1.time, c1.praise_count, c1.content, c1.u_id,c2.u_id as to_id,#{userId} as userId
+        from knowledge_planet.comment c1 join knowledge_planet.comment c2 on c1.parent_id=c2.comment_id
+        where c1.first_comment_id=#{commentId};
     </select>
 
     <insert id="changeCommentUserRel">
