@@ -53,4 +53,15 @@ public interface UserMapper {
      * @return Integer
      */
     Integer updatePasswordByEmail(String email,String newPassword);
+
+
+    /**
+     *根据用户id更改用户名
+     *@author cj
+     *@date 2022/5/7 11:18
+     * @param userId
+     * @param newName
+     * @return Integer
+     */
+    Integer updateNameByUserId(Long userId ,String newName);
 }

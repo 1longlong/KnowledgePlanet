@@ -38,4 +38,10 @@
       where email=#{email};
    </update>
 
+   <update id="updateNameByUserId">
+      update knowledge_planet.user
+      set u_name=#{newName}
+      where u_id=#{userId};
+   </update>
+
 </mapper>

@@ -57,4 +57,14 @@ public interface UserInfoService {
      * @param newPassword
      */
     void updatePassword(String email,String newPassword);
+
+    /**
+     *根据用户id修改用户名
+     *@author cj
+     *@date 2022/5/7 11:19
+     * @param userId
+     * @param newName
+     * @return Integer
+     */
+    Integer updateNameByUserId(Long userId ,String newName);
 }
