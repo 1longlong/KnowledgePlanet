@@ -54,5 +54,23 @@
         from knowledge_planet.activity a join knowledge_planet.user_activity_rel uar on a.activity_id=uar.activity_id join knowledge_planet.user u on u.u_id=uar.u_id
         where a.activity_id=#{activityId} and role=1;
     </select>
+    <update id="changeCurNumber">
+        update knowledge_planet.activity
+        set cur_number=cur_number+#{delta}
+        where activity_id=#{activityId};
+    </update>
+    <delete id="deleteUserActivityRel">
+        delete from knowledge_planet.user_activity_rel
+        where activity_id=#{activityId} and u_id=#{userId}
+    </delete>
+    <delete id="deleteActivity">
+        delete from knowledge_planet.activity
+        where activity_id=#{activityId};
+    </delete>
 
+    <select id="getActivityNum" resultType="Integer">
+        select count(*)
+        from knowledge_planet.user_activity_rel
+        where u_id=#{userId} and role=#{role};
+    </select>
 </mapper>

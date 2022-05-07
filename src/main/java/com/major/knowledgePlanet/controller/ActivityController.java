@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.controller;
 
+import cn.hutool.http.server.HttpServerRequest;
 import com.major.knowledgePlanet.VO.ActivityVO;
 import com.major.knowledgePlanet.entity.Activity;
 import com.major.knowledgePlanet.result.Response;
@@ -87,6 +88,38 @@ public class ActivityController {
         }catch(Exception e){
             return Response.serverError().message(e.getMessage());
         }
+    }
+
+    @PostMapping("activity/joinOrQuitActivity")
+    @ApiOperation(value="参加活动")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="活动id",value="activityId",dataType = "Long",dataTypeClass = Long.class,paramType = "query",required = true),
+            @ApiImplicitParam(name="参加或者取消,1表示参加，0表示取消",value="type",dataType = "Integer",dataTypeClass = Integer.class,paramType = "query",required = true)
+    })
+    public Response joinOrQuitActivity(HttpServletRequest request,@RequestParam("activityId")Long activityId,@RequestParam("type")Integer type){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        try{
+            activityService.joinOrQuitActivity(activityId,userId,type);
+            return Response.success().message("操作成功!");
+        }catch (Exception e){
+            e.printStackTrace();
+            return Response.clientError().message(e.getMessage());
+        }
+    }
+
+    @GetMapping("activity/getActivityNum")
+    @ApiOperation(value="统计创建和参与的活动数量")
+    public Response getActivityNum(HttpServletRequest request){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("B0204").message("身份验证失败");
+        }
+        Integer createNum = activityService.getActivityNum(userId, 1);
+        Integer joinNum=activityService.getActivityNum(userId,0);
+        return Response.success().data("createNum",createNum).data("joinNum",joinNum);
     }
 
 

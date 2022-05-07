@@ -43,7 +43,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void addActivity(Activity activity,Long userId) {
         activity.setStatus(0);
         activity.setCreateTime(new Date());
-        activity.setCurNumber(0);
+        activity.setCurNumber(1);
         activityMapper.addActivity(activity);
         activityMapper.addRel(activity.getActivityId(),userId,1);
         //获取当前用户
@@ -92,6 +92,28 @@ public class ActivityServiceImpl implements ActivityService {
         message.setTime(new Date());
         message.setStatus(0);
         messageMapper.addMessage(message);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void joinOrQuitActivity(Long activityId, Long userId,Integer type) throws Exception {
+        if(type==1){
+            activityMapper.addRel(activityId,userId,0);
+            activityMapper.changeCurNumber(activityId,1);
+        }else if(type==0){
+            if(activityMapper.getRole(activityId,userId)==1){
+                activityMapper.deleteActivity(activityId);
+            }
+            activityMapper.deleteUserActivityRel(activityId,userId);
+            activityMapper.changeCurNumber(activityId,-1);
+        }else{
+            throw new Exception("参数错误");
+        }
+    }
+
+    @Override
+    public Integer getActivityNum(Long userId, Integer role) {
+        return activityMapper.getActivityNum(userId,role);
     }
 
 }
