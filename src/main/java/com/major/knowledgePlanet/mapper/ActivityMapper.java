@@ -62,4 +62,51 @@ public interface ActivityMapper {
     * @date 2022-05-02 21:28
     */
     ActivityVO getActivityById(Long activityId,Long userId);
+
+    /**
+    * 修改活动当前人数
+    * @param activityId 1
+    * @param delta 正数表示增加，负数表示减少
+    * @author Covenant
+    * @date 2022-05-07 17:45
+    */
+    void changeCurNumber(Long activityId,Integer delta);
+
+    /**
+    * 删除用户关系
+    * @param activityId 1
+    * @param userId 2
+    * @author Covenant
+    * @date 2022-05-07 17:47
+    */
+    void deleteUserActivityRel(Long activityId,Long userId);
+    /**
+    * 获取用户在活动中的角色
+    * @param activityId 1
+    * @param userId 2
+    * @return : java.lang.Integer
+    * @author Covenant
+    * @date 2022-05-07 18:14
+    */
+    Integer getRole(Long activityId,Long userId);
+
+    /**
+    * 取消活动
+    * @param activityId 1
+    * @author Covenant
+    * @date 2022-05-07 18:15
+    */
+    void deleteActivity(Long activityId);
+
+
+    /**
+    * 统计创建和参与的活动个数
+    * @param userId 1
+    * @param role 0表示参与的,1表示创建的
+    * @return : java.lang.Integer
+    * @author Covenant
+    * @date 2022-05-07 18:24
+    */
+    Integer getActivityNum(Long userId,Integer role);
+
 }
