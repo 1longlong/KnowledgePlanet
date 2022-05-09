@@ -47,4 +47,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public Integer updateNameByUserId(Long userId ,String newName){
         return userMapper.updateNameByUserId(userId,newName);}
+
+    @Override
+    public Integer updateAvatarByUserId(Long userId ,String newAvatar){
+        return userMapper.updateAvatarByUserId(userId,newAvatar);}
+
+    @Override
+    public Integer countName(String userName){
+        return userMapper.countName(userName);
+    }
+
 }

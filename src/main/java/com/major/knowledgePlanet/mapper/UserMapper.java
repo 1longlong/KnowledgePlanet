@@ -64,4 +64,27 @@ public interface UserMapper {
      * @return Integer
      */
     Integer updateNameByUserId(Long userId ,String newName);
+
+
+    /**
+     *根据用户id修改头像
+     *@author cj
+     *@date 2022/5/7 11:19
+     * @param userId
+     * @param newAvatar
+     * @return Integer
+     */
+    Integer updateAvatarByUserId(Long userId ,String newAvatar);
+
+    /**
+     *查找用户名是否存在
+     *@author cj
+     *@date 2022/5/7 16:55
+     * @param userName
+     * @return Integer
+     */
+    Integer countName(String userName);
+
+
+
 }

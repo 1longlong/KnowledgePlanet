@@ -44,4 +44,19 @@
       where u_id=#{userId};
    </update>
 
+   <update id="updateAvatarByUserId">
+      update knowledge_planet.user
+      set avatar=#{newAvatar}
+      where u_id=#{userId};
+   </update>
+
+   <select id="countName" parameterType="String" resultType="Integer">
+      select count(*)
+      from knowledge_planet.user
+      where u_name = #{userName};
+   </select>
+   
+   
+
+
 </mapper>
