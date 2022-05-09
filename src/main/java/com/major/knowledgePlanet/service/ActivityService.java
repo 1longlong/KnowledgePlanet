@@ -17,4 +17,8 @@ public interface ActivityService {
 
     void checkActivity(Long userId,Long activityId,String checkInfo,Integer checkResult);
 
+    void joinOrQuitActivity(Long activity,Long userId,Integer type) throws Exception;
+
+    Integer getActivityNum(Long userId,Integer role);
+
 }
