@@ -43,4 +43,18 @@ public class UserInfoServiceImpl implements UserInfoService {
     public void updatePassword(String email, String newPassword) {
          userMapper.updatePasswordByEmail(email,newPassword);
     }
+
+    @Override
+    public Integer updateNameByUserId(Long userId ,String newName){
+        return userMapper.updateNameByUserId(userId,newName);}
+
+    @Override
+    public Integer updateAvatarByUserId(Long userId ,String newAvatar){
+        return userMapper.updateAvatarByUserId(userId,newAvatar);}
+
+    @Override
+    public Integer countName(String userName){
+        return userMapper.countName(userName);
+    }
+
 }
