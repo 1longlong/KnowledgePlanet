@@ -72,8 +72,8 @@ public class PlanetServiceImpl implements PlanetService {
 
     @Override
     public List<RecommendPlanetVO> getRecommendPlanet(Long userId) {
-        //TODO:暂时和热度相同
-        return planetMapper.getRecommendPlanet();
+
+        return planetMapper.getRecommendPlanet(userId);
     }
 
     @Override
@@ -133,5 +133,10 @@ public class PlanetServiceImpl implements PlanetService {
     @Override
     public  Integer deleteMember(Long userId ,Long planetCode){
         return planetMapper.deleteMember(userId ,planetCode);
+    }
+
+    @Override
+    public Integer getRole(Long userId, Long planetCode) {
+        return planetMapper.getRole(userId, planetCode);
     }
 }

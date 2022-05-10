@@ -17,6 +17,7 @@
         <association property="planet" resultMap="Planet"/>
     </resultMap>
     <resultMap id="RecommendPlanetVO" type="RecommendPlanetVO">
+        <id property="planet.planetCode" column="p_code"/>
         <result property="uploaderName" column="u_name"/>
         <result property="uploaderAvatar" column="avatar"/>
         <association property="planet" resultMap="Planet"/>
@@ -66,7 +67,11 @@
     <select id="getRecommendPlanet" resultMap="RecommendPlanetVO">
         select p.p_code,p_name,p.create_time,max_number,p_description,p_avatar,hot,u_name ,avatar
         from knowledge_planet.user u,knowledge_planet.planet p,knowledge_planet.user_planet_rel upr
-        where u.u_id=upr.u_id and p.p_code=upr.p_code and role=1
+        where u.u_id=upr.u_id and p.p_code=upr.p_code and role=1 and p.p_code not in (
+            select distinct s.p_code
+            from knowledge_planet.user_planet_rel s
+            where s.u_id=#{userId}
+            )
         order by hot desc limit 5;
     </select>
 
@@ -131,5 +136,12 @@
         delete from knowledge_planet.user_planet_rel
         where u_id = #{userId} and p_code =#{planetCode};
     </delete>
+
+    <select id="getRole" resultType="Integer">
+        select role
+        from knowledge_planet.user_planet_rel
+        where u_id=#{userId} and p_code=#{planetCode};
+    </select>
+
 
 </mapper>

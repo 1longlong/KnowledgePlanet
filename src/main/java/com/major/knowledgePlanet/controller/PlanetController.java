@@ -77,6 +77,7 @@ public class PlanetController {
         if(userId==null){
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
         }
+        System.out.println(userId);
         //TODO: 获得推荐的星球
         List<RecommendPlanetVO> planetList=planetService.getRecommendPlanet(userId);
         return Response.success().data("planetList",planetList);
@@ -180,6 +181,18 @@ public class PlanetController {
         }else{
             return Response.serverError().message("删除失败");
         }
+    }
+
+    @GetMapping("planet/getRole/{planetCode}")
+    @ApiOperation(value="获取用户在星球中的身份")
+    @ApiImplicitParam(name="planetCode",value="星球id",dataType = "Long",dataTypeClass = Long.class,paramType = "path",required = true)
+    public Response getRole(HttpServletRequest request,@PathVariable("planetCode")Long planetCode){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        Integer role = planetService.getRole(userId, planetCode);
+        return Response.success().data("role",role);
     }
 
 

@@ -56,12 +56,13 @@ public interface PlanetMapper {
 
 
     /**
-    * 获取推荐的星球
+    * 根据用户推荐星球
+    * @param userId 1
     * @return : java.util.List<com.major.knowledgePlanet.entity.RecommendPlanetVO>
     * @author Covenant
-    * @date 2022-04-20 15:26
+    * @date 2022-05-07 20:14
     */
-    List<RecommendPlanetVO> getRecommendPlanet();
+    List<RecommendPlanetVO> getRecommendPlanet(Long userId);
 
 
 
@@ -144,5 +145,16 @@ public interface PlanetMapper {
      * @return Integer
      */
     Integer deleteMember(Long userId ,Long planetCode);
+
+    /**
+    * 查询用户在星球中的角色
+    * @param userId 1
+    * @param planetCode 2
+    * @return : java.lang.Integer
+    * @author Covenant
+    * @date 2022-05-08 17:36
+    */
+    Integer getRole(Long userId,Long planetCode);
+
 
 }

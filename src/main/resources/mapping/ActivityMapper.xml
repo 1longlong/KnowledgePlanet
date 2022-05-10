@@ -37,7 +37,7 @@
     <select id="getActivity" resultMap="ActivityVO">
         select a.activity_id, p_code, title, description, address, a.status, tag, start_time, end_time, a.create_time, cur_number, max_number,u.u_id, u.u_name,u.avatar,  #{userId} as userId
         from knowledge_planet.activity a join knowledge_planet.user_activity_rel uar on a.activity_id=uar.activity_id join knowledge_planet.user u on u.u_id=uar.u_id
-        where p_code=#{planetCode} and a.status=1 and role=1 and end_time>now();
+        where p_code=#{planetCode} and role=1 and end_time>now();
     </select>
     <select id="getRole" resultType="Integer">
         select role
@@ -65,6 +65,10 @@
     </delete>
     <delete id="deleteActivity">
         delete from knowledge_planet.activity
+        where activity_id=#{activityId};
+    </delete>
+    <delete id="deleteUserActivityRelById">
+        delete from knowledge_planet.user_activity_rel
         where activity_id=#{activityId};
     </delete>
 

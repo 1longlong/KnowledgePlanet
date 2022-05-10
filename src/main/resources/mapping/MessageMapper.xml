@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.major.knowledgePlanet.mapper.MessageMapper">
+    <resultMap id="Message" type="Message">
+        <id property="messageId" column="message_id"/>
+        <result property="from" column="from"/>
+        <result property="to" column="to"/>
+        <result property="content" column="content"/>
+        <result property="time" column="time"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
     <insert id="addMessage" useGeneratedKeys="true" keyProperty="messageId">
         insert knowledge_planet.message( `from`, `to`, content, time, status) values
         (#{from},#{to},#{content},#{time},#{status});
     </insert>
-    <select id="getMessageById" resultType="Message">
+    <select id="getMessageById" resultMap="Message">
         select message_id ,content,time,status,`from`,`to`
         from knowledge_planet.message
         where `to`=#{userId} and status=0

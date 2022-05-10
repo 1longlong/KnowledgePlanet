@@ -37,7 +37,7 @@ public interface ActivityMapper {
     void addRel(Long activityId,Long userId,Integer role);
 
     /**
-    * 获取星球中所有通过审核的活动以及和当前用户的关系
+    * 获取星球中所有活动以及和当前用户的关系
     * @param userId 1 当前用户
     * @param planetCode 2 星球
     * @return : java.util.List<com.major.knowledgePlanet.VO.ActivityVO>
@@ -97,6 +97,14 @@ public interface ActivityMapper {
     * @date 2022-05-07 18:15
     */
     void deleteActivity(Long activityId);
+
+    /**
+    * 根据活动id删除所有活动和用户参与关系
+    * @param activityId 1
+    * @author Covenant
+    * @date 2022-05-08 15:14
+    */
+    void deleteUserActivityRelById(Long activityId);
 
 
     /**

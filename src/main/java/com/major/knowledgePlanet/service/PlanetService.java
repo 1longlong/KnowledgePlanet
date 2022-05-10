@@ -109,4 +109,6 @@ public interface PlanetService {
      * @return Integer
      */
     Integer deleteMember(Long userId ,Long planetCode);
+
+    Integer getRole(Long userId,Long planetCode);
 }

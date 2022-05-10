@@ -103,6 +103,7 @@ public class ActivityServiceImpl implements ActivityService {
         }else if(type==0){
             if(activityMapper.getRole(activityId,userId)==1){
                 activityMapper.deleteActivity(activityId);
+                activityMapper.deleteUserActivityRelById(activityId);
             }
             activityMapper.deleteUserActivityRel(activityId,userId);
             activityMapper.changeCurNumber(activityId,-1);
