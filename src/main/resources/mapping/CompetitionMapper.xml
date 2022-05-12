@@ -2,4 +2,124 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.major.knowledgePlanet.mapper.CompetitionMapper">
 
+
+    <resultMap id="Competition" type="Competition">
+        <id property="competitionId" column="c_id"/>
+        <result property="planetCode" column="p_code"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="picture" column="picture"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <resultMap id="Question" type="Question">
+        <id property="questionId" column="q_id"/>
+        <result property="competitionId" column="c_id"/>
+        <result property="content" column="content"/>
+        <result property="answer" column="answer"/>
+        <result property="score" column="score"/>
+        <result property="items" column="items"/>
+    </resultMap>
+
+
+    <resultMap id="QuestionVO" type="com.major.knowledgePlanet.VO.QuestionVO">
+        <id property="question.questionId" column="q_id"/>
+        <result property="userAnswer" column="user_answer"/>
+        <result property="getScore" column="get_score"/>
+        <result property="right" column="is_right"/>
+        <association property="question" resultMap="Question"/>
+    </resultMap>
+
+
+    <resultMap id="CompetitionVO" type="com.major.knowledgePlanet.VO.CompetitionVO">
+        <id property="competition.competitionId" column="c_id"/>
+        <association property="competition" resultMap="Competition"/>
+        <association property="totalScore" select="getTotalScore" column="{userId=userId,competitionId=c_id}"/>
+    </resultMap>
+    <select id="getTotalScore" resultType="Integer">
+        select total_score
+        from knowledge_planet.user_competition_rel
+        where u_id=#{userId} and c_id=#{competitionId};
+    </select>
+
+    <select id="getCompetitionByPlanet" resultMap="CompetitionVO">
+        select c_id, p_code, title, description, create_time, start_time, end_time, picture,status,#{userId} as userId
+        from knowledge_planet.competition
+        where p_code=#{planetCode} and status=1
+        order by start_time asc;
+    </select>
+
+    <select id="getCompetitionByPlanetNotStart" resultMap="CompetitionVO">
+        select c_id, p_code, title, description, create_time, start_time, end_time, picture,status,#{userId} as userId
+        from knowledge_planet.competition
+        where p_code=#{planetCode} and status=1 and start_time>now()
+        order by start_time asc;
+    </select>
+
+    <insert id="addCompetition" useGeneratedKeys="true" keyProperty="competitionId">
+        insert knowledge_planet.competition(p_code, title, description, create_time, start_time, end_time, picture, status)
+        values(#{planetCode},#{title},#{description},#{createTime},#{startTime},#{endTime},#{picture},#{status});
+    </insert>
+
+    <insert id="addUserCompetition">
+        insert knowledge_planet.user_competition_rel(c_id, u_id, total_score)
+        values(#{competitionId},#{userId},0);
+    </insert>
+    <delete id="deleteUserCompetition">
+        delete from knowledge_planet.user_competition_rel
+        where c_id=#{competitionId} and u_id=#{userId};
+    </delete>
+    <update id="changeCompetitionStatus">
+        update knowledge_planet.competition
+        set status=#{status}
+        where c_id=#{competitionId};
+    </update>
+
+    <select id="getRegisteredCompetition" resultMap="CompetitionVO">
+        select c.c_id, p_code, title, description, create_time, start_time, end_time, picture,status,#{userId} as userId
+        from knowledge_planet.competition c,knowledge_planet.user_competition_rel ucr
+        where c.c_id=ucr.c_id and ucr.u_id=#{userId};
+    </select>
+
+    <select id="getQuestionList" resultMap="Question">
+        select q_id, c_id, content, null as answer, score, items
+        from knowledge_planet.question
+        where c_id=#{competitionId};
+    </select>
+
+    <select id="getQuestionWithUserResult" resultMap="QuestionVO">
+        select q.q_id, c_id, content, answer, score, items,user_answer,get_score,is_right
+        from knowledge_planet.question q left outer join knowledge_planet.user_question_rel uqr on q.q_id=uqr.q_id
+        where c_id=#{competitionId} and uqr.u_id=#{userId};
+    </select>
+    <select id="getQuestion" resultMap="Question">
+        select q_id, c_id, content, answer, score, items
+        from knowledge_planet.question
+        where q_id=#{questionId};
+    </select>
+    <insert id="addUserQuestionRel">
+        insert knowledge_planet.user_question_rel(u_id, q_id, user_answer, get_score, is_right)
+        values(#{userId},#{questionId},#{userAnswer},#{getScore},#{isRight});
+    </insert>
+    <insert id="addUserCompetitionRel">
+        replace knowledge_planet.user_competition_rel(c_id, u_id, total_score)
+        values(#{competitionId},#{userId},#{totalScore});
+    </insert>
+
+    <select id="getSumScore" resultType="Integer">
+        select sum(get_score)
+        from knowledge_planet.user_question_rel uqr join knowledge_planet.question q on q.q_id=uqr.q_id
+        where u_id=#{userId}
+    </select>
+
+    <insert id="addQuestion" useGeneratedKeys="true" keyProperty="questionId">
+        insert knowledge_planet.question(c_id, content, answer, score, items)
+        values (#{competitionId},#{content},#{answer},#{score},#{items});
+    </insert>
+
+
+
 </mapper>
