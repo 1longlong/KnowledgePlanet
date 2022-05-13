@@ -1,6 +1,7 @@
 package
         com.major.knowledgePlanet.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.VO.CompetitionVO;
 import com.major.knowledgePlanet.VO.QuestionVO;
 import com.major.knowledgePlanet.entity.Competition;
@@ -8,6 +9,7 @@ import com.major.knowledgePlanet.entity.Question;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.CompetitionService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -152,11 +154,15 @@ public class CompetitionController {
     }
 
 
-    //按参加竞赛次数返回排行榜
-
     @GetMapping("competition/getLeaderBoard")
-    public Response getLeaderBoard(){
-        return null;
+    @ApiOperation(value="按参加竞赛次数返回排行榜和自己的参与次数")
+    public Response getLeaderBoard(HttpServletRequest request,@RequestParam("planetCode")Long planetCode){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        JSONObject obj = competitionService.getLeaderBoard(planetCode, userId);
+        return Response.success().data("result",obj);
     }
 
 

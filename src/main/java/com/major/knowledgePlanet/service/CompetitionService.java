@@ -1,5 +1,6 @@
 package com.major.knowledgePlanet.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.VO.CompetitionVO;
 import com.major.knowledgePlanet.VO.QuestionVO;
 import com.major.knowledgePlanet.entity.Competition;
@@ -38,6 +39,8 @@ public interface CompetitionService {
     Integer getCompetitionScore(Long competitionId,Long userId);
 
     void addQuestion(Question question);
+
+    JSONObject getLeaderBoard(Long planetCode,Long userId);
 
 
 }

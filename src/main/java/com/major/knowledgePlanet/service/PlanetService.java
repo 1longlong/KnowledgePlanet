@@ -2,6 +2,7 @@ package com.major.knowledgePlanet.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.major.knowledgePlanet.VO.SearchResultVO;
 import com.major.knowledgePlanet.entity.Planet;
 import com.major.knowledgePlanet.entity.RecommendPlanetVO;
 import com.major.knowledgePlanet.entity.User;
@@ -32,7 +33,7 @@ public interface PlanetService {
     * @author Covenant
     * @date 2022-04-13 15:58
     */
-    List<Planet> searchPlanet(String info);
+    List<SearchResultVO> searchPlanet(String info,Long userId);
 
     /**
     * 获取推荐星球

@@ -3,6 +3,7 @@ package
 
 import cn.hutool.jwt.JWTUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.major.knowledgePlanet.VO.SearchResultVO;
 import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.TopicMapper;
 import com.major.knowledgePlanet.result.Response;
@@ -64,8 +65,12 @@ public class PlanetController {
     @GetMapping("planet/searchPlanet")
     @ApiOperation(value="根据关键词查询星球")
     @ApiImplicitParam(name="keyWord",value = "搜索的关键词",dataType="String",dataTypeClass = String.class,paramType = "query",required = true)
-    public Response searchPlanet(@RequestParam("keyWord")String keyWord){
-        List<Planet> planetList = planetService.searchPlanet(keyWord);
+    public Response searchPlanet(HttpServletRequest request,@RequestParam("keyWord")String keyWord){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        List<SearchResultVO> planetList = planetService.searchPlanet(keyWord,userId);
         return Response.success().data("planetList",planetList);
     }
 

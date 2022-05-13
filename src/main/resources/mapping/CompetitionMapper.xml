@@ -33,12 +33,30 @@
         <association property="question" resultMap="Question"/>
     </resultMap>
 
+    <resultMap id="LeaderBoardVO" type="com.major.knowledgePlanet.VO.LeaderBoardVO">
+        <id property="userInfo.userId" column="userId"/>
+        <result property="count" column="count"/>
+        <association property="userInfo" select="getUserInfo" column="userId=userId"/>
+    </resultMap>
+    <resultMap id="UserInfo" type="UserInfo">
+        <id property="userId" column="u_id"/>
+        <result property="userName" column="u_name"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
 
     <resultMap id="CompetitionVO" type="com.major.knowledgePlanet.VO.CompetitionVO">
         <id property="competition.competitionId" column="c_id"/>
         <association property="competition" resultMap="Competition"/>
         <association property="totalScore" select="getTotalScore" column="{userId=userId,competitionId=c_id}"/>
     </resultMap>
+
+    <select id="getUserInfo" resultMap="UserInfo">
+        select u_id, u_name,avatar
+        from knowledge_planet.user
+        where u_id=#{userId};
+    </select>
+
     <select id="getTotalScore" resultType="Integer">
         select total_score
         from knowledge_planet.user_competition_rel
@@ -119,6 +137,23 @@
         insert knowledge_planet.question(c_id, content, answer, score, items)
         values (#{competitionId},#{content},#{answer},#{score},#{items});
     </insert>
+
+
+    <select id="getLeaderBoard" resultMap="LeaderBoardVO">
+        select u_id as userId,count(c.c_id) as count
+        from knowledge_planet.competition c join knowledge_planet.user_competition_rel ucr on c.c_id=ucr.c_id
+        where c.p_code=#{planetCode}
+        group by u_id
+        order by count(c.c_id) asc;
+    </select>
+
+
+    <select id="getJoinCount" resultType="Integer">
+        select count(*)
+        from knowledge_planet.competition c join knowledge_planet.user_competition_rel ucr on c.c_id=ucr.c_id
+        where u_id=#{userId} and c.p_code=#{planetCode};
+    </select>
+
 
 
 

@@ -3,6 +3,7 @@ package
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.major.knowledgePlanet.VO.SearchResultVO;
 import com.major.knowledgePlanet.constValue.UserPlanetEnum;
 import com.major.knowledgePlanet.entity.*;
 import com.major.knowledgePlanet.mapper.PlanetMapper;
@@ -66,8 +67,8 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
-    public List<Planet> searchPlanet(String info) {
-        return planetMapper.searchPlanet(info);
+    public List<SearchResultVO> searchPlanet(String info,Long userId) {
+        return planetMapper.searchPlanet(info,userId);
     }
 
     @Override

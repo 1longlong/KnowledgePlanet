@@ -1,6 +1,7 @@
 package com.major.knowledgePlanet.mapper;
 
 import com.major.knowledgePlanet.VO.CompetitionVO;
+import com.major.knowledgePlanet.VO.LeaderBoardVO;
 import com.major.knowledgePlanet.VO.QuestionVO;
 import com.major.knowledgePlanet.entity.Competition;
 import com.major.knowledgePlanet.entity.Question;
@@ -73,6 +74,10 @@ public interface CompetitionMapper {
     Integer getSumScore(Long competitionId,Long userId);
 
     void addQuestion(Question question);
+
+    List<LeaderBoardVO> getLeaderBoard(Long planetCode);
+
+    Integer getJoinCount(Long userId,Long planetCode);
 
 
 

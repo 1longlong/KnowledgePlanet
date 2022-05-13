@@ -1,5 +1,6 @@
 package com.major.knowledgePlanet.mapper;
 
+import com.major.knowledgePlanet.VO.SearchResultVO;
 import com.major.knowledgePlanet.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -31,11 +32,11 @@ public interface PlanetMapper {
     /**
     * 根据关键词查找星球
     * @param info 1
-    * @return : java.util.List<com.major.knowledgePlanet.entity.Planet>
+    * @return : java.util.List<com.major.knowledgePlanet.VO.SearchResultVO>
     * @author Covenant
     * @date 2022-04-13 14:24
     */
-    List<Planet> searchPlanet(String info);
+    List<SearchResultVO> searchPlanet(String info,Long userId);
 
     /**
     * 查找用户创建或加入的星球

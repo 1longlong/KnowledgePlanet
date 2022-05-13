@@ -1,7 +1,9 @@
 package
         com.major.knowledgePlanet.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.VO.CompetitionVO;
+import com.major.knowledgePlanet.VO.LeaderBoardVO;
 import com.major.knowledgePlanet.VO.QuestionVO;
 import com.major.knowledgePlanet.entity.Competition;
 import com.major.knowledgePlanet.entity.Question;
@@ -108,5 +110,15 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public void addQuestion(Question question) {
         competitionMapper.addQuestion(question);
+    }
+
+    @Override
+    public JSONObject getLeaderBoard(Long planetCode,Long userId) {
+        JSONObject obj = new JSONObject();
+        List<LeaderBoardVO> leaderBoard = competitionMapper.getLeaderBoard(planetCode);
+        Integer joinCount = competitionMapper.getJoinCount(userId, planetCode);
+        obj.put("leaderBoard",leaderBoard);
+        obj.put("joinCount",joinCount);
+        return obj;
     }
 }
