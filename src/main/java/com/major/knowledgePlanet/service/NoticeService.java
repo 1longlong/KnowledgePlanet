@@ -11,9 +11,9 @@ public interface NoticeService {
    *@author cj
    *@date 2022/4/20 16:32
    * @param notice
-   * @return Integer
+   * @return Long
    */
-    Integer releaseNotice(Notice notice);
+    Long releaseNotice(Notice notice);
 
 
    /**
@@ -42,5 +42,8 @@ public interface NoticeService {
     * @date 2022-04-27 14:06
     */
     void setMessageStatus(Long messageId,Integer status);
+
+    void changeNoticeStatus(Long noticeId,Integer status);
+
 
 }

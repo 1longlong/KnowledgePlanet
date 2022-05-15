@@ -165,5 +165,19 @@ public class CompetitionController {
         return Response.success().data("result",obj);
     }
 
+    @GetMapping("competition/getQuestionListWithAnswer")
+    @ApiOperation(value="获取带有答案的问题列表")
+    public Response getQuestionListWithAnswer(@RequestParam("competitionId")Long competitionId){
+        List<Question> questionList = competitionService.getQuestionListWithAnswer(competitionId);
+        return Response.success().data("questionList",questionList);
+    }
+
+    @PostMapping("competition/updateQuestion")
+    @ApiOperation(value="修改问题")
+    public Response updateQuestion(@RequestBody Question question){
+        competitionService.updateQuestion(question);
+        return Response.success();
+    }
+
 
 }

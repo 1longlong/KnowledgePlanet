@@ -47,17 +47,30 @@
 
     <resultMap id="CompetitionVO" type="com.major.knowledgePlanet.VO.CompetitionVO">
         <id property="competition.competitionId" column="c_id"/>
+        <association property="questionNumber" select="getQuestionNumber" column="competitionId=c_id"/>
         <association property="competition" resultMap="Competition"/>
-        <association property="totalScore" select="getTotalScore" column="{userId=userId,competitionId=c_id}"/>
+        <association property="userScore" select="getUserScore" column="{userId=userId,competitionId=c_id}"/>
+        <association property="totalScore" select="getTotalScore" column="competitionId=c_id"/>
     </resultMap>
+
+    <select id="getQuestionNumber" resultType="Integer">
+        select count(*)
+        from knowledge_planet.question
+        where c_id=#{competitionId};
+    </select>
 
     <select id="getUserInfo" resultMap="UserInfo">
         select u_id, u_name,avatar
         from knowledge_planet.user
         where u_id=#{userId};
     </select>
-
     <select id="getTotalScore" resultType="Integer">
+        select ifnull(sum(score),0)
+        from knowledge_planet.question
+        where c_id=#{competitionId};
+    </select>
+
+    <select id="getUserScore" resultType="Integer">
         select total_score
         from knowledge_planet.user_competition_rel
         where u_id=#{userId} and c_id=#{competitionId};
@@ -66,7 +79,7 @@
     <select id="getCompetitionByPlanet" resultMap="CompetitionVO">
         select c_id, p_code, title, description, create_time, start_time, end_time, picture,status,#{userId} as userId
         from knowledge_planet.competition
-        where p_code=#{planetCode} and status=1
+        where p_code=#{planetCode}
         order by start_time asc;
     </select>
 
@@ -104,6 +117,12 @@
 
     <select id="getQuestionList" resultMap="Question">
         select q_id, c_id, content, null as answer, score, items
+        from knowledge_planet.question
+        where c_id=#{competitionId};
+    </select>
+
+    <select id="getQuestionListWithAnswer" resultMap="Question">
+        select q_id, c_id, content, answer, score, items
         from knowledge_planet.question
         where c_id=#{competitionId};
     </select>
@@ -153,6 +172,12 @@
         from knowledge_planet.competition c join knowledge_planet.user_competition_rel ucr on c.c_id=ucr.c_id
         where u_id=#{userId} and c.p_code=#{planetCode};
     </select>
+
+    <update id="updateQuestion">
+        update knowledge_planet.question
+        set content =#{content},answer=#{answer},score=#{score},items=#{items}
+        where q_id=#{questionId};
+    </update>
 
 
 

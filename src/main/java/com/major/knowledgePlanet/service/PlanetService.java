@@ -112,4 +112,7 @@ public interface PlanetService {
     Integer deleteMember(Long userId ,Long planetCode);
 
     Integer getRole(Long userId,Long planetCode);
+
+    List<Planet> getAllPlanet();
+
 }

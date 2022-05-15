@@ -4,6 +4,8 @@ import com.major.knowledgePlanet.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface UserMapper {
@@ -84,6 +86,10 @@ public interface UserMapper {
      * @return Integer
      */
     Integer countName(String userName);
+
+    List<User> searchUser(String info);
+
+    void changeUserStatus(Long userId,Integer status);
 
 
 

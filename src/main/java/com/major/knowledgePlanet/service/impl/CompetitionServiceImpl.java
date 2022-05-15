@@ -121,4 +121,14 @@ public class CompetitionServiceImpl implements CompetitionService {
         obj.put("joinCount",joinCount);
         return obj;
     }
+
+    @Override
+    public List<Question> getQuestionListWithAnswer(Long competitionId) {
+        return competitionMapper.getQuestionListWithAnswer(competitionId);
+    }
+
+    @Override
+    public void updateQuestion(Question question) {
+        competitionMapper.updateQuestion(question);
+    }
 }

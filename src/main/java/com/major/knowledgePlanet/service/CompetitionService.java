@@ -42,5 +42,9 @@ public interface CompetitionService {
 
     JSONObject getLeaderBoard(Long planetCode,Long userId);
 
+    List<Question> getQuestionListWithAnswer(Long competitionId);
+
+    void updateQuestion(Question question);
+
 
 }

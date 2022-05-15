@@ -199,6 +199,12 @@ public class PlanetController {
         Integer role = planetService.getRole(userId, planetCode);
         return Response.success().data("role",role);
     }
+    @GetMapping("planet/getAllPlanet")
+    @ApiOperation(value="获取所有的星球")
+    public Response getAllPlanet(){
+        List<Planet> planetList = planetService.getAllPlanet();
+        return Response.success().data("planetList",planetList);
+    }
 
 
 

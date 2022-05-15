@@ -80,7 +80,13 @@ public interface CompetitionMapper {
     Integer getJoinCount(Long userId,Long planetCode);
 
 
+    List<Question> getQuestionListWithAnswer(Long competitionId);
+
+    void updateQuestion(Question question);
 
 
 
-}
+
+
+
+    }

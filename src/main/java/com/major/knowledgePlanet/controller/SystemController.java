@@ -178,22 +178,9 @@ public class SystemController {
 
     @PostMapping("system/releaseNotice")
     @ApiOperation(value="发布系统公告")
-    public Response releaseNotice(HttpServletRequest request, @RequestBody Notice notice){
-        String token = request.getHeader("token");
-        if(token==null){
-            return Response.clientError().code("B0201").message("未获取到token");
-        } if(JWTUtil.verify(token, saltValue.getBytes())) {
-            Long userId = ((Integer) JWTUtil.parseToken(token).getPayload("userId")).longValue();
-            System.out.println("userId:" + userId);
-            Integer result = noticeService.releaseNotice(notice);
-            if(result!=0){
-                return Response.success().message("上传成功").data("noticeId", notice.getNoticeId()).data("createTime", notice.getCreateTime());
-            }else{
-                return  Response.serverError().message("上传失败").data("result", result);
-            }
-
-        }
-        return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+    public Response releaseNotice(@RequestBody Notice notice){
+        Long noticeId= noticeService.releaseNotice(notice);
+        return  Response.success().data("noticeId",noticeId);
     }
 
     @GetMapping("system/getAllNotice")
@@ -243,6 +230,14 @@ public class SystemController {
     })
     public Response setMessageStatus(@RequestParam("messageId")Long messageId,@RequestParam("status")Integer status){
         noticeService.setMessageStatus(messageId,status);
+        return Response.success();
+    }
+
+
+    @PostMapping("system/changeNoticeStatus")
+    @ApiOperation(value="开放公告或者关闭公告")
+    public Response changeNoticeStatus(@RequestParam("noticeId")Long noticeId,@RequestParam("status")Integer status){
+        noticeService.changeNoticeStatus(noticeId,status);
         return Response.success();
     }
 

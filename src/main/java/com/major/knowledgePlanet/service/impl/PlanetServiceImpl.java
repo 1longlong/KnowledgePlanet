@@ -140,4 +140,11 @@ public class PlanetServiceImpl implements PlanetService {
     public Integer getRole(Long userId, Long planetCode) {
         return planetMapper.getRole(userId, planetCode);
     }
+
+    @Override
+    public List<Planet> getAllPlanet() {
+        return planetMapper.getAllPlanet();
+    }
+
+
 }

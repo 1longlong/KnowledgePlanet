@@ -4,6 +4,8 @@ package
 import com.major.knowledgePlanet.entity.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * TODO:此处写UserInfo类的描述
  *
@@ -86,5 +88,9 @@ public interface UserInfoService {
      * @return Integer
      */
     Integer countName(String userName);
+
+    List<User> searchUser(String info);
+
+    void changeUserStatus(Long userId,Integer status);
 
 }

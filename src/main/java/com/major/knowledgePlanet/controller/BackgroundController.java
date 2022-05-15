@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @Api(tags="后台管理模块",value = "Background")
@@ -86,6 +87,21 @@ public class BackgroundController {
             }
         }return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
     }
+
+    @GetMapping("background/searchUser")
+    @ApiOperation(value="搜索用户")
+    public Response searchUser(@RequestParam("info")String info){
+        List<User> users = userInfoService.searchUser(info);
+        return Response.success().data("userList",users);
+    }
+
+    @PostMapping("background/changeUserStatus")
+    @ApiOperation(value="改变用户状态")
+    public Response changeUserStatus(@RequestParam("userId")Long userId,@RequestParam("status")Integer status){
+        userInfoService.changeUserStatus(userId,status);
+        return Response.success();
+    }
+
 
 
 

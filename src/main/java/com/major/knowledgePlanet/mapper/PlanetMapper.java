@@ -158,4 +158,7 @@ public interface PlanetMapper {
     Integer getRole(Long userId,Long planetCode);
 
 
+    List<Planet> getAllPlanet();
+
+
 }

@@ -12,13 +12,19 @@
 
 <insert id="releaseNotice" parameterType="Notice" useGeneratedKeys="true" keyProperty="noticeId">
     insert into knowledge_planet.notice(admin_id,title,create_time,status,content)
-    values(#{adminId},#{title},#{create_time},#{status},#{content});
+    values(#{adminId},#{title},#{createTime},#{status},#{content});
 </insert>
 
 <select id="getAllNotice" resultMap="Notice" resultType="Notice">
     select notice_id,admin_id,title,create_time,status,content
     from knowledge_planet.notice
+    where status=1
     order by create_time desc ;
 </select>
 
+    <update id="changeNoticeStatus">
+        update knowledge_planet.notice
+        set status = #{status}
+        where notice_id=#{noticeId};
+    </update>
 </mapper>

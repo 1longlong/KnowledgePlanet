@@ -148,5 +148,10 @@
         where u_id=#{userId} and p_code=#{planetCode};
     </select>
 
+    <select id="getAllPlanet" resultMap="Planet">
+        select p_code, p_name, create_time, max_number, p_description, p_avatar, hot
+        from knowledge_planet.planet
+    </select>
+
 
 </mapper>

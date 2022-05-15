@@ -2,7 +2,9 @@ package
         com.major.knowledgePlanet.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -13,6 +15,8 @@ import java.util.Date;
  * @date 2022/5/10 20:03
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Competition {
     private Long competitionId;
     private Long planetCode;

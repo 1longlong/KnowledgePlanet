@@ -24,4 +24,6 @@ public interface NoticeMapper {
      * @return List<Notice>
      */
     List<Notice> getAllNotice();
+
+    void changeNoticeStatus(Long noticeId,Integer status);
 }

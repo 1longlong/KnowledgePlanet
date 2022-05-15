@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,7 +25,12 @@ public class NoticeServiceImpl implements NoticeService {
     private MessageMapper messageMapper;
 
     @Override
-    public Integer releaseNotice(Notice notice){return noticeMapper.releaseNotice(notice);}
+    public Long releaseNotice(Notice notice){
+        notice.setCreateTime(new Date());
+        notice.setStatus(1);
+        noticeMapper.releaseNotice(notice);
+        return notice.getNoticeId();
+    }
 
     @Override
     public List<Notice> getAllNotice(){return  noticeMapper.getAllNotice();}
@@ -37,5 +43,10 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public void setMessageStatus(Long messageId, Integer status) {
          messageMapper.setMessageStatus(messageId,status);
+    }
+
+    @Override
+    public void changeNoticeStatus(Long noticeId, Integer status) {
+        noticeMapper.changeNoticeStatus(noticeId,status);
     }
 }

@@ -18,4 +18,6 @@ import lombok.NoArgsConstructor;
 public class CompetitionVO {
     private Competition competition;
     private Integer totalScore;
+    private Integer questionNumber;
+    private Integer userScore;
 }

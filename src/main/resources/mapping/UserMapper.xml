@@ -55,6 +55,20 @@
       from knowledge_planet.user
       where u_name = #{userName};
    </select>
+
+   <select id="searchUser" resultMap="User">
+        <bind name="bindInfo" value="'%'+info+'%'"/>
+        select u_id, u_name, create_time, update_time, status, avatar, email, null as password
+        from knowledge_planet.user
+        where u_name like #{bindInfo};
+   </select>
+
+
+   <update id="changeUserStatus">
+       update knowledge_planet.user
+        set status=#{status}
+        where u_id =#{userId};
+   </update>
    
    
 

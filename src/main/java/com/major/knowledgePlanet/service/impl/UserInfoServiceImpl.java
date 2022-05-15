@@ -7,6 +7,8 @@ import com.major.knowledgePlanet.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * TODO:此处写UserInfoServiceImpl类的描述
  *
@@ -55,6 +57,16 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public Integer countName(String userName){
         return userMapper.countName(userName);
+    }
+
+    @Override
+    public List<User> searchUser(String info) {
+        return userMapper.searchUser(info);
+    }
+
+    @Override
+    public void changeUserStatus(Long userId, Integer status) {
+        userMapper.changeUserStatus(userId,status);
     }
 
 }
