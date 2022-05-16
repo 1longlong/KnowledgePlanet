@@ -154,4 +154,11 @@
     </select>
 
 
+    <select id="changeUserPlanetIntegral">
+        update knowledge_planet.user_planet_rel
+        set integral = integral + #{delta}
+        where u_id=#{userId} and p_code=#{planetCode};
+    </select>
+
+
 </mapper>

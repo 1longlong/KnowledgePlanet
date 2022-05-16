@@ -3,11 +3,13 @@ package
 
 import cn.hutool.jwt.JWTUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.major.knowledgePlanet.constValue.IntegralEnum;
 import com.major.knowledgePlanet.entity.Reply;
 import com.major.knowledgePlanet.entity.Topic;
 import com.major.knowledgePlanet.entity.TopicVO;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.CommentService;
+import com.major.knowledgePlanet.service.PlanetService;
 import com.major.knowledgePlanet.service.TopicService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.Api;
@@ -39,6 +41,9 @@ public class TopicController {
     @Resource(name="commentServiceImpl")
     private CommentService commentService;
 
+    @Resource(name="planetServiceImpl")
+    private PlanetService planetService;
+
 
     @PostMapping("topic/insertTopic")
     @ApiOperation(value = "发帖功能")
@@ -52,6 +57,8 @@ public class TopicController {
 
             Integer result = topicService.insertTopic(topic , userId);
             if(result!=0){
+                //发帖加10积分
+                planetService.changeUserPlanetIntegral(userId,topic.getPlanetCode(), IntegralEnum.ADD_TOPIC_INTEGRAL.getIntegral());
                 return Response.success().message("发帖成功").data("topicId",topic.getTopicId()).data("createTime",topic.getTime());
             }else{
                 return Response.serverError().message("发帖失败");

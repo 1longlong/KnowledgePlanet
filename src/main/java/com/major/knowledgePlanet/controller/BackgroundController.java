@@ -1,5 +1,7 @@
 package com.major.knowledgePlanet.controller;
 
+import cn.hutool.crypto.digest.DigestAlgorithm;
+import cn.hutool.crypto.digest.Digester;
 import cn.hutool.jwt.JWTUtil;
 import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Api(tags="后台管理模块",value = "Background")
@@ -100,6 +104,27 @@ public class BackgroundController {
     public Response changeUserStatus(@RequestParam("userId")Long userId,@RequestParam("status")Integer status){
         userInfoService.changeUserStatus(userId,status);
         return Response.success();
+    }
+
+    @PostMapping("background/adminLogin")
+    @ApiOperation(value="管理员登录")
+    public Response adminLogin(@RequestParam("adminId")String adminId,@RequestParam("password")String password){
+        String realPassword = userInfoService.getAdminPassword(adminId);
+        Digester sha256=new Digester(DigestAlgorithm.SHA256);
+        String sha256Password = sha256.digestHex(password);
+        System.out.println(sha256Password);
+        if(realPassword==null || !realPassword.equals(sha256Password)){
+            return Response.clientError().code("A0203").message("用户密码错误");
+        }
+        Map<String, Object> map = new HashMap<>(4){
+            private static final long serialVersionUID = 1L;
+            {
+                put("adminId",adminId);
+                put("expireTime", System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);//1天
+            }
+        };
+        String token = JWTUtil.createToken(map, saltValue.getBytes());
+        return Response.success().data("token",token);
     }
 
 

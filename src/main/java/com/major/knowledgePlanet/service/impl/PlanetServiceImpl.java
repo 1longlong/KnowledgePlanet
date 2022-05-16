@@ -146,5 +146,10 @@ public class PlanetServiceImpl implements PlanetService {
         return planetMapper.getAllPlanet();
     }
 
+    @Override
+    public void changeUserPlanetIntegral(Long userId, Long planetCode, Integer delta) {
+        planetMapper.changeUserPlanetIntegral(userId,planetCode,delta);
+    }
+
 
 }

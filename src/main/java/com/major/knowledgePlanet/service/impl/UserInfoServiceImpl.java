@@ -69,4 +69,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         userMapper.changeUserStatus(userId,status);
     }
 
+    @Override
+    public String getAdminPassword(String adminId) {
+        return userMapper.getAdminPassword(adminId);
+    }
+
 }

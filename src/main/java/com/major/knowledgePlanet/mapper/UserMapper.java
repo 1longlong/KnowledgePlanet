@@ -91,6 +91,8 @@ public interface UserMapper {
 
     void changeUserStatus(Long userId,Integer status);
 
+    String getAdminPassword(String adminId);
+
 
 
 }

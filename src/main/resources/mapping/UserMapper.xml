@@ -69,6 +69,12 @@
         set status=#{status}
         where u_id =#{userId};
    </update>
+
+   <select id="getAdminPassword" resultType="String">
+      select password
+        from knowledge_planet.admin
+        where admin_id=#{adminId};
+   </select>
    
    
 

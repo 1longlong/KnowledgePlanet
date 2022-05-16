@@ -93,4 +93,6 @@ public interface UserInfoService {
 
     void changeUserStatus(Long userId,Integer status);
 
+    String getAdminPassword(String adminId);
+
 }

@@ -4,10 +4,12 @@ package
 import com.alibaba.fastjson.JSONObject;
 import com.major.knowledgePlanet.VO.CompetitionVO;
 import com.major.knowledgePlanet.VO.QuestionVO;
+import com.major.knowledgePlanet.constValue.IntegralEnum;
 import com.major.knowledgePlanet.entity.Competition;
 import com.major.knowledgePlanet.entity.Question;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.CompetitionService;
+import com.major.knowledgePlanet.service.PlanetService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,9 @@ public class CompetitionController {
 
     @Resource(name="competitionServiceImpl")
     private CompetitionService competitionService;
+
+    @Resource(name="planetServiceImpl")
+    private PlanetService planetService;
 
     @GetMapping("competition/getCompetitionByPlanet")
     @ApiOperation(value="获取星球中所有竞赛，按开始时间由早到晚排序")
@@ -176,6 +181,21 @@ public class CompetitionController {
     @ApiOperation(value="修改问题")
     public Response updateQuestion(@RequestBody Question question){
         competitionService.updateQuestion(question);
+        return Response.success();
+    }
+
+
+    @PostMapping("competition/submitAnswers")
+    @ApiOperation(value="提交竞赛答案")
+    public Response submitAnswers(HttpServletRequest request, @RequestBody Map<Long,String>answers,@RequestParam("planetCode")Long planetCode){
+        Long userId= TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        for (Map.Entry<Long, String> entry : answers.entrySet()) {
+            competitionService.submitAnswer(entry.getKey(),userId,entry.getValue());
+        }
+        planetService.changeUserPlanetIntegral(userId,planetCode, IntegralEnum.JOIN_COMPETITION_INTEGRAL.getIntegral());
         return Response.success();
     }
 

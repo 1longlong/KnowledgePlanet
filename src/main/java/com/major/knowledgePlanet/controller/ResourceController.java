@@ -1,14 +1,15 @@
 package com.major.knowledgePlanet.controller;
 
 
+import com.major.knowledgePlanet.constValue.IntegralEnum;
 import com.major.knowledgePlanet.constValue.RedisKey;
-import com.major.knowledgePlanet.entity.Resource;
 import com.major.knowledgePlanet.entity.ResourceCheckVO;
 import com.major.knowledgePlanet.entity.ResourceVO;
 import com.major.knowledgePlanet.entity.UploadResourceVO;
 import com.major.knowledgePlanet.result.Response;
 
 
+import com.major.knowledgePlanet.service.PlanetService;
 import com.major.knowledgePlanet.service.RedisService;
 import com.major.knowledgePlanet.service.ResourceService;
 import com.major.knowledgePlanet.util.RedisUtil;
@@ -20,6 +21,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +50,9 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
 
+    @Resource(name="planetServiceImpl")
+    private PlanetService planetService;
+
 
 
     @PostMapping("resource/uploadResource")
@@ -59,6 +65,7 @@ public class ResourceController {
         }
         System.out.println("userId:" + userId);
         int result = resourceService.uploadResource(uploadResourceVO,userId);
+
         if (result != 0) {
             return Response.success().message("上传成功,请等待审核结果！");
         } else {
@@ -205,13 +212,16 @@ public class ResourceController {
 
    @PostMapping("resource/checkResource")
    @ApiOperation(value="审核资源")
-    public Response checkResource(HttpServletRequest request,@RequestBody ResourceCheckVO resourceCheckVO){
+    public Response checkResource(HttpServletRequest request,@RequestBody ResourceCheckVO resourceCheckVO,@RequestParam("planetCode")Long planetCode){
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("B0204").message("身份验证失败");
         }
         try {
             resourceService.checkResource(userId, resourceCheckVO.getUploaderId(), resourceCheckVO.getResourceId(), resourceCheckVO.getResourceName(), resourceCheckVO.getCheckInfo(), resourceCheckVO.getCheckResult());
+            if(resourceCheckVO.getCheckResult()==1){
+                planetService.changeUserPlanetIntegral(resourceCheckVO.getUploaderId(),planetCode, IntegralEnum.UPLOAD_RESOURCE_INTEGRAL.getIntegral());
+            }
             return Response.success().message("审核成功");
         }catch(Exception e){
             return Response.serverError().message(e.getMessage());

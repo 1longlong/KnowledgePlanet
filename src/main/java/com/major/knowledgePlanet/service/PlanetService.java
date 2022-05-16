@@ -115,4 +115,7 @@ public interface PlanetService {
 
     List<Planet> getAllPlanet();
 
+    void changeUserPlanetIntegral(Long userId,Long planetCode,Integer delta);
+
+
 }
