@@ -93,14 +93,14 @@ public class CompetitionController {
     }
 
 
-    @GetMapping("competition/getCompetitionNotStart")
-    @ApiOperation(value="获取还未开始的竞赛")
-    public Response getCompetitionNotStart(HttpServletRequest request, @RequestParam("planetCode")Long planetCode){
+    @GetMapping("competition/getCompetitionStarted/{planetCode}")
+    @ApiOperation(value="获取进行中的竞赛")
+    public Response getCompetitionStarted(HttpServletRequest request,@PathVariable("planetCode")Long planetCode){
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
         }
-        List<CompetitionVO> competitionList = competitionService.getCompetitionByPlanetNotStart(planetCode, userId);
+        List<CompetitionVO> competitionList = competitionService.getCompetitionByPlanetStarted(planetCode, userId);
         return Response.success().data("competitionList",competitionList);
     }
 
@@ -116,9 +116,9 @@ public class CompetitionController {
         return Response.success().data("competitionList",registeredCompetition);
     }
 
-    @GetMapping("competition/getQuestionWithUserResult")
+    @GetMapping("competition/getQuestionWithUserResult/{competitionId}")
     @ApiOperation(value="查看参赛题目和自己的答案")
-    public Response getQuestionWithUserResult(HttpServletRequest request,@RequestParam("competitionId")Long competitionId){
+    public Response getQuestionWithUserResult(HttpServletRequest request,@PathVariable("competitionId")Long competitionId){
         Long userId= TokenParseUtil.getUserId(request,saltValue);
         if(userId==null){
             return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");

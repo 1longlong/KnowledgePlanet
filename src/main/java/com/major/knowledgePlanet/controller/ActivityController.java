@@ -4,6 +4,7 @@ package
 import cn.hutool.http.server.HttpServerRequest;
 import com.major.knowledgePlanet.VO.ActivityVO;
 import com.major.knowledgePlanet.entity.Activity;
+import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
 import com.major.knowledgePlanet.service.ActivityService;
 import com.major.knowledgePlanet.util.TokenParseUtil;
@@ -11,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -122,6 +124,12 @@ public class ActivityController {
         return Response.success().data("createNum",createNum).data("joinNum",joinNum);
     }
 
+    @GetMapping("activity/getActivityMember/{activityId}")
+    @ApiOperation(value="获取报名活动的成员")
+    public Response getActivityMember(@PathVariable("activityId")Long activityId){
+        List<User> memberList = activityService.getActivityMember(activityId);
+        return Response.success().data("memberList",memberList);
+    }
 
 
 

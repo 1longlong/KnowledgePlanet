@@ -10,6 +10,7 @@ import com.major.knowledgePlanet.entity.Question;
 import com.major.knowledgePlanet.mapper.CompetitionMapper;
 import com.major.knowledgePlanet.service.CompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -28,6 +29,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Autowired
     private CompetitionMapper competitionMapper;
 
+    @Value("${defaultCompetitionAvatar}")
+    private String defaultCompetitionAvatar;
+
 
     @Override
     public List<CompetitionVO> getCompetitionByPlanet(Long planetCode, Long userId) {
@@ -35,8 +39,8 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public List<CompetitionVO> getCompetitionByPlanetNotStart(Long planetCode, Long userId) {
-        return competitionMapper.getCompetitionByPlanetNotStart(planetCode,userId);
+    public List<CompetitionVO> getCompetitionByPlanetStarted(Long planetCode, Long userId) {
+        return competitionMapper.getStartedCompetitionByPlanet(planetCode,userId);
     }
 
     @Override
@@ -44,6 +48,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         competition.setCreateTime(new Date());
         //设置初始为未发布
         competition.setStatus(0);
+        if(competition.getPicture()==null){
+            competition.setPicture(defaultCompetitionAvatar);
+        }
         competitionMapper.addCompetition(competition);
         return competition.getCompetitionId();
     }

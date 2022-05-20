@@ -13,7 +13,7 @@ public interface CompetitionService {
 
     List<CompetitionVO> getCompetitionByPlanet(Long planetCode, Long userId);
 
-    List<CompetitionVO> getCompetitionByPlanetNotStart(Long planetCode,Long userId);
+    List<CompetitionVO> getCompetitionByPlanetStarted(Long planetCode,Long userId);
 
     /**
     * 添加竞赛，返回竞赛id

@@ -31,4 +31,5 @@ swagger:
 saltValue: 1234
 defaultAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultAvatar.jgp
 defaultPlanetAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultPlanetAvatar.jpg
+defaultCompetitionAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/competitionDefault.jpg
 defaultPlanetMaxNumber: 500

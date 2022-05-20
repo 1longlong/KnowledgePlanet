@@ -206,6 +206,17 @@ public class PlanetController {
         return Response.success().data("planetList",planetList);
     }
 
+    @PostMapping("planet/quitPlanet")
+    @ApiOperation(value="退出星球")
+    public Response quitPlanet(HttpServletRequest request,@RequestParam("planetCode")Long planetCode){
+        Long userId=TokenParseUtil.getUserId(request,saltValue);
+        if(userId==null){
+            return Response.clientError().code("A0204").message("身份验证失败，请重新登录！");
+        }
+        planetService.deleteMember(userId,planetCode);
+        return Response.success().message("退出成功");
+    }
+
 
 
 

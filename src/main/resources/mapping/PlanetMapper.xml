@@ -29,6 +29,7 @@
         <result property="planetCode" column="p_code"/>
     </resultMap>
     <resultMap id="UserPlanetVO" type="UserPlanetVO">
+        <id property="planet.planetCode" column="p_code"/>
         <result property="integral" column="integral"/>
         <association property="planet" resultMap="Planet"/>
     </resultMap>

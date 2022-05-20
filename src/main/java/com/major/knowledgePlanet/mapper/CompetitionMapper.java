@@ -51,7 +51,7 @@ public interface CompetitionMapper {
     * @author Covenant
     * @date 2022-05-12 11:24
     */
-    List<CompetitionVO> getCompetitionByPlanetNotStart(Long planetCode, Long userId);
+    List<CompetitionVO> getStartedCompetitionByPlanet(Long planetCode, Long userId);
 
 
     void addCompetition(Competition competition);

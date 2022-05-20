@@ -3,16 +3,15 @@ package com.major.knowledgePlanet.controller;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.jwt.JWTUtil;
+import com.major.knowledgePlanet.entity.LoginLog;
 import com.major.knowledgePlanet.entity.User;
 import com.major.knowledgePlanet.result.Response;
+import com.major.knowledgePlanet.service.LoginLogService;
 import com.major.knowledgePlanet.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +27,8 @@ public class BackgroundController {
 
     @Resource(name="userInfoServiceImpl")
     private UserInfoService userInfoService;
+    @Resource(name="loginLogServiceImpl")
+    private LoginLogService loginLogService;
 
     @PostMapping("background/updateNameById")
     @ApiOperation(value = "更新用户信息")
@@ -127,6 +128,12 @@ public class BackgroundController {
         return Response.success().data("token",token);
     }
 
+    @GetMapping("background/getLoginLogByUserId/{userId}")
+    @ApiOperation(value="根据用户id获取登录日志")
+    public Response getLoginLogByUserId(@PathVariable("userId") Long userId){
+            List<LoginLog> loginLogList = loginLogService.getLoginLogById(userId);
+            return Response.success().data("loginLogList",loginLogList);
+    }
 
 
 

@@ -83,10 +83,10 @@
         order by start_time asc;
     </select>
 
-    <select id="getCompetitionByPlanetNotStart" resultMap="CompetitionVO">
+    <select id="getStartedCompetitionByPlanet" resultMap="CompetitionVO">
         select c_id, p_code, title, description, create_time, start_time, end_time, picture,status,#{userId} as userId
         from knowledge_planet.competition
-        where p_code=#{planetCode} and status=1 and start_time>now()
+        where p_code=#{planetCode} and status=1 and end_time>now() and now()>start_time
         order by start_time asc;
     </select>
 
@@ -149,7 +149,7 @@
     <select id="getSumScore" resultType="Integer">
         select sum(get_score)
         from knowledge_planet.user_question_rel uqr join knowledge_planet.question q on q.q_id=uqr.q_id
-        where u_id=#{userId}
+        where u_id=#{userId} and q.c_id=#{competitionId};
     </select>
 
     <insert id="addQuestion" useGeneratedKeys="true" keyProperty="questionId">

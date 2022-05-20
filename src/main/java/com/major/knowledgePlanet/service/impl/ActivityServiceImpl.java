@@ -117,4 +117,9 @@ public class ActivityServiceImpl implements ActivityService {
         return activityMapper.getActivityNum(userId,role);
     }
 
+    @Override
+    public List<User> getActivityMember(Long activityId) {
+        return activityMapper.getActivityMember(activityId);
+    }
+
 }

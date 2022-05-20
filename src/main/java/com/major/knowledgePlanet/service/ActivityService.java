@@ -2,6 +2,7 @@ package com.major.knowledgePlanet.service;
 
 import com.major.knowledgePlanet.VO.ActivityVO;
 import com.major.knowledgePlanet.entity.Activity;
+import com.major.knowledgePlanet.entity.User;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface ActivityService {
     void joinOrQuitActivity(Long activity,Long userId,Integer type) throws Exception;
 
     Integer getActivityNum(Long userId,Integer role);
+
+    List<User>getActivityMember(Long activityId);
 
 }

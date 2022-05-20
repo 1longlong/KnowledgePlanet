@@ -3,6 +3,7 @@ package
 
 import com.major.knowledgePlanet.VO.ActivityVO;
 import com.major.knowledgePlanet.entity.Activity;
+import com.major.knowledgePlanet.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -116,5 +117,14 @@ public interface ActivityMapper {
     * @date 2022-05-07 18:24
     */
     Integer getActivityNum(Long userId,Integer role);
+
+    /**
+    * 获取活动创建人以外的所有参与者
+    * @param activityId 1
+    * @return : java.util.List<com.major.knowledgePlanet.entity.User>
+    * @author Covenant
+    * @date 2022-05-18 15:47
+    */
+    List<User>getActivityMember(Long activityId);
 
 }
