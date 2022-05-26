@@ -74,6 +74,14 @@ public class PlanetController {
         return Response.success().data("planetList",planetList);
     }
 
+    @GetMapping("planet/adminSearchPlanet")
+    @ApiOperation(value="管理员根据关键词查询星球")
+    public Response adminSearchPlanet(@RequestParam("keyWord")String keyWord){
+        List<Planet> planetList = planetService.adminSearchPlanet(keyWord);
+        return Response.success().data("planetList",planetList);
+    }
+
+
 
     @GetMapping("planet/getRecommendPlanet")
     @ApiOperation(value="获取推荐星球")
@@ -216,6 +224,14 @@ public class PlanetController {
         planetService.deleteMember(userId,planetCode);
         return Response.success().message("退出成功");
     }
+
+    @GetMapping("planet/getOwnerId/{planetCode}")
+    @ApiOperation(value="获取星主id")
+    public Response getOwnerId(@PathVariable("planetCode")Long planetCode){
+        Long ownerId = planetService.getOwnerId(planetCode);
+        return Response.success().data("ownerId",ownerId);
+    }
+
 
 
 

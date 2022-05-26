@@ -36,6 +36,15 @@ public interface PlanetService {
     List<SearchResultVO> searchPlanet(String info,Long userId);
 
     /**
+    * 管理员搜索星球
+    * @param info 1
+    * @return : java.util.List<com.major.knowledgePlanet.entity.Planet>
+    * @author Covenant
+    * @date 2022-05-25 14:46
+    */
+    public List<Planet> adminSearchPlanet(String info);
+
+    /**
     * 获取推荐星球
     * @param userId 1
     * @return : java.util.List<com.major.knowledgePlanet.entity.Planet>
@@ -117,5 +126,7 @@ public interface PlanetService {
 
     void changeUserPlanetIntegral(Long userId,Long planetCode,Integer delta);
 
+
+    Long getOwnerId(Long planetCode);
 
 }

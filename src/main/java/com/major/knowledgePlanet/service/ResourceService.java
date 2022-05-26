@@ -46,6 +46,8 @@ public interface ResourceService {
      */
     List<ResourceVO> getResourceByPCode(Long planetCode,Long userId);
 
+    List<ResourceVO> getResourceByPCode(Long planetCode);
+
     /**
     * 查找用户所有收藏的资源
     * @param userId 用户id
@@ -68,4 +70,6 @@ public interface ResourceService {
      */
 
     Integer changeRecommendStatus(Long resourceId,Integer isRecommended);
+
+    void freezeOrThawResource(Long resourceId,Integer type);
 }

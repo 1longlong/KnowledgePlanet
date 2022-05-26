@@ -240,6 +240,29 @@ public class ResourceController {
         }
     }
 
+    @PostMapping("resource/freezeOrThawResource")
+    @ApiOperation(value="冻结资源或解冻资源")
+    public Response freezeOrThawResource(@RequestParam("resourceId") Long resourceId,@RequestParam("type")Integer type){
+        if(type!=3&&type!=1){
+            return Response.clientError().message("参数类型错误！");
+        }
+        resourceService.freezeOrThawResource(resourceId,type);
+        return Response.success().message("成功！");
+    }
+
+
+    @GetMapping("resource/adminGetResourceByPCode")
+    @ApiOperation(value="按星球获取资源")
+    @ApiImplicitParam(name="planetCode",value="星球id",dataType = "Long",dataTypeClass = String.class,paramType = "query",required = true)
+    public Response adminGetResourceByPCode(@RequestParam(value = "planetCode") Long planetCode){
+        redisService.persistResourceLikeCount();
+        redisService.persistResourceCollectCount();
+        redisService.persistResourceUserIsCollect();
+        redisService.persistResourceUserIsLike();
+        List<ResourceVO> resourceList = resourceService.getResourceByPCode(planetCode);
+        return Response.success().message("查找成功").data("resourceList",resourceList);
+    }
+
 
 
 

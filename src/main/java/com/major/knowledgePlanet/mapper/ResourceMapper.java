@@ -145,4 +145,15 @@ public interface ResourceMapper {
      */
 
     Integer changeRecommendStatus(Long resourceId,Integer isRecommended);
+
+    /**
+    * 冻结资源
+    * @param resourceId 1
+    * @author Covenant
+    * @date 2022-05-21 19:59
+    */
+    void freezeOrThawResource(Long resourceId,Integer type);
+
+
+    List<ResourceVO> adminGetResourceByPCode(Long planetCode);
 }

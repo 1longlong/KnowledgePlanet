@@ -120,7 +120,7 @@ public class BackgroundController {
         Map<String, Object> map = new HashMap<>(4){
             private static final long serialVersionUID = 1L;
             {
-                put("adminId",adminId);
+                put("userId",adminId);
                 put("expireTime", System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2);//1天
             }
         };
@@ -134,6 +134,9 @@ public class BackgroundController {
             List<LoginLog> loginLogList = loginLogService.getLoginLogById(userId);
             return Response.success().data("loginLogList",loginLogList);
     }
+
+
+
 
 
 

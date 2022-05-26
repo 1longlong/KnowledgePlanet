@@ -3,6 +3,23 @@
 <mapper namespace="com.major.knowledgePlanet.mapper.ResourceMapper">
 
 
+    <resultMap id="Resource" type="Resource">
+        <id property="resourceId" column="r_id"/>
+        <result property="uploaderId" column="u_id"/>
+        <result property="planetCode" column="p_code"/>
+        <result property="resourceName" column="r_name"/>
+        <result property="uploadTime" column="upload_time"/>
+        <result property="link" column="link"/>
+        <result property="coverage" column="coverage"/>
+        <result property="resourceDescription" column="r_description"/>
+        <result property="status" column="status"/>
+        <result property="checkInfo" column="check_info"/>
+        <result property="isRecommended" column="is_recommended"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="collectCount" column="collect_count"/>
+    </resultMap>
+
+
 
     <resultMap id="ResourceVO" type="ResourceVO">
         <id property="resourceId" column="r_id"/>
@@ -18,17 +35,27 @@
         <result property="isRecommended" column="is_recommended"/>
         <result property="likeCount" column="like_count"/>
         <result property="collectCount" column="collect_count"/>
-        <result property="liked" column="is_liked"/>
-        <result property="collected" column="is_collected"/>
         <result property="uploaderName" column="u_name"/>
         <result property="uploaderAvatar" column="avatar"/>
+        <association property="liked"  select="getUserResourceLiked" column="{userId=userId,resourceId=r_id}"/>
+        <association property="collected" select="getUserResourceCollected" column="{userId=userId,resourceId=r_id}"/>
         <collection property="tagList" javaType="ArrayList" column="r_id" ofType="String" select="getResourceTags">
         </collection>
     </resultMap>
 
 
-
-
+    <select id="getUserResourceLiked" resultType="Boolean">
+        select ifnull((
+            select is_liked
+            from knowledge_planet.user_resource_rel
+            where u_id=#{userId} and r_id =#{resourceId}),false) as is_liked;
+    </select>
+    <select id="getUserResourceCollected" resultType="Boolean">
+        select ifnull((
+          select is_collected
+          from knowledge_planet.user_resource_rel
+          where u_id=#{userId} and r_id =#{resourceId}),false) as is_collected;
+    </select>
     <select id="getResourceTags" resultType="String">
         select tag_name
         from knowledge_planet.tag
@@ -72,10 +99,18 @@
 
 
     <select id="getResourceByPCode" resultMap="ResourceVO">
-        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,collect_count,details,is_liked,is_collected,u_name,avatar
-        from (knowledge_planet.resource join knowledge_planet.user on user.u_id=resource.u_id) left join knowledge_planet.user_resource_rel urr on urr.r_id=resource.r_id
-        where p_code = #{planetCode} and (urr.u_id=#{userId} or urr.u_id is null);
+        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,collect_count,details,u_name,avatar,#{userId} as userId
+        from knowledge_planet.resource join knowledge_planet.user on user.u_id=resource.u_id
+        where p_code = #{planetCode};
     </select>
+
+
+    <select id="adminGetResourceByPCode" resultMap="ResourceVO">
+        select resource.r_id as r_id,resource.u_id as u_id,p_code,r_name,upload_time,link,coverage,r_description,resource.status as status,check_info,is_recommended,like_count,collect_count,details,u_name,avatar,null as userId
+        from knowledge_planet.resource join knowledge_planet.user on user.u_id = resource.u_id
+        where p_code=#{planetCode};
+    </select>
+
 
     <update id="addResourceLikeCount">
         update knowledge_planet.resource set like_count=like_count+#{delta}
@@ -120,6 +155,12 @@
     <update id="changeRecommendStatus">
         update knowledge_planet.resource
         set is_recommended =#{isRecommended}
+        where r_id=#{resourceId};
+    </update>
+
+    <update id="freezeOrThawResource">
+        update knowledge_planet.resource
+        set status=#{type}
         where r_id=#{resourceId};
     </update>
 

@@ -74,6 +74,11 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public List<ResourceVO> getResourceByPCode(Long planetCode) {
+        return resourceMapper.adminGetResourceByPCode(planetCode);
+    }
+
+    @Override
     public List<ResourceVO> getCollectResourceByUserId(Long userId) {
         return resourceMapper.getCollectResourceByUserId(userId);
     }
@@ -100,7 +105,14 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public Integer changeRecommendStatus(Long resourceId,Integer isRecommended){
         return resourceMapper.changeRecommendStatus(resourceId,isRecommended);
-    };
+    }
+
+    @Override
+    public void freezeOrThawResource(Long resourceId,Integer type) {
+        resourceMapper.freezeOrThawResource(resourceId,type);
+    }
+
+    ;
 
 
 }

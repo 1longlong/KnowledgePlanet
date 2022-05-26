@@ -67,6 +67,11 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
+    public List<Planet> adminSearchPlanet(String info){
+        return planetMapper.adminSearchPlanet(info);
+    }
+
+    @Override
     public List<SearchResultVO> searchPlanet(String info,Long userId) {
         return planetMapper.searchPlanet(info,userId);
     }
@@ -149,6 +154,11 @@ public class PlanetServiceImpl implements PlanetService {
     @Override
     public void changeUserPlanetIntegral(Long userId, Long planetCode, Integer delta) {
         planetMapper.changeUserPlanetIntegral(userId,planetCode,delta);
+    }
+
+    @Override
+    public Long getOwnerId(Long planetCode) {
+        return planetMapper.getOwnerId(planetCode);
     }
 
 
