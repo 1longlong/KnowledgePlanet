@@ -1,12 +1,13 @@
 spring:
   datasource:
     username: root
-    password: M2575052366
-    url: jdbc:mysql://49.235.232.7:3306/knowledge_planet?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    password: *
+    url: jdbc:mysql://*:3306/knowledge_planet?useSSL=false&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
-    redis:
-      host: 127.0.0.1
-      port: 6379
+  redis:
+    host: *
+    port: 6379
+    password: *
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
@@ -29,7 +30,7 @@ swagger:
   applicationVersion: 1.0
   applicationDescription: knowledgePlanet api info
 saltValue: 1234
-defaultAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultAvatar.jgp
-defaultPlanetAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/defaultPlanetAvatar.jpg
-defaultCompetitionAvatar: https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/default/competitionDefault.jpg
+defaultAvatar: *
+defaultPlanetAvatar: *
+defaultCompetitionAvatar: *
 defaultPlanetMaxNumber: 500

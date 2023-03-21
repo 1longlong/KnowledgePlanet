@@ -29,18 +29,19 @@ public class COSController {
         try {
             //这里的 SecretId 和 SecretKey 代表了用于申请临时密钥的永久身份（主账号、子账号等），子账号需要具有操作存储桶的权限。
             // 替换为您的云 api 密钥 SecretId
-            config.put("secretId", "AKIDrBH8j5B1cx3uVv50f4E8nCMGwMWR6VeZ");
+
+            config.put("secretId", "*");
             // 替换为您的云 api 密钥 SecretKey
-            config.put("secretKey", "hAOM5YljRt63lDPM3UfaGgqlTw96oGSP");
+            config.put("secretKey", "*");
 
 
             // 临时密钥有效时长，单位是秒，默认 1800 秒，目前主账号最长 2 小时（即 7200 秒），子账号最长 36 小时（即 129600）秒
             config.put("durationSeconds", 1800);
 
             // 换成您的 bucket
-            config.put("bucket", "covenant-1308013334");
+            config.put("bucket", "*");
             // 换成 bucket 所在地区
-            config.put("region", "ap-shanghai");
+            config.put("region", "*");
 
             // 这里改成允许的路径前缀，可以根据自己网站的用户登录态判断允许上传的具体路径
             // 列举几种典型的前缀授权场景：
