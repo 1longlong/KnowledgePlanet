@@ -48,6 +48,7 @@ KnowledgePlanet
 ## 环境配置
 
 * **application.yml**
+
 ![application.yml](https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/repository/20230321160243.png)
 
 active项根据对应环境配置文件后缀更改为dev或test
