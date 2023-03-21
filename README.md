@@ -49,11 +49,11 @@ KnowledgePlanet
 
 * **application.yml**
 
-![application.yml](https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/repository/20230321160243.png)
+    ![application.yml](https://covenant-1308013334.cos.ap-shanghai.myqcloud.com/repository/20230321160243.png)
 
-active项根据对应环境配置文件后缀更改为dev或test
-application-test.yml 测试环境配置文件
-application-dev.yml 开发环境配置文件
+    active项根据对应环境配置文件后缀更改为dev或test
+    application-test.yml 测试环境配置文件
+    application-dev.yml 开发环境配置文件
 
 * **Mysql配置**
 
